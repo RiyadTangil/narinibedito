@@ -1,0 +1,72 @@
+[
+  {
+    "product_id": 1,
+    "product_name": "Food Delivery Service",
+    "category_title": "Food Delivery",
+    "product_status": 1,
+    "products_is_deleted": 0
+  },
+  {
+    "product_id": 2,
+    "product_name": "Catering Dispatch Service",
+    "category_title": "Food Delivery",
+    "product_status": 1,
+    "products_is_deleted": 0
+  },
+  {
+    "product_id": 3,
+    "product_name": "Prescription Medicine Delivery",
+    "category_title": "Medicine Delivery",
+    "product_status": 1,
+    "products_is_deleted": 0
+  },
+  {
+    "product_id": 4,
+    "product_name": "Cold-Chain Medical Delivery",
+    "category_title": "Medicine Delivery",
+    "product_status": 1,
+    "products_is_deleted": 0
+  },
+  {
+    "product_id": 5,
+    "product_name": "Grocery Express Delivery",
+    "category_title": "Grocery Delivery",
+    "product_status": 1,
+    "products_is_deleted": 0
+  },
+  {
+    "product_id": 6,
+    "product_name": "Same-Day Parcel Delivery",
+    "category_title": "Parcel & Courier",
+    "product_status": 1,
+    "products_is_deleted": 0
+  },
+  {
+    "product_id": 7,
+    "product_name": "Next-Day Inter-City Delivery",
+    "category_title": "Parcel & Courier",
+    "product_status": 1,
+    "products_is_deleted": 0
+  },
+  {
+    "product_id": 8,
+    "product_name": "Document Express Delivery",
+    "category_title": "Parcel & Courier",
+    "product_status": 1,
+    "products_is_deleted": 0
+  },
+  {
+    "product_id": 9,
+    "product_name": "Express Rider Dispatch",
+    "category_title": "Express Dispatch",
+    "product_status": 1,
+    "products_is_deleted": 0
+  },
+  {
+    "product_id": 10,
+    "product_name": "Packaging Box & Container",
+    "category_title": "Packaging Supplies",
+    "product_status": 1,
+    "products_is_deleted": 0
+  }
+]
