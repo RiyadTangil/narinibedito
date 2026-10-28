@@ -207,22 +207,6 @@ export function Header() {
             </Button>
           </a>
 
-          {/* Shopping Cart Pill */}
-          <Link href="/products">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="rounded-full border-rose-200 hover:bg-rose-50 text-[#6B112B] h-9 px-3 gap-1.5 shadow-none"
-            >
-              <div className="relative">
-                <ShoppingBag className="h-4 w-4" />
-                <span className="absolute -top-1.5 -right-2 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#6B112B] text-[8px] font-bold text-white">
-                  ০
-                </span>
-              </div>
-              <span className="hidden sm:inline font-bold text-xs">Cart</span>
-            </Button>
-          </Link>
 
           {/* User Account / Login */}
           {session?.user ? (

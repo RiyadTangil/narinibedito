@@ -67,10 +67,10 @@ export default function AdminAddProductPage() {
     inStock: true,
     highlight: "স্বচ্ছ গ্লাস ডোর • সিকিউরিটি লক ও চাবি • ১৪০ ডজন ধারণক্ষমতা • ওয়ার্ম এলইডি লাইটিং",
     description: "আপনার মূল্যবান কাচের, রেশমি ও ধাতব চুড়িগুলো ঘরের কোণে এলোমেলো না রেখে সাজিয়ে রাখুন পরিপাটি ও নিরাপদে। প্রতিটি আলনা অভিজ্ঞ কারিগরের নিখুঁত হাতে কাঠের পালিশ এবং সুরক্ষার জন্য উন্নত চাবি লক দিয়ে তৈরি করা হয়েছে।",
-    image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80",
+    image: "/images/products/churi-alna.jpg",
     secondaryImages: [
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80"
+      "/images/products/home-mandir.jpg",
+      "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&w=800&q=80"
     ]
   });
 

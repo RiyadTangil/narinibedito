@@ -4,7 +4,6 @@ import { use, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
-  ShoppingBag, 
   ChevronRight, 
   Star, 
   Truck, 
@@ -15,13 +14,18 @@ import {
   Check, 
   Minus, 
   Plus,
+  ShoppingBag,
   MessageCircle,
+  MessageSquare,
   Phone,
   Sparkles,
   Lock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ReviewsSection } from "@/components/reviews-section";
+import { QuickOrderModal, type QuickOrderProduct } from "@/components/quick-order-modal";
+import { toast } from "sonner";
 
 interface ProductDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -41,7 +45,7 @@ const PRODUCT_DATABASE: Record<string, any> = {
     capacity: "১৪০+ ডজন চুড়ির ধারণক্ষমতা",
     features: ["সিকিউরিটি লক ও চাবি", "স্বচ্ছ কাঁচের পাল্লা", "স্মুথ স্লাইডিং উডেন রড", "সহজে পরিষ্কারযোগ্য"],
     images: [
-      "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=900&q=80",
+      "/images/products/churi-alna.jpg",
       "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=900&q=80"
@@ -61,10 +65,10 @@ const PRODUCT_DATABASE: Record<string, any> = {
     capacity: "দেয়ালে ঝুলানো বা টেবিলে রাখার উপযোগী",
     features: ["সুক্ষ্ম লেজার কাটিং আর্টওয়ার্ক", "ইন-বিল্ট গোল্ডেন ওয়ার্ম এলইডি লাইট", "প্রার্থনা সামগ্রী রাখার তাক"],
     images: [
-      "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=900&q=80",
+      "/images/products/home-mandir.jpg",
       "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=900&q=80"
+      "/images/products/churi-alna.jpg"
     ],
     description: "ঘরের পবিত্র পরিবেশকে আরও উজ্জ্বল ও নান্দনিক করতে তৈরি এই কাস্টমাইজড উডেন হোম মন্দির। এলইডি আলো ঘরের আধ্যাত্মিক আমেজ বাড়িয়ে দেয়।"
   },
@@ -97,16 +101,22 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
 
   const [selectedImage, setSelectedImage] = useState(product.images[0]);
   const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
-
-  const handleAddToCart = () => {
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
-  };
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
   const whatsappOrderUrl = `https://wa.me/8801614258804?text=${encodeURIComponent(
     `Hello Nari Nibedito, I want to order ${product.name} (Quantity: ${quantity}, Price: ৳${product.price * quantity}).`
   )}`;
+
+  const quickOrderProductData: QuickOrderProduct = {
+    id: productId,
+    name: product.name,
+    price: product.price,
+    originalPrice: product.originalPrice,
+    image: product.images?.[0] || "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=80",
+    size: product.size,
+    sku: product.sku,
+    category: product.category,
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-10">
@@ -243,44 +253,61 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
             </div>
           </div>
 
-          {/* Action Buttons: WhatsApp Direct Order + Cart */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <a
-              href={whatsappOrderUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1"
-            >
-              <Button
-                size="lg"
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 rounded-xl shadow-lg shadow-emerald-950/20 gap-2"
-              >
-                <MessageCircle className="h-5 w-5 fill-white" />
-                <span>হোয়াটসঅ্যাপে সরাসরি অর্ডার করুন</span>
-              </Button>
-            </a>
-
+          {/* Action Buttons: Direct COD Order + WhatsApp + Feedback/Reviews */}
+          <div className="space-y-3 pt-2">
+            {/* Primary COD Order Button */}
             <Button
               size="lg"
-              onClick={handleAddToCart}
-              className={`font-bold h-12 rounded-xl ${
-                added ? "bg-emerald-600" : "bg-[#8B1E3F] hover:bg-[#701531]"
-              } text-white transition-all`}
+              onClick={() => setIsOrderModalOpen(true)}
+              className="w-full bg-gradient-to-r from-[#6B112B] via-[#8B1E3F] to-[#9E1B42] hover:from-[#52091E] hover:to-[#6B112B] text-white font-extrabold h-14 rounded-2xl shadow-xl shadow-rose-950/25 gap-3 text-base active:scale-[0.99] transition-all cursor-pointer"
             >
-              {added ? (
-                <>
-                  <Check className="mr-2 h-5 w-5" /> Cart যোগ হয়েছে!
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="mr-2 h-5 w-5" /> Cart রাখুন
-                </>
-              )}
+              <ShoppingBag className="h-5 w-5" />
+              <span>সরাসরি অর্ডার করুন (ক্যাশ অন ডেলিভারি)</span>
             </Button>
 
-            <Button size="lg" variant="outline" className="border-rose-200 text-slate-700 hover:bg-rose-50 h-12 rounded-xl">
-              <Heart className="h-5 w-5 text-[#8B1E3F]" />
-            </Button>
+            {/* Secondary actions: WhatsApp Order & Inquiry, Reviews, Share */}
+            <div className="flex flex-col sm:flex-row gap-2.5">
+              <a
+                href={whatsappOrderUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1"
+              >
+                <Button
+                  size="lg"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 rounded-xl shadow-md gap-2"
+                >
+                  <MessageCircle className="h-4 w-4 fill-white" />
+                  <span>হোয়াটসঅ্যাপে অর্ডার / তথ্য</span>
+                </Button>
+              </a>
+
+              <a href="#reviews-section" className="shrink-0">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto border-rose-200 text-[#8B1E3F] hover:bg-rose-50 font-bold h-12 rounded-xl gap-2"
+                >
+                  <MessageSquare className="h-4 w-4 text-[#8B1E3F]" />
+                  <span>মতামত ও রিভিউ ({product.reviews || 48})</span>
+                </Button>
+              </a>
+
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    navigator.clipboard?.writeText(window.location.href);
+                    toast.success("পণ্যটির লিংক কপি করা হয়েছে!");
+                  }
+                }}
+                className="border-rose-200 text-slate-700 hover:bg-rose-50 h-12 rounded-xl"
+                title="লিংক শেয়ার করুন"
+              >
+                <Share2 className="h-5 w-5 text-[#8B1E3F]" />
+              </Button>
+            </div>
           </div>
 
           {/* Delivery & Trust highlights */}
@@ -323,6 +350,19 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
           </div>
         </div>
       </div>
+
+      {/* Customer Reviews & Feedback Section */}
+      <div className="border-t border-rose-100 pt-8">
+        <ReviewsSection productId={productId} productTitle={product.name} />
+      </div>
+
+      {/* Quick Order Cash on Delivery Modal */}
+      <QuickOrderModal
+        product={quickOrderProductData}
+        isOpen={isOrderModalOpen}
+        onClose={() => setIsOrderModalOpen(false)}
+        initialQuantity={quantity}
+      />
     </div>
   );
 }

@@ -32,7 +32,7 @@ const INITIAL_CATEGORIES = [
     title: "চুড়ি আলনা ও শোকেস",
     subtitle: "Bangle Alna & Showcase",
     count: 14,
-    image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80",
+    image: "/images/products/churi-alna.jpg",
     badge: "সেরা বিক্রিত",
     order: 1,
     status: true,
@@ -42,7 +42,7 @@ const INITIAL_CATEGORIES = [
     title: "হোম মন্দির ও ডেকোর",
     subtitle: "Custom Mandir & Decor",
     count: 8,
-    image: "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=600&q=80",
+    image: "/images/products/home-mandir.jpg",
     badge: "কাস্টমাইজড",
     order: 2,
     status: true,
@@ -120,7 +120,7 @@ export default function AdminCategoriesPage() {
     subtitle: "",
     id: "",
     badge: "নতুন",
-    image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80",
+    image: "/images/products/churi-alna.jpg",
     order: (categories.length + 1).toString(),
   });
 
@@ -135,7 +135,7 @@ export default function AdminCategoriesPage() {
       title: formData.title.trim(),
       subtitle: formData.subtitle.trim() || "Exclusive Collection",
       count: 0,
-      image: formData.image.trim() || "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80",
+      image: formData.image.trim() || "/images/products/churi-alna.jpg",
       badge: formData.badge.trim() || "নতুন",
       order: parseInt(formData.order) || categories.length + 1,
       status: true,
@@ -147,7 +147,7 @@ export default function AdminCategoriesPage() {
       subtitle: "",
       id: "",
       badge: "নতুন",
-      image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80",
+      image: "/images/products/churi-alna.jpg",
       order: (categories.length + 2).toString(),
     });
 
@@ -312,7 +312,7 @@ export default function AdminCategoriesPage() {
                   <div className="relative rounded-2xl overflow-hidden min-h-[140px] flex flex-col justify-end p-4 border border-rose-200 bg-slate-900 shadow-sm">
                     <div className="absolute inset-0">
                       <Image
-                        src={formData.image || "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80"}
+                        src={formData.image || "/images/products/churi-alna.jpg"}
                         alt="Preview"
                         fill
                         className="object-cover"

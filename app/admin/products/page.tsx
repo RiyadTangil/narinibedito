@@ -37,7 +37,7 @@ const INITIAL_INVENTORY = [
     status: "Active",
     badge: "সেরা বিক্রিত",
     size: "২১\" x ১৬\" সাইজ",
-    image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=400&q=80",
+    image: "/images/products/churi-alna.jpg",
   },
   {
     id: "2",
@@ -51,7 +51,7 @@ const INITIAL_INVENTORY = [
     status: "Active",
     badge: "কাস্টমাইজড",
     size: "২৪\" x ১৮\" ওয়াল মাউন্ট",
-    image: "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=400&q=80",
+    image: "/images/products/home-mandir.jpg",
   },
   {
     id: "3",

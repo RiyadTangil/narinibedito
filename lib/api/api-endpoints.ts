@@ -11,5 +11,14 @@ export const ENDPOINTS = {
     RESET_PASSWORD: { URL: "/api/auth/reset-password", KEY: "auth-reset-password" },
     CHANGE_PASSWORD: { URL: "/api/auth/change-password", KEY: "auth-change-password" },
   },
+  REVIEWS: {
+    LIST: { URL: "/api/reviews", KEY: "reviews-list" },
+    CREATE: { URL: "/api/reviews", KEY: "reviews-create" },
+  },
+  ORDERS: {
+    LIST: { URL: "/api/orders", KEY: "orders-list" },
+    CREATE: { URL: "/api/orders", KEY: "orders-create" },
+    UPDATE: { URL: "/api/orders", KEY: "orders-update" },
+  },
 };
 

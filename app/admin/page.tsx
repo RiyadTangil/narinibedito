@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -71,7 +72,7 @@ const RECENT_PRODUCTS = [
     stock: 24,
     status: "Active",
     badge: "সেরা বিক্রিত",
-    image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=400&q=80",
+    image: "/images/products/churi-alna.jpg",
   },
   {
     id: "2",
@@ -83,7 +84,7 @@ const RECENT_PRODUCTS = [
     stock: 12,
     status: "Active",
     badge: "কাস্টমাইজড",
-    image: "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=400&q=80",
+    image: "/images/products/home-mandir.jpg",
   },
   {
     id: "3",
@@ -132,6 +133,23 @@ const CATEGORY_SUMMARY = [
 ];
 
 export default function AdminDashboardPage() {
+  const [liveOrders, setLiveOrders] = useState<any[]>([]);
+  const [orderStats, setOrderStats] = useState<any>({ total: 0, pending: 0, confirmed: 0, totalRevenue: 0 });
+
+  useEffect(() => {
+    fetch("/api/orders?limit=4")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          setLiveOrders(json.data || []);
+          if (json.meta?.stats) {
+            setOrderStats(json.meta.stats);
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="space-y-8">
       {/* 1. Welcome & Quick Action Hero Banner */}
@@ -148,22 +166,29 @@ export default function AdminDashboardPage() {
               স্বাগতম, নারী নিবেদিত ম্যানেজমেন্ট!
             </h1>
             <p className="text-xs sm:text-sm text-rose-100/90 leading-relaxed">
-              আপনার ই-কমার্স স্টোরের পণ্য তালিকা, নতুন কালেকশন যুক্ত করা, মূল্য নির্ধারণ এবং ক্যাটাগরি সম্পূর্ণ নিয়ন্ত্রণ করুন এক স্থান থেকেই।
+              আপনার ই-কমার্স স্টোরের পণ্য তালিকা, নতুন কালেকশন যুক্ত করা, গ্রাহকদের অর্ডার ট্র্যাকিং এবং ক্যাটাগরি সম্পূর্ণ নিয়ন্ত্রণ করুন এক স্থান থেকেই।
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <Link href="/admin/orders">
+              <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-md gap-2 h-11 text-xs sm:text-sm">
+                <ShoppingBag className="h-4 w-4" />
+                <span>কাস্টমার অর্ডারসমূহ ({orderStats.total})</span>
+              </Button>
+            </Link>
+
             <Link href="/admin/products/add">
               <Button size="lg" className="bg-[#D4AF37] hover:bg-[#c29e2e] text-[#4A0A1C] font-bold rounded-2xl shadow-md gap-2 h-11 text-xs sm:text-sm">
                 <PlusCircle className="h-4 w-4" />
-                <span>নতুন পণ্য যোগ করুন</span>
+                <span>নতুন পণ্য যোগ</span>
               </Button>
             </Link>
 
             <Link href="/admin/categories">
               <Button size="lg" variant="outline" className="border-rose-300/40 bg-white/10 text-white hover:bg-white/20 rounded-2xl gap-2 h-11 text-xs sm:text-sm">
                 <Layers className="h-4 w-4 text-[#D4AF37]" />
-                <span>ক্যাটাগরি সাজান</span>
+                <span>ক্যাটাগরি</span>
               </Button>
             </Link>
           </div>
@@ -195,6 +220,56 @@ export default function AdminDashboardPage() {
             </Card>
           );
         })}
+      </div>
+
+      {/* Recent Incoming Customer Orders Section */}
+      <div className="bg-white p-5 rounded-2xl border border-rose-100 shadow-sm space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="h-9 w-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+              <ShoppingBag className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-slate-900 tracking-tight font-serif">
+                সাম্প্রতিক কাস্টমার অর্ডারসমূহ (Recent Customer Orders)
+              </h2>
+              <p className="text-xs text-slate-500">
+                ওয়েবসাইট থেকে সরাসরি আসা ক্যাশ অন ডেলিভারি অর্ডার
+              </p>
+            </div>
+          </div>
+
+          <Link href="/admin/orders" className="text-xs font-bold text-[#6B112B] hover:underline flex items-center gap-1">
+            সকল অর্ডার দেখুন ({orderStats.total}) <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        {liveOrders.length === 0 ? (
+          <div className="p-6 text-center text-xs text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            এখনো কোনো নতুন অর্ডার আসেনি। গ্রাহকরা অর্ডার করলে এখানে সাথে সাথে দেখা যাবে।
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            {liveOrders.map((ord: any) => (
+              <div key={ord._id} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2 hover:bg-white hover:shadow-sm transition-all text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono font-bold text-[#6B112B] text-[11px]">{ord.orderNumber}</span>
+                  <Badge variant="outline" className="text-[10px] bg-emerald-50 text-emerald-700 border-emerald-200 font-bold">
+                    ৳{ord.totalAmount?.toLocaleString()}
+                  </Badge>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 truncate">{ord.customerName}</h4>
+                  <span className="text-[11px] text-slate-500 block truncate">{ord.phone}</span>
+                </div>
+                <div className="text-[11px] text-slate-600 truncate border-t border-slate-200/60 pt-1.5 flex items-center justify-between">
+                  <span className="truncate max-w-[150px]">{ord.items?.[0]?.name}</span>
+                  <span className="text-[10px] font-semibold text-slate-400">× {ord.items?.[0]?.quantity || 1}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 3. Main Dashboard Grid (Recent Products + Category Breakdown) */}

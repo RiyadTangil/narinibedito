@@ -58,6 +58,13 @@ export default function AdminLayout({
       highlight: true,
     },
     {
+      title: "কাস্টমার অর্ডারসমূহ",
+      subTitle: "Customer Orders",
+      href: "/admin/orders",
+      icon: ShoppingBag,
+      active: pathname.startsWith("/admin/orders"),
+    },
+    {
       title: "ক্যাটাগরি ম্যানেজমেন্ট",
       subTitle: "Product Categories",
       href: "/admin/categories",

@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "seed": "npx tsx --env-file=.env scripts/seed-data.ts",
     "seed:categories": "node scripts/seed-categories.js",
     "scrape:reg-travel-agencies": "node --env-file=.env scripts/marketting/scrape-reg-travel-agencies.js --length 500",
     "migrate:agencies": "npx tsx --env-file=.env scripts/migrate-agencies.ts",
@@ -102,6 +103,7 @@
     "@types/nodemailer": "^7.0.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^18.0.9",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"

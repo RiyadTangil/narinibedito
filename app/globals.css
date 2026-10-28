@@ -57,3 +57,32 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Infinite Auto-Scrolling Marquee */
+@keyframes infinite-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee-infinite {
+  display: flex;
+  flex-shrink: 0;
+  will-change: transform;
+  animation: infinite-marquee 32s linear infinite;
+}
+
+@media (max-width: 640px) {
+  .animate-marquee-infinite {
+    animation-duration: 24s;
+  }
+}
+
+.marquee-pause-hover:hover .animate-marquee-infinite,
+.marquee-pause-hover:active .animate-marquee-infinite {
+  animation-play-state: paused;
+}
+

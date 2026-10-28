@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -17,38 +17,42 @@ import {
   Lightbulb, 
   Award, 
   Eye, 
-  Check,
-  CheckCircle2,
-  Package,
-  Layers,
-  HelpCircle,
-  ChevronDown,
-  Gift,
-  Home,
-  Gem,
-  Palette,
-  ShoppingBasket
+  Check, 
+  CheckCircle2, 
+  Package, 
+  Layers, 
+  HelpCircle, 
+  ChevronDown, 
+  ChevronLeft, 
+  ChevronRight, 
+  Gift, 
+  Home, 
+  Gem, 
+  Palette, 
+  ShoppingBasket 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ReviewsSection } from "@/components/reviews-section";
+import { QuickOrderModal, QuickOrderProduct } from "@/components/quick-order-modal";
 
 // 8 Official Categories directly derived from the Facebook Cover Banner & Page
 const CATEGORIES = [
   {
     id: "churi-alna",
     title: "চুড়ি আলনা ও শোকেস",
-    subtitle: "Bangle Alna & Showcase",
+    subtitle: "Handcrafted Bangle Showcase",
     count: "১৪০+ ডজন ধারণক্ষমতা",
-    image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80",
+    image: "/images/products/churi-alna.jpg",
     badge: "সেরা বিক্রিত",
     tag: "হস্তশিল্প",
   },
   {
     id: "home-decor",
     title: "হোম মন্দির ও ডেকোর",
-    subtitle: "Custom Mandir & Decor",
+    subtitle: "Backlit Wooden Mandir",
     count: "এলইডি ব্যাকলিট ডিজাইন",
-    image: "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=600&q=80",
+    image: "/images/products/home-mandir.jpg",
     badge: "কাস্টমাইজড",
     tag: "আলোকিত",
   },
@@ -121,9 +125,9 @@ const PRODUCTS = [
     rating: 5.0,
     reviews: 48,
     badge: "সেরা বিক্রিত",
-    highlight: "স্বচ্ছ গ্লাস ডোর • সিকিউরিটি লক ও চাবি • ১৪০ ডজন ধারণক্ষমতা",
+    highlight: "স্বচ্ছ গ্লাস ডোর • সিকিউরিটি লক ও চাবি • ১৪০ ডজন ধারণক্ষমতা • অর্গানাইজার ড্রয়ার",
     size: "২১\" x ১৬\" সাইজ",
-    image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80",
+    image: "/images/products/churi-alna.jpg",
     inStock: true,
     whatsappMsg: "আমি 'ডাবল ডোর কাঠের চুড়ি আলনা (২২৫০ টাকা)' অর্ডার করতে চাই।",
   },
@@ -138,9 +142,9 @@ const PRODUCTS = [
     rating: 4.9,
     reviews: 32,
     badge: "কাস্টমাইজড",
-    highlight: "সুক্ষ্ম লেজার কাটিং • ইন-বিল্ট এলইডি লাইট • এক্রিলিক প্রোটেকশন",
-    size: "২৪\" x ১৮\" ওয়াল মাউন্ট",
-    image: "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=800&q=80",
+    highlight: "সুক্ষ্ম লেজার কাটিং • ইন-বিল্ট ওয়ার্ম গোল্ডেন এলইডি লাইট • এক্রিলিক প্রোটেকশন",
+    size: "২৪\" x ১৮\" ওয়াল মাউন্ট ও টেবিলটপ",
+    image: "/images/products/home-mandir.jpg",
     inStock: true,
     whatsappMsg: "আমি 'কাস্টমাইজড উডেন হোম মন্দির (৩৪৫০ টাকা)' অর্ডার করতে চাই।",
   },
@@ -157,7 +161,7 @@ const PRODUCTS = [
     badge: "নতুন কালেকশন",
     highlight: "ঐতিহ্যবাহী নিখুঁত রেশমি চুড়ি • আকর্ষণীয় মাল্টিকালার কম্বো",
     size: "সাইজ ২.৪, ২.৬, ২.৮ এভেইলেবল",
-    image: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=800&q=80",
+    image: "/images/products/reshmi-churi.jpg",
     inStock: true,
     whatsappMsg: "আমি 'রেশমি কাচের চুড়ি কম্বো সেট (৫৮০ টাকা)' অর্ডার করতে চাই।",
   },
@@ -174,7 +178,7 @@ const PRODUCTS = [
     badge: "ট্রেন্ডিং",
     highlight: "ওয়ার্ম হোয়াইট এলইডি • আলাদা রিং ও গহনার ড্রয়ার • ভেলভেট কুশন",
     size: "১৮\" x ১৪\" সাইজ",
-    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80",
+    image: "/images/products/jewelry-box.jpg",
     inStock: true,
     whatsappMsg: "আমি 'এলইডি লাইটিংসহ চুড়ি বক্স (১৯৫০ টাকা)' অর্ডার করতে চাই।",
   },
@@ -296,6 +300,7 @@ const FAQS = [
 export default function HomePage() {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [orderModalProduct, setOrderModalProduct] = useState<QuickOrderProduct | null>(null);
 
   const filteredProducts = selectedFilter === "all" 
     ? PRODUCTS 
@@ -481,84 +486,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ========================================================= */}
-      {/* 2. THE FACEBOOK COVER TRUST RIBBON (5 Signature Pillars)  */}
-      {/* ========================================================= */}
-      <section className="container mx-auto px-4 -mt-6 sm:-mt-8 relative z-20">
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-rose-100/90 shadow-xl p-4 sm:p-6">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 divide-y md:divide-y-0 md:divide-x divide-rose-100">
-            
-            {/* 1. Authentic */}
-            <div className="flex items-center gap-3 p-2">
-              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[#6B112B] shrink-0">
-                <CheckCircle2 className="h-5 w-5" />
-              </div>
-              <div>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-900">খাঁটি পণ্য</h4>
-                <p className="text-[11px] text-slate-500">১০০% আসল কাঠের হস্তশিল্প</p>
-              </div>
-            </div>
-
-            {/* 2. Best Quality */}
-            <div className="flex items-center gap-3 p-2 pt-3 md:pt-2 md:pl-4">
-              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-[#B8860B] shrink-0">
-                <ShieldCheck className="h-5 w-5" />
-              </div>
-              <div>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-900">সেরা মান</h4>
-                <p className="text-[11px] text-slate-500">টেকসই পলিশ ও মজবুত কাঁচ</p>
-              </div>
-            </div>
-
-            {/* 3. Fast Delivery */}
-            <div className="flex items-center gap-3 p-2 pt-3 md:pt-2 md:pl-4">
-              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-700 shrink-0">
-                <Truck className="h-5 w-5" />
-              </div>
-              <div>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-900">দ্রুত ডেলিভারি</h4>
-                <p className="text-[11px] text-slate-500">সারাদেশে সুরক্ষিত হোম কুরিয়ার</p>
-              </div>
-            </div>
-
-            {/* 4. Cash on Delivery */}
-            <div className="flex items-center gap-3 p-2 pt-3 md:pt-2 md:pl-4">
-              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-                <Package className="h-5 w-5" />
-              </div>
-              <div>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-900">ক্যাশ অন ডেলিভারি</h4>
-                <p className="text-[11px] text-slate-500">পণ্য হাতে পেয়ে নিশ্চিন্তে টাকা দিন</p>
-              </div>
-            </div>
-
-            {/* 5. 24/7 Trusted Service */}
-            <div className="col-span-2 md:col-span-1 flex items-center gap-3 p-2 pt-3 md:pt-2 md:pl-4">
-              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[#6B112B] shrink-0">
-                <MessageCircle className="h-5 w-5" />
-              </div>
-              <div>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-900">বিশ্বস্ত গ্রাহক সেবা</h4>
-                <p className="text-[11px] text-slate-500">০১৬১৪-২৫৮৮০৪ সার্বক্ষণিক সাপোর্ট</p>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Slogan Banner Footer */}
-          <div className="mt-4 pt-3 border-t border-rose-100 text-center">
-            <span className="text-xs font-semibold text-[#6B112B]">
-              🌸 ভালোবাসা দিয়ে তৈরি, আপনার জন্য নিবেদিত ♡
-            </span>
-          </div>
-        </div>
-      </section>
 
       {/* ========================================================= */}
-      {/* 3. OFFICIAL 8 FB CATEGORIES (Visual Cards Grid)           */}
+      {/* 3. OFFICIAL 8 FB CATEGORIES (Mobile Carousel / Slider)     */}
       {/* ========================================================= */}
       <section className="container mx-auto px-4 sm:px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div className="flex items-end justify-between gap-4 mb-6">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#6B112B] bg-rose-50 px-3 py-1 rounded-full mb-2 border border-rose-200">
               <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" /> অফিসিয়াল ক্যাটাগরি
@@ -571,43 +504,92 @@ export default function HomePage() {
             </p>
           </div>
 
-          <Link href="/products" className="text-sm font-bold text-[#6B112B] hover:text-[#50091D] flex items-center gap-1 group">
-            সকল ক্যাটাগরি দেখুন <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          {/* View All Link (No controlling buttons) */}
+          <Link 
+            href="/products" 
+            className="text-xs sm:text-sm font-bold text-[#6B112B] hover:text-[#50091D] inline-flex items-center gap-1 group shrink-0"
+          >
+            সব দেখুন <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {CATEGORIES.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/products?category=${cat.id}`}
-              className="group relative rounded-2xl sm:rounded-3xl overflow-hidden border border-rose-100/90 shadow-sm hover:shadow-xl hover:border-[#6B112B]/40 transition-all flex flex-col justify-end min-h-[200px] sm:min-h-[230px] bg-slate-900"
-            >
-              {/* Background Realistic Image */}
-              <div className="absolute inset-0">
-                <Image
-                  src={cat.image}
-                  alt={cat.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 group-hover:via-black/50 transition-colors" />
-              </div>
+        {/* Infinite Auto-Scrolling Marquee Track */}
+        <div className="relative overflow-hidden w-full marquee-pause-hover py-2">
+          {/* Subtle Left & Right Edge Gradient Fade */}
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
 
-              {/* Category Info */}
-              <div className="relative z-10 p-4 space-y-1 text-center flex flex-col items-center">
-                <span className="text-[10px] font-bold text-[#F5E6B3] bg-[#6B112B]/85 px-2.5 py-0.5 rounded-full border border-[#D4AF37]/30 backdrop-blur-sm mb-1">
-                  {cat.badge}
-                </span>
-                <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-[#F5E6B3] transition-colors leading-tight">
-                  {cat.title}
-                </h3>
-                <span className="text-[11px] text-rose-200/90 font-medium">
-                  {cat.count}
-                </span>
-              </div>
-            </Link>
-          ))}
+          <div className="flex items-center">
+            {/* Track 1 */}
+            <div className="animate-marquee-infinite flex items-center gap-4 sm:gap-5 pr-4 sm:pr-5">
+              {CATEGORIES.map((cat, idx) => (
+                <Link
+                  key={`track1-${cat.id}-${idx}`}
+                  href={`/products?category=${cat.id}`}
+                  className="group relative rounded-2xl sm:rounded-3xl overflow-hidden border border-rose-100/90 shadow-sm hover:shadow-xl hover:border-[#6B112B]/50 transition-all flex flex-col justify-end min-h-[195px] sm:min-h-[220px] w-60 xs:w-68 sm:w-52 lg:w-56 shrink-0 bg-slate-900"
+                >
+                  {/* Background Realistic Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={cat.image}
+                      alt={cat.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/15 group-hover:via-black/55 transition-colors" />
+                  </div>
+
+                  {/* Category Info */}
+                  <div className="relative z-10 p-3.5 sm:p-4 space-y-1 text-center flex flex-col items-center">
+                    <span className="text-[9px] sm:text-[10px] font-bold text-[#F5E6B3] bg-[#6B112B]/90 px-2.5 py-0.5 rounded-full border border-[#D4AF37]/35 backdrop-blur-sm mb-1 shadow-xs">
+                      {cat.badge}
+                    </span>
+                    <h3 className="font-bold text-xs sm:text-sm text-white group-hover:text-[#F5E6B3] transition-colors leading-tight line-clamp-1">
+                      {cat.title}
+                    </h3>
+                    <span className="text-[10px] sm:text-[11px] text-rose-200/90 font-medium">
+                      {cat.count}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Track 2 (Seamless Infinite Clone) */}
+            <div aria-hidden="true" className="animate-marquee-infinite flex items-center gap-4 sm:gap-5 pr-4 sm:pr-5">
+              {CATEGORIES.map((cat, idx) => (
+                <Link
+                  key={`track2-${cat.id}-${idx}`}
+                  href={`/products?category=${cat.id}`}
+                  className="group relative rounded-2xl sm:rounded-3xl overflow-hidden border border-rose-100/90 shadow-sm hover:shadow-xl hover:border-[#6B112B]/50 transition-all flex flex-col justify-end min-h-[195px] sm:min-h-[220px] w-60 xs:w-68 sm:w-52 lg:w-56 shrink-0 bg-slate-900"
+                >
+                  {/* Background Realistic Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={cat.image}
+                      alt={cat.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/15 group-hover:via-black/55 transition-colors" />
+                  </div>
+
+                  {/* Category Info */}
+                  <div className="relative z-10 p-3.5 sm:p-4 space-y-1 text-center flex flex-col items-center">
+                    <span className="text-[9px] sm:text-[10px] font-bold text-[#F5E6B3] bg-[#6B112B]/90 px-2.5 py-0.5 rounded-full border border-[#D4AF37]/35 backdrop-blur-sm mb-1 shadow-xs">
+                      {cat.badge}
+                    </span>
+                    <h3 className="font-bold text-xs sm:text-sm text-white group-hover:text-[#F5E6B3] transition-colors leading-tight line-clamp-1">
+                      {cat.title}
+                    </h3>
+                    <span className="text-[10px] sm:text-[11px] text-rose-200/90 font-medium">
+                      {cat.count}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -656,99 +638,147 @@ export default function HomePage() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="group rounded-3xl border border-rose-100/90 bg-white overflow-hidden hover:shadow-xl hover:border-rose-300 transition-all duration-300 flex flex-col justify-between"
+              className="group relative rounded-[28px] border border-rose-100/90 bg-white p-3 sm:p-3.5 shadow-[0_4px_20px_-4px_rgba(107,17,43,0.06)] hover:shadow-[0_22px_45px_-12px_rgba(107,17,43,0.18)] hover:border-rose-300 transition-all duration-500 flex flex-col justify-between transform hover:-translate-y-1.5"
             >
-              {/* Product Visual Container */}
-              <div className="relative h-64 w-full overflow-hidden bg-slate-100">
+              {/* Product Visual Container with Inset Rounded Frame */}
+              <div className="relative aspect-[4/5] sm:aspect-[1/1] lg:aspect-[4/5] w-full overflow-hidden rounded-2xl bg-gradient-to-b from-stone-50 via-rose-50/20 to-stone-100">
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
-                  className="object-cover group-hover:scale-108 transition-transform duration-500"
+                  className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                
+                {/* Subtle Luxury Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent pointer-events-none opacity-80 group-hover:opacity-90 transition-opacity" />
 
-                {/* Badge */}
-                <Badge className="absolute top-3.5 left-3.5 bg-[#6B112B] text-white font-medium text-xs shadow-md border-0">
-                  {product.badge}
-                </Badge>
-
-                {/* Discount Tag */}
-                {product.discount && (
-                  <span className="absolute top-3.5 right-3.5 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-                    {product.discount}
+                {/* Top Left: Luxury Boutique Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="inline-flex items-center gap-1 bg-[#6B112B]/90 backdrop-blur-md text-[#F5E6B3] border border-[#D4AF37]/40 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md">
+                    <Sparkles className="h-2.5 w-2.5 text-[#D4AF37]" />
+                    {product.badge}
                   </span>
-                )}
-
-                {/* Size / Dimensions Tag */}
-                <div className="absolute bottom-3 left-3.5 bg-black/75 text-[#F5E6B3] text-[11px] px-2.5 py-1 rounded-md backdrop-blur-sm font-medium border border-white/10">
-                  {product.size}
                 </div>
+
+                {/* Top Right: Discount Pill & Heart Wishlist */}
+                <div className="absolute top-3 right-3 z-10 flex flex-col items-end gap-1.5">
+                  {product.discount && (
+                    <span className="bg-rose-600 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md tracking-wider">
+                      {product.discount}
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    aria-label="Wishlist"
+                    className="h-8 w-8 rounded-full bg-white/90 backdrop-blur-sm text-slate-500 hover:text-rose-600 hover:bg-white shadow-sm flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0"
+                  >
+                    <Heart className="h-4 w-4 fill-transparent hover:fill-rose-600 transition-colors" />
+                  </button>
+                </div>
+
+                {/* Bottom Left: Size & Specification Chip */}
+                <div className="absolute bottom-3 left-3 z-10">
+                  <div className="bg-black/70 backdrop-blur-md text-[#FBEBB5] text-[11px] font-semibold px-2.5 py-1 rounded-lg border border-white/15 shadow-sm flex items-center gap-1.5">
+                    <Package className="h-3 w-3 text-[#D4AF37]" />
+                    <span>{product.size}</span>
+                  </div>
+                </div>
+
+                {/* Hover Reveal: Floating Quick View Link */}
+                <Link
+                  href={`/products/${product.id}`}
+                  className="absolute inset-x-3 bottom-3 z-20 hidden group-hover:flex items-center justify-center gap-1.5 bg-white/95 backdrop-blur-md text-[#6B112B] font-bold text-xs py-2 rounded-xl shadow-lg border border-rose-200/80 transition-all duration-300"
+                >
+                  <Eye className="h-3.5 w-3.5" /> বিস্তারিত দেখুন
+                </Link>
               </div>
 
-              {/* Product Details */}
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-[#6B112B] font-bold tracking-wide">{product.category}</span>
-                    <div className="flex items-center gap-1 text-amber-500 font-bold">
-                      <Star className="h-3.5 w-3.5 fill-amber-500" />
+              {/* Product Details Section */}
+              <div className="pt-3.5 pb-1 px-1 flex-1 flex flex-col justify-between space-y-3.5">
+                <div className="space-y-2">
+                  {/* Category Pill and Rating Bar */}
+                  <div className="flex items-center justify-between text-xs gap-2">
+                    <span className="text-[11px] font-bold text-[#6B112B] bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200/60 tracking-wide line-clamp-1">
+                      {product.category}
+                    </span>
+                    <div className="flex items-center gap-1 text-[11px] font-bold text-amber-500 bg-amber-50/80 px-2 py-0.5 rounded-full border border-amber-200/50 shrink-0">
+                      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                       <span>{product.rating}</span>
                       <span className="text-slate-400 font-normal">({product.reviews})</span>
                     </div>
                   </div>
 
-                  <Link href={`/products/${product.id}`} className="block">
-                    <h3 className="font-bold text-base text-slate-900 group-hover:text-[#6B112B] transition-colors line-clamp-2 leading-snug">
+                  {/* Product Title */}
+                  <Link href={`/products/${product.id}`} className="block group/title">
+                    <h3 className="font-bold text-base text-slate-900 group-hover/title:text-[#6B112B] transition-colors line-clamp-2 leading-snug font-serif">
                       {product.name}
                     </h3>
                   </Link>
 
-                  <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                    {product.highlight}
-                  </p>
+                  {/* Highlights / Features Micro Badges */}
+                  <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                    {product.highlight.split("•").slice(0, 2).map((item, idx) => (
+                      <span key={idx} className="text-[10px] font-medium text-slate-600 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-200/60 flex items-center gap-1">
+                        <Check className="h-2.5 w-2.5 text-emerald-600" />
+                        <span className="truncate max-w-[130px]">{item.trim()}</span>
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
-                {/* Price and Action Buttons */}
-                <div className="pt-3 border-t border-slate-100 space-y-3">
+                {/* Price and Stock Status */}
+                <div className="pt-2.5 border-t border-rose-100/80 space-y-3">
                   <div className="flex items-baseline justify-between">
-                    <div>
-                      <span className="text-2xl font-black text-[#6B112B]">৳{product.price.toLocaleString()}</span>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-2xl font-black text-[#6B112B] tracking-tight">
+                        ৳{product.price.toLocaleString()}
+                      </span>
                       {product.originalPrice && (
-                        <span className="ml-2 text-xs text-slate-400 line-through">
+                        <span className="text-xs text-slate-400 line-through">
                           ৳{product.originalPrice.toLocaleString()}
                         </span>
                       )}
                     </div>
-                    <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                       ইন স্টক
-                    </span>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 pt-1">
-                    {/* Direct WhatsApp Instant Order Button */}
+                  {/* Action Buttons: WhatsApp Info Inquiry & Direct Order */}
+                  <div className="grid grid-cols-2 gap-2 pt-0.5">
+                    {/* Button 1: Ask Info on WhatsApp */}
                     <a
-                      href={`https://wa.me/8801614258804?text=${encodeURIComponent(product.whatsappMsg)}`}
+                      href={`https://wa.me/8801614258804?text=${encodeURIComponent(
+                        `হ্যালো নারী নিবেদিত, আমি '${product.name}' সম্পর্কে বিস্তারিত তথ্য জানতে চাই।`
+                      )}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full"
                     >
-                      <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs gap-1.5 rounded-xl h-10 shadow-sm">
-                        <MessageCircle className="h-4 w-4 fill-white" />
-                        <span>অর্ডার করুন</span>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        className="w-full border-emerald-300 hover:border-emerald-600 bg-emerald-50/60 hover:bg-emerald-100 text-emerald-800 font-bold text-xs gap-1.5 rounded-xl h-10 shadow-sm transition-all"
+                      >
+                        <MessageCircle className="h-4 w-4 fill-emerald-600 text-emerald-600" />
+                        <span>তথ্য জানুন</span>
                       </Button>
                     </a>
 
-                    {/* View Details */}
-                    <Link href={`/products/${product.id}`} className="w-full">
-                      <Button size="sm" variant="outline" className="w-full border-rose-200 hover:bg-rose-50 text-[#6B112B] font-semibold text-xs rounded-xl h-10">
-                        <Eye className="mr-1.5 h-3.5 w-3.5" /> বিস্তারিত
-                      </Button>
-                    </Link>
+                    {/* Button 2: Direct Order Modal Trigger */}
+                    <Button 
+                      size="sm" 
+                      onClick={() => setOrderModalProduct(product)}
+                      className="w-full bg-[#6B112B] hover:bg-[#52091E] text-white font-bold text-xs gap-1.5 rounded-xl h-10 shadow-sm hover:shadow-md transition-all active:scale-95 border-0"
+                    >
+                      <ShoppingBag className="h-3.5 w-3.5 text-[#D4AF37]" />
+                      <span>অর্ডার করুন</span>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -930,50 +960,10 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================= */}
-      {/* 7. REAL CUSTOMER REVIEWS (Facebook Social Proof)          */}
+      {/* 7. REAL CUSTOMER REVIEWS & FEEDBACK                       */}
       {/* ========================================================= */}
       <section className="container mx-auto px-4 sm:px-6">
-        <div className="text-center max-w-2xl mx-auto space-y-2 mb-10">
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#6B112B] bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
-            <Heart className="h-3.5 w-3.5 fill-[#6B112B] text-[#6B112B]" /> গ্রাহকের ভালোবাসা
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-serif">
-            সন্তুষ্ট গ্রাহকদের বাস্তব প্রতিক্রিয়া
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            ফেসবুক পেজে আমাদের সম্মানিত ক্রেতাদের বাস্তব মতামত ও ভালোবাসার কিছু স্মৃতি
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {TESTIMONIALS.map((t, idx) => (
-            <div
-              key={idx}
-              className="bg-white p-6 rounded-3xl border border-rose-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
-            >
-              <div className="space-y-3">
-                <div className="flex items-center gap-1 text-amber-500">
-                  {[...Array(t.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-500" />
-                  ))}
-                </div>
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
-                  "{t.comment}"
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-rose-50 flex items-center justify-between">
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900">{t.name}</h4>
-                  <span className="text-[10px] text-slate-400">{t.location}</span>
-                </div>
-                <Badge variant="outline" className="text-[10px] text-[#6B112B] border-rose-200 bg-rose-50/50">
-                  {t.product}
-                </Badge>
-              </div>
-            </div>
-          ))}
-        </div>
+        <ReviewsSection productId="all" productTitle="নারী নিবেদিত শপ" />
       </section>
 
       {/* ========================================================= */}
@@ -1084,6 +1074,13 @@ export default function HomePage() {
           </a>
         </div>
       </div>
+
+      {/* Quick Cash-on-Delivery Order Modal */}
+      <QuickOrderModal
+        product={orderModalProduct}
+        isOpen={!!orderModalProduct}
+        onClose={() => setOrderModalProduct(null)}
+      />
 
     </div>
   );

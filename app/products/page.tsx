@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Star, Filter, ArrowUpDown, MessageCircle, Eye, Heart } from "lucide-react";
+import { Star, Filter, ArrowUpDown, MessageCircle, Eye, Heart, Sparkles, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { QuickOrderModal, QuickOrderProduct } from "@/components/quick-order-modal";
 
 const ALL_PRODUCTS = [
   {
@@ -17,7 +19,7 @@ const ALL_PRODUCTS = [
     reviews: 48,
     badge: "সেরা বিক্রিত",
     size: "২১\" x ১৬\" সাইজ",
-    image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80",
+    image: "/images/products/churi-alna.jpg",
     description: "স্বচ্ছ গ্লাস ডোর, মজবুত কাঠের তৈরি এবং সম্পূর্ণ লক ও কি বিশিষ্ট চুড়ি আলনা।",
   },
   {
@@ -30,7 +32,7 @@ const ALL_PRODUCTS = [
     reviews: 32,
     badge: "কাস্টমাইজড",
     size: "২৪\" x ১৮\" সাইজ",
-    image: "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=800&q=80",
+    image: "/images/products/home-mandir.jpg",
     description: "সুক্ষ্ম লেজার কাটিং কাঠের কাজ ও ওয়ার্ম এলইডি লাইটিংযুক্ত ঘর সাজানোর মন্দির।",
   },
   {
@@ -43,7 +45,7 @@ const ALL_PRODUCTS = [
     reviews: 65,
     badge: "নতুন স্টক",
     size: "সাইজ ২.৪, ২.৬, ২.৮",
-    image: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=800&q=80",
+    image: "/images/products/reshmi-churi.jpg",
     description: "ঐতিহ্যবাহী নিখুঁত রেশমি চুড়ির কম্বো সেট। বিয়ে ও উৎসবের সেরা পছন্দ।",
   },
   {
@@ -56,7 +58,7 @@ const ALL_PRODUCTS = [
     reviews: 41,
     badge: "ট্রেন্ডিং",
     size: "১৮\" x ১৪\" সাইজ",
-    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80",
+    image: "/images/products/jewelry-box.jpg",
     description: "ইন-বিল্ট এলইডি লাইট এবং গহনার ড্রয়ারযুক্ত আকর্ষণীয় কাঠের বক্স।",
   },
   {
@@ -69,7 +71,7 @@ const ALL_PRODUCTS = [
     reviews: 27,
     badge: "জনপ্রিয়",
     size: "১৬\" x ১২\" সাইজ",
-    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80",
+    image: "/images/products/jewelry-box.jpg",
     description: "আলাদা রিং স্লট, নেকলেস হ্যাঙ্গার এবং ভেলভেট কুশনযুক্ত নিরাপদ বক্স।",
   },
   {
@@ -114,6 +116,8 @@ const ALL_PRODUCTS = [
 ];
 
 export default function ProductsPage() {
+  const [orderModalProduct, setOrderModalProduct] = useState<QuickOrderProduct | null>(null);
+
   return (
     <div className="container mx-auto px-4 py-10 space-y-8">
       {/* Page Header */}
@@ -148,90 +152,139 @@ export default function ProductsPage() {
       </div>
 
       {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7">
         {ALL_PRODUCTS.map((product) => (
           <div
             key={product.id}
-            className="group rounded-3xl border border-rose-100 bg-white overflow-hidden hover:shadow-xl hover:border-rose-300 transition-all flex flex-col justify-between"
+            className="group relative rounded-[28px] border border-rose-100/90 bg-white p-3 sm:p-3.5 shadow-[0_4px_20px_-4px_rgba(107,17,43,0.06)] hover:shadow-[0_20px_40px_-12px_rgba(107,17,43,0.18)] hover:border-rose-300 transition-all duration-500 flex flex-col justify-between transform hover:-translate-y-1.5"
           >
-            {/* Image with Unsplash */}
-            <div className="relative h-60 w-full overflow-hidden bg-slate-100">
+            {/* Inset Rounded Image Container */}
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-gradient-to-b from-stone-50 via-rose-50/20 to-stone-100">
               <Image
                 src={product.image}
                 alt={product.name}
                 fill
-                className="object-cover group-hover:scale-108 transition-transform duration-500"
+                className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent pointer-events-none opacity-80 group-hover:opacity-90 transition-opacity" />
 
-              <Badge className="absolute top-3 left-3 bg-[#8B1E3F] text-white font-medium text-xs border-0 shadow-sm">
-                {product.badge}
-              </Badge>
-
-              <div className="absolute bottom-3 left-3 bg-black/70 text-[#F5E6B3] text-[11px] px-2 py-0.5 rounded backdrop-blur-sm font-medium">
-                {product.size}
+              {/* Top Left: Boutique Badge */}
+              <div className="absolute top-3 left-3 z-10">
+                <span className="inline-flex items-center gap-1 bg-[#6B112B]/90 backdrop-blur-md text-[#F5E6B3] border border-[#D4AF37]/40 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md">
+                  <Sparkles className="h-2.5 w-2.5 text-[#D4AF37]" />
+                  {product.badge}
+                </span>
               </div>
 
+              {/* Top Right: Wishlist Heart Button */}
               <button
                 type="button"
-                className="absolute top-3 right-3 h-8 w-8 rounded-full bg-white/90 backdrop-blur-sm text-slate-600 hover:text-[#8B1E3F] flex items-center justify-center shadow-sm"
+                aria-label="Wishlist"
+                className="absolute top-3 right-3 z-10 h-8 w-8 rounded-full bg-white/90 backdrop-blur-sm text-slate-500 hover:text-rose-600 hover:bg-white shadow-sm flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0"
               >
-                <Heart className="h-4 w-4" />
+                <Heart className="h-4 w-4 fill-transparent hover:fill-rose-600 transition-colors" />
               </button>
+
+              {/* Bottom Left: Size / Specs */}
+              <div className="absolute bottom-3 left-3 z-10">
+                <div className="bg-black/70 backdrop-blur-md text-[#FBEBB5] text-[11px] font-semibold px-2.5 py-1 rounded-lg border border-white/15 shadow-sm">
+                  {product.size}
+                </div>
+              </div>
+
+              {/* Hover Quick Action */}
+              <Link
+                href={`/products/${product.id}`}
+                className="absolute inset-x-3 bottom-3 z-20 hidden group-hover:flex items-center justify-center gap-1.5 bg-white/95 backdrop-blur-md text-[#6B112B] font-bold text-xs py-2 rounded-xl shadow-lg border border-rose-200/80 transition-all duration-300"
+              >
+                <Eye className="h-3.5 w-3.5" /> বিস্তারিত দেখুন
+              </Link>
             </div>
 
-            {/* Details */}
-            <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-              <div>
-                <span className="text-[11px] font-bold text-[#8B1E3F] uppercase tracking-wider">
-                  {product.category}
-                </span>
-                <Link href={`/products/${product.id}`} className="block mt-1">
-                  <h3 className="font-bold text-sm text-slate-900 group-hover:text-[#8B1E3F] transition-colors line-clamp-2 leading-snug">
+            {/* Details Section */}
+            <div className="pt-3.5 pb-1 px-1 flex-1 flex flex-col justify-between space-y-3.5">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs gap-2">
+                  <span className="text-[11px] font-bold text-[#6B112B] bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200/60 tracking-wide line-clamp-1">
+                    {product.category}
+                  </span>
+                  <div className="flex items-center gap-1 text-[11px] font-bold text-amber-500 bg-amber-50/80 px-2 py-0.5 rounded-full border border-amber-200/50 shrink-0">
+                    <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                    <span>{product.rating}</span>
+                    <span className="text-slate-400 font-normal">({product.reviews})</span>
+                  </div>
+                </div>
+
+                <Link href={`/products/${product.id}`} className="block group/title">
+                  <h3 className="font-bold text-base text-slate-900 group-hover/title:text-[#6B112B] transition-colors line-clamp-2 leading-snug font-serif">
                     {product.name}
                   </h3>
                 </Link>
-                <p className="text-xs text-slate-500 line-clamp-2 mt-1">
+
+                <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
                   {product.description}
                 </p>
-                <div className="flex items-center gap-1 text-amber-500 text-xs pt-1.5 font-bold">
-                  <Star className="h-3 w-3 fill-amber-500" />
-                  <span>{product.rating}</span>
-                  <span className="text-slate-400 font-normal">({product.reviews})</span>
-                </div>
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-                <div>
-                  <span className="text-lg font-black text-[#7A1233]">৳{product.price.toLocaleString()}</span>
-                  {product.originalPrice && (
-                    <span className="ml-1.5 text-xs text-slate-400 line-through">
-                      ৳{product.originalPrice.toLocaleString()}
-                    </span>
-                  )}
+              {/* Price and Actions */}
+              <div className="pt-2.5 border-t border-rose-100/80 space-y-3">
+                <div className="flex items-baseline justify-between">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#6B112B] tracking-tight">৳{product.price.toLocaleString()}</span>
+                    {product.originalPrice && (
+                      <span className="text-xs text-slate-400 line-through">
+                        ৳{product.originalPrice.toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    ইন স্টক
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-1.5">
+                <div className="grid grid-cols-2 gap-2 pt-0.5">
+                  {/* Button 1: Ask Info on WhatsApp */}
                   <a
-                    href={`https://wa.me/8801614258804?text=Hello%20Nari%20Nibedito,%20I%20want%20to%20order%20${encodeURIComponent(product.name)}`}
+                    href={`https://wa.me/8801614258804?text=${encodeURIComponent(
+                      `হ্যালো নারী নিবেদিত, আমি '${product.name}' সম্পর্কে বিস্তারিত তথ্য জানতে চাই।`
+                    )}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="w-full"
                   >
-                    <Button size="icon" className="h-8 w-8 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full">
-                      <MessageCircle className="h-4 w-4 fill-white" />
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="w-full border-emerald-300 hover:border-emerald-600 bg-emerald-50/60 hover:bg-emerald-100 text-emerald-800 font-bold text-xs gap-1.5 rounded-xl h-10 shadow-sm transition-all"
+                    >
+                      <MessageCircle className="h-4 w-4 fill-emerald-600 text-emerald-600" />
+                      <span>তথ্য জানুন</span>
                     </Button>
                   </a>
-                  <Link href={`/products/${product.id}`}>
-                    <Button size="sm" variant="default" className="bg-[#8B1E3F] hover:bg-[#701531] text-white text-xs rounded-full h-8 px-3">
-                      বিস্তারিত
-                    </Button>
-                  </Link>
+
+                  {/* Button 2: Direct Order Modal Trigger */}
+                  <Button 
+                    size="sm" 
+                    onClick={() => setOrderModalProduct(product)}
+                    className="w-full bg-[#6B112B] hover:bg-[#52091E] text-white font-bold text-xs gap-1.5 rounded-xl h-10 shadow-sm hover:shadow-md transition-all active:scale-95 border-0"
+                  >
+                    <ShoppingBag className="h-3.5 w-3.5 text-[#D4AF37]" />
+                    <span>অর্ডার করুন</span>
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Quick Cash-on-Delivery Order Modal */}
+      <QuickOrderModal
+        product={orderModalProduct}
+        isOpen={!!orderModalProduct}
+        onClose={() => setOrderModalProduct(null)}
+      />
     </div>
   );
 }
