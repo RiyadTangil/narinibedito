@@ -20,5 +20,17 @@ export const ENDPOINTS = {
     CREATE: { URL: "/api/orders", KEY: "orders-create" },
     UPDATE: { URL: "/api/orders", KEY: "orders-update" },
   },
+  CATEGORIES: {
+    LIST: { URL: "/api/categories", KEY: "categories-list" },
+    CREATE: { URL: "/api/categories", KEY: "categories-create" },
+    UPDATE: { URL: "/api/categories", KEY: "categories-update" },
+    DELETE: { URL: "/api/categories", KEY: "categories-delete" },
+  },
+  PRODUCTS: {
+    LIST: { URL: "/api/products", KEY: "products-list" },
+    CREATE: { URL: "/api/products", KEY: "products-create" },
+    UPDATE: { URL: "/api/products", KEY: "products-update" },
+    DELETE: { URL: "/api/products", KEY: "products-delete" },
+  },
 };
 

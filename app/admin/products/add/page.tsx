@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -21,24 +22,15 @@ import {
   Star,
   MessageCircle,
   HelpCircle,
-  AlertCircle
+  AlertCircle,
+  Loader2
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-
-const CATEGORY_OPTIONS = [
-  { id: "churi-alna", name: "চুড়ি আলনা ও শোকেস" },
-  { id: "home-decor", name: "হোম মন্দির ও ডেকোর" },
-  { id: "jewellery", name: "ঐতিহ্যবাহী চুড়ি ও গহনা" },
-  { id: "organizer", name: "জুয়েলারি বক্স ও কেবিনেট" },
-  { id: "lighting", name: "শোপিস ও ফেয়ারি লাইটিং" },
-  { id: "clothing", name: "পোশাক ও উৎসবের কুর্তি" },
-  { id: "accessories", name: "ব্যাগ ও লেডিস এক্সেসরিজ" },
-  { id: "beauty", name: "বিউটি, স্কিনকেয়ার ও গিফট" },
-];
+import { toast } from "sonner";
 
 const BADGE_OPTIONS = [
   "সেরা বিক্রিত",
@@ -49,32 +41,112 @@ const BADGE_OPTIONS = [
   "এক্সক্লুসিভ",
 ];
 
-export default function AdminAddProductPage() {
+function ProductFormContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const editId = searchParams.get("id") || searchParams.get("edit");
+  const isEditing = Boolean(editId);
+
+  const [categoriesList, setCategoriesList] = useState<any[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingProduct, setLoadingProduct] = useState(Boolean(editId));
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   
   // Interactive Form State for Frontend
   const [formData, setFormData] = useState({
-    name: "এক্সক্লুসিভ ডাবল ডোর কাঠের চুড়ি আলনা (১৪০ ডজন ধারণক্ষমতা)",
-    sku: "NN-ALNA-01",
-    categorySlug: "churi-alna",
-    price: "2250",
-    originalPrice: "2650",
-    badge: "সেরা বিক্রিত",
-    size: "২১\" x ১৬\" সাইজ",
-    capacity: "১৪০ ডজন চুড়ি",
-    material: "উন্নত মেহগনি কাঠ ও স্বচ্ছ গ্লাস",
-    stock: "35",
+    name: "",
+    sku: "",
+    categorySlug: "",
+    price: "",
+    originalPrice: "",
+    badge: "নতুন কালেকশন",
+    size: "",
+    capacity: "",
+    material: "",
+    stock: "25",
     inStock: true,
-    highlight: "স্বচ্ছ গ্লাস ডোর • সিকিউরিটি লক ও চাবি • ১৪০ ডজন ধারণক্ষমতা • ওয়ার্ম এলইডি লাইটিং",
-    description: "আপনার মূল্যবান কাচের, রেশমি ও ধাতব চুড়িগুলো ঘরের কোণে এলোমেলো না রেখে সাজিয়ে রাখুন পরিপাটি ও নিরাপদে। প্রতিটি আলনা অভিজ্ঞ কারিগরের নিখুঁত হাতে কাঠের পালিশ এবং সুরক্ষার জন্য উন্নত চাবি লক দিয়ে তৈরি করা হয়েছে।",
+    highlight: "",
+    description: "",
     image: "/images/products/churi-alna.jpg",
     secondaryImages: [
-      "/images/products/home-mandir.jpg",
-      "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&w=800&q=80"
-    ]
+      "/images/products/home-mandir.jpg"
+    ] as string[]
   });
 
   const [newImageUrl, setNewImageUrl] = useState("");
+
+  // 1. Fetch Categories
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+          setCategoriesList(json.data);
+          if (!isEditing) {
+            setFormData((prev) => ({
+              ...prev,
+              categorySlug: prev.categorySlug || json.data[0].id,
+            }));
+          }
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load categories:", err);
+      })
+      .finally(() => {
+        setLoadingCategories(false);
+      });
+  }, [isEditing]);
+
+  // 2. Fetch Existing Product when in Edit mode
+  useEffect(() => {
+    if (!editId) return;
+
+    let isMounted = true;
+    setLoadingProduct(true);
+
+    fetch(`/api/products/${editId}`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (!isMounted) return;
+        if (json.success && json.data) {
+          const p = json.data;
+          setFormData({
+            name: p.name || "",
+            sku: p.sku || "",
+            categorySlug: p.categorySlug || "",
+            price: p.price !== undefined ? p.price.toString() : "",
+            originalPrice: p.originalPrice !== undefined ? p.originalPrice.toString() : "",
+            badge: p.badge || "নতুন কালেকশন",
+            size: p.size || "",
+            capacity: p.capacity || "",
+            material: p.material || "",
+            stock: p.stock !== undefined ? p.stock.toString() : "25",
+            inStock: p.inStock ?? (p.stock > 0),
+            highlight: p.highlight || "",
+            description: p.description || "",
+            image: p.image || "/images/products/churi-alna.jpg",
+            secondaryImages: Array.isArray(p.secondaryImages) && p.secondaryImages.length > 0 
+              ? p.secondaryImages 
+              : ["/images/products/home-mandir.jpg"],
+          });
+        } else {
+          toast.error("পণ্যের তথ্য লোড করা যায়নি");
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch product for editing:", err);
+        if (isMounted) toast.error("পণ্যের তথ্য লোড করতে সমস্যা হয়েছে");
+      })
+      .finally(() => {
+        if (isMounted) setLoadingProduct(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [editId]);
 
   const regularNum = parseFloat(formData.originalPrice) || 0;
   const saleNum = parseFloat(formData.price) || 0;
@@ -82,13 +154,75 @@ export default function AdminAddProductPage() {
     ? Math.round(((regularNum - saleNum) / regularNum) * 100)
     : 0;
 
-  const currentCategory = CATEGORY_OPTIONS.find(c => c.id === formData.categorySlug)?.name || "ক্যাটাগরি";
+  const currentCategory = categoriesList.find(c => c.id === formData.categorySlug)?.title || "ক্যাটাগরি";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setTimeout(() => setSubmitted(false), 5000);
+    if (!formData.name.trim()) {
+      toast.error("পণ্যের নাম আবশ্যক");
+      return;
+    }
+    if (!formData.price || parseFloat(formData.price) <= 0) {
+      toast.error("পণ্যের সঠিক মূল্য প্রদান করুন");
+      return;
+    }
+    if (!formData.image.trim()) {
+      toast.error("পণ্যের ছবির লিংক প্রদান করুন");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      const url = "/api/products";
+      const method = isEditing ? "PATCH" : "POST";
+
+      const payload: Record<string, any> = {
+        name: formData.name.trim(),
+        sku: formData.sku.trim() || undefined,
+        categorySlug: formData.categorySlug,
+        category: currentCategory,
+        price: parseFloat(formData.price),
+        originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : undefined,
+        discount: discountPercent > 0 ? `${discountPercent}% ছাড়` : "",
+        badge: formData.badge,
+        highlight: formData.highlight,
+        description: formData.description,
+        size: formData.size,
+        material: formData.material,
+        stock: parseInt(formData.stock, 10) || 10,
+        inStock: formData.inStock,
+        image: formData.image.trim(),
+        secondaryImages: formData.secondaryImages,
+        status: 1,
+      };
+
+      if (isEditing) {
+        payload._id = editId;
+        payload.id = editId;
+      }
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        setSubmitted(true);
+        toast.success(isEditing ? "পণ্য সফলভাবে আপডেট করা হয়েছে!" : "নতুন পণ্য সফলভাবে ডাটাবেসে যোগ হয়েছে!");
+        setTimeout(() => {
+          router.push("/admin/products");
+        }, 1200);
+      } else {
+        toast.error(json.message || "পণ্য সংরক্ষণ করতে ব্যর্থ হয়েছে");
+      }
+    } catch (err: any) {
+      console.error("Submit error:", err);
+      toast.error("সার্ভার সমস্যা হয়েছে, অনুগ্রহ করে আবার চেষ্টা করুন");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const addImageUrl = () => {
@@ -108,6 +242,16 @@ export default function AdminAddProductPage() {
     });
   };
 
+  if (loadingProduct) {
+    return (
+      <div className="py-24 flex flex-col items-center justify-center space-y-4 max-w-xl mx-auto">
+        <Loader2 className="h-10 w-10 text-[#6B112B] animate-spin" />
+        <p className="text-sm font-semibold text-slate-700">পণ্যের তথ্য লোড করা হচ্ছে...</p>
+        <span className="text-xs text-slate-400">অনুগ্রহ করে একটু অপেক্ষা করুন</span>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-16">
       
@@ -122,14 +266,16 @@ export default function AdminAddProductPage() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-serif">
-                নতুন পণ্য যুক্ত করুন
+                {isEditing ? "পণ্য সম্পাদনা করুন (Edit Product)" : "নতুন পণ্য যুক্ত করুন"}
               </h1>
               <Badge className="bg-[#6B112B] text-white text-[10px] font-bold">
-                PRO FORM
+                {isEditing ? "EDIT MODE" : "PRO FORM"}
               </Badge>
             </div>
             <p className="text-xs text-slate-500">
-              নারী নিবেদিত স্টোরফ্রন্টে প্রদর্শনের জন্য পণ্যের বিস্তারিত ও ছবি আপলোড করুন
+              {isEditing 
+                ? "পণ্যের তথ্য, ছবি ও মূল্য পরিবর্তন করে ডাটাবেসে আপডেট করুন"
+                : "নারী নিবেদিত স্টোরফ্রন্টে প্রদর্শনের জন্য পণ্যের বিস্তারিত ও ছবি আপলোড করুন"}
             </p>
           </div>
         </div>
@@ -143,10 +289,21 @@ export default function AdminAddProductPage() {
           <Button
             size="sm"
             onClick={handleSubmit}
-            className="bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl text-xs gap-1.5 shadow-sm shadow-rose-950/20"
+            disabled={submitting}
+            className="bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl text-xs gap-1.5 shadow-sm shadow-rose-950/20 disabled:opacity-60"
           >
-            <Save className="h-4 w-4 text-[#F5E6B3]" />
-            <span>পণ্যটি পাবলিশ করুন</span>
+            {submitting ? (
+              <Loader2 className="h-4 w-4 animate-spin text-[#F5E6B3]" />
+            ) : (
+              <Save className="h-4 w-4 text-[#F5E6B3]" />
+            )}
+            <span>
+              {submitting 
+                ? "সংরক্ষণ হচ্ছে..." 
+                : isEditing 
+                ? "পরিবর্তন সংরক্ষণ করুন" 
+                : "পণ্যটি পাবলিশ করুন"}
+            </span>
           </Button>
         </div>
       </div>
@@ -160,22 +317,22 @@ export default function AdminAddProductPage() {
             </div>
             <div>
               <h4 className="font-bold text-sm text-emerald-900">
-                পণ্য সফলভাবে তালিকাভুক্ত হয়েছে!
+                {isEditing ? "পণ্য সফলভাবে আপডেট হয়েছে!" : "পণ্য সফলভাবে তালিকাভুক্ত হয়েছে!"}
               </h4>
               <p className="text-xs text-emerald-700">
-                ফ্রন্টএন্ড ইন্টারফেস সম্পূর্ণ প্রস্তুত। ব্যাকএন্ড এপিআই অনুমোদন পাওয়ার পর সরাসরি ডাটাবেসে সেভ হবে।
+                ডাটাবেসে তথ্য সংরক্ষিত হয়েছে এবং স্টোরে লাইভ প্রদর্শিত হচ্ছে।
               </p>
             </div>
           </div>
-          <Link href="/">
+          <Link href="/admin/products">
             <Button size="sm" variant="outline" className="border-emerald-300 text-emerald-800 hover:bg-emerald-100 text-xs font-bold rounded-xl">
-              <Eye className="mr-1 h-3.5 w-3.5" /> স্টোরে দেখুন
+              পণ্য তালিকায় যান
             </Button>
           </Link>
         </div>
       )}
 
-      {/* Main Form Layout: 2 Columns (Form fields left 7 cols, Live Preview right 5 cols) */}
+      {/* Main Form Layout: 2 Columns */}
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left Form Inputs (7 Cols) */}
@@ -219,11 +376,15 @@ export default function AdminAddProductPage() {
                     onChange={(e) => setFormData({ ...formData, categorySlug: e.target.value })}
                     className="w-full h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs sm:text-sm text-slate-800 focus:border-[#6B112B] focus:outline-none"
                   >
-                    {CATEGORY_OPTIONS.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </option>
-                    ))}
+                    {categoriesList.length === 0 ? (
+                      <option value="">ক্যাটাগরি লোড হচ্ছে...</option>
+                    ) : (
+                      categoriesList.map((cat) => (
+                        <option key={cat.id || cat._id} value={cat.id}>
+                          {cat.title}
+                        </option>
+                      ))
+                    )}
                   </select>
                 </div>
 
@@ -267,70 +428,46 @@ export default function AdminAddProductPage() {
 
                 <div className="space-y-1.5">
                   <Label className="text-xs font-bold text-slate-700">
-                    স্টক স্ট্যাটাস
+                    স্টক এভেইলেবিলিটি
                   </Label>
-                  <div className="flex items-center gap-3 pt-1">
-                    <label className="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={formData.inStock}
-                        onChange={() => setFormData({ ...formData, inStock: true })}
-                        className="text-[#6B112B] focus:ring-[#6B112B]"
-                      />
-                      <span>ইন-স্টক (In Stock)</span>
-                    </label>
-
-                    <label className="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={!formData.inStock}
-                        onChange={() => setFormData({ ...formData, inStock: false })}
-                        className="text-red-600 focus:ring-red-600"
-                      />
-                      <span className="text-red-600">স্টক শেষ (Out of Stock)</span>
-                    </label>
+                  <div className="flex items-center gap-3 pt-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, inStock: true })}
+                      className={`text-xs px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 border transition-all ${
+                        formData.inStock 
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-300 shadow-xs" 
+                          : "bg-slate-50 text-slate-500 border-slate-200"
+                      }`}
+                    >
+                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                      ইন স্টক
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, inStock: false })}
+                      className={`text-xs px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 border transition-all ${
+                        !formData.inStock 
+                          ? "bg-red-50 text-red-800 border-red-300 shadow-xs" 
+                          : "bg-slate-50 text-slate-500 border-slate-200"
+                      }`}
+                    >
+                      <span className="h-2 w-2 rounded-full bg-red-500" />
+                      স্টক শেষ
+                    </button>
                   </div>
                 </div>
-              </div>
-
-              {/* Highlights Bullet */}
-              <div className="space-y-1.5 pt-2">
-                <Label htmlFor="highlight" className="text-xs font-bold text-slate-700">
-                  সংক্ষিপ্ত হাইলাইটস (Bullet Highlights)
-                </Label>
-                <Input
-                  id="highlight"
-                  value={formData.highlight}
-                  onChange={(e) => setFormData({ ...formData, highlight: e.target.value })}
-                  placeholder="যেমন: স্বচ্ছ গ্লাস ডোর • সিকিউরিটি লক • ১৪০ ডজন ধারণক্ষমতা"
-                  className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
-                />
-              </div>
-
-              {/* Full Description */}
-              <div className="space-y-1.5">
-                <Label htmlFor="description" className="text-xs font-bold text-slate-700">
-                  বিস্তারিত বিবরণ (Full Description)
-                </Label>
-                <textarea
-                  id="description"
-                  rows={4}
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="পণ্যের উপাদান, ফিনিশিং ও কারিগরির বিস্তারিত লিখুন..."
-                  className="w-full rounded-xl border border-slate-200 p-3 text-xs sm:text-sm text-slate-800 focus:border-[#6B112B] focus:outline-none"
-                />
               </div>
 
             </CardContent>
           </Card>
 
-          {/* 2. Pricing & Dimensions */}
+          {/* 2. Pricing & Inventory */}
           <Card className="border-slate-200/90 shadow-sm rounded-2xl">
             <CardHeader className="pb-3 border-b border-slate-100">
               <CardTitle className="text-sm sm:text-base font-bold text-slate-900 font-serif flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-emerald-600" />
-                <span>মূল্য ও স্পেসিফিকেশন (Pricing & Specifications)</span>
+                <DollarSign className="h-4 w-4 text-[#6B112B]" />
+                <span>মূল্য ও স্টক পরিমাণ (Price & Inventory)</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
@@ -346,14 +483,14 @@ export default function AdminAddProductPage() {
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     placeholder="2250"
-                    className="rounded-xl border-slate-200 text-sm font-bold text-[#6B112B] h-10"
+                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10 font-bold text-[#6B112B]"
                     required
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <Label htmlFor="originalPrice" className="text-xs font-bold text-slate-700">
-                    রেগুলার মূল্য (৳)
+                    পূর্বের রেগুলার মূল্য (৳)
                   </Label>
                   <Input
                     id="originalPrice"
@@ -361,50 +498,13 @@ export default function AdminAddProductPage() {
                     value={formData.originalPrice}
                     onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
                     placeholder="2650"
-                    className="rounded-xl border-slate-200 text-sm text-slate-500 h-10"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-bold text-slate-700">
-                    ছাড়ের পরিমাণ
-                  </Label>
-                  <div className="h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center font-bold text-xs text-emerald-700">
-                    {discountPercent > 0 ? `${discountPercent}% ছাড় ক্যালকুলেটেড` : "কোনো ছাড় নেই"}
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                <div className="space-y-1.5">
-                  <Label htmlFor="size" className="text-xs font-bold text-slate-700">
-                    সাইজ / মাপ (Dimensions)
-                  </Label>
-                  <Input
-                    id="size"
-                    value={formData.size}
-                    onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-                    placeholder={'e.g. ২১" x ১৬" সাইজ'}
-                    className="rounded-xl border-slate-200 text-xs h-10"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="capacity" className="text-xs font-bold text-slate-700">
-                    ধারণক্ষমতা (Capacity)
-                  </Label>
-                  <Input
-                    id="capacity"
-                    value={formData.capacity}
-                    onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
-                    placeholder="e.g. ১৪০ ডজন চুড়ি"
-                    className="rounded-xl border-slate-200 text-xs h-10"
+                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <Label htmlFor="stock" className="text-xs font-bold text-slate-700">
-                    স্টক পরিমাণ (পিস)
+                    মজুদ স্টক সংখ্যা
                   </Label>
                   <Input
                     id="stock"
@@ -412,88 +512,153 @@ export default function AdminAddProductPage() {
                     value={formData.stock}
                     onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
                     placeholder="35"
-                    className="rounded-xl border-slate-200 text-xs h-10"
+                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
                   />
                 </div>
               </div>
 
-              <div className="space-y-1.5 pt-1">
-                <Label htmlFor="material" className="text-xs font-bold text-slate-700">
-                  কাঠ বা উপকরণের বিবরণ (Material)
+            </CardContent>
+          </Card>
+
+          {/* 3. Specifications & Highlights */}
+          <Card className="border-slate-200/90 shadow-sm rounded-2xl">
+            <CardHeader className="pb-3 border-b border-slate-100">
+              <CardTitle className="text-sm sm:text-base font-bold text-slate-900 font-serif flex items-center gap-2">
+                <Layers className="h-4 w-4 text-[#6B112B]" />
+                <span>স্পেসিফিকেশন ও বিবরণ (Specifications)</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-4">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="size" className="text-xs font-bold text-slate-700">
+                    সাইজ / পরিমাপ
+                  </Label>
+                  <Input
+                    id="size"
+                    value={formData.size}
+                    onChange={(e) => setFormData({ ...formData, size: e.target.value })}
+                    placeholder={'যেমন: ২১" x ১৬" সাইজ'}
+                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="capacity" className="text-xs font-bold text-slate-700">
+                    ধারণক্ষমতা
+                  </Label>
+                  <Input
+                    id="capacity"
+                    value={formData.capacity}
+                    onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
+                    placeholder="যেমন: ১৪০ ডজন চুড়ি"
+                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="material" className="text-xs font-bold text-slate-700">
+                    মেটেরিয়াল ও কাঠ
+                  </Label>
+                  <Input
+                    id="material"
+                    value={formData.material}
+                    onChange={(e) => setFormData({ ...formData, material: e.target.value })}
+                    placeholder="মেহগনি কাঠ ও স্বচ্ছ গ্লাস"
+                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="highlight" className="text-xs font-bold text-slate-700">
+                  মূল বৈশিষ্ট্য ও হাইলাইটস (বুলেট পয়েন্ট)
                 </Label>
                 <Input
-                  id="material"
-                  value={formData.material}
-                  onChange={(e) => setFormData({ ...formData, material: e.target.value })}
-                  placeholder="e.g. মেহগনি কাঠ, ৫ মিমি ক্লিয়ার গ্লাস ও সিকিউরিটি লক"
-                  className="rounded-xl border-slate-200 text-xs h-10"
+                  id="highlight"
+                  value={formData.highlight}
+                  onChange={(e) => setFormData({ ...formData, highlight: e.target.value })}
+                  placeholder="যেমন: স্বচ্ছ গ্লাস ডোর • সিকিউরিটি লক ও চাবি • ১৪০ ডজন ধারণক্ষমতা"
+                  className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="description" className="text-xs font-bold text-slate-700">
+                  পণ্যের বিস্তারিত বিবরণ (Full Description)
+                </Label>
+                <textarea
+                  id="description"
+                  rows={4}
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="আপনার প্রিয় চুড়ি ও গহনাগুলো সাজিয়ে রাখার বিস্তারিত বিবরণ..."
+                  className="w-full rounded-xl border border-slate-200 p-3 text-xs sm:text-sm focus:border-[#6B112B] focus:outline-none leading-relaxed"
                 />
               </div>
 
             </CardContent>
           </Card>
 
-          {/* 3. Media & Photography */}
+          {/* 4. Product Images */}
           <Card className="border-slate-200/90 shadow-sm rounded-2xl">
             <CardHeader className="pb-3 border-b border-slate-100">
               <CardTitle className="text-sm sm:text-base font-bold text-slate-900 font-serif flex items-center gap-2">
-                <Upload className="h-4 w-4 text-[#B8860B]" />
-                <span>পণ্যের ছবি (Product Images)</span>
+                <Upload className="h-4 w-4 text-[#6B112B]" />
+                <span>পণ্যের ছবি ও গ্যালারি (Product Images)</span>
               </CardTitle>
-              <CardDescription className="text-xs">
-                প্রধান ছবি এবং অতিরিক্ত গ্যালারি ছবির লিঙ্ক বা আপলোড
-              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
               
               <div className="space-y-1.5">
-                <Label htmlFor="primaryImage" className="text-xs font-bold text-slate-700">
-                  প্রধান ছবির URL (Primary Cover Image) <span className="text-red-500">*</span>
+                <Label htmlFor="image" className="text-xs font-bold text-slate-700">
+                  প্রধান ছবির লিংক (Primary Image URL) <span className="text-red-500">*</span>
                 </Label>
                 <Input
-                  id="primaryImage"
+                  id="image"
                   value={formData.image}
                   onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="https://images.unsplash.com/..."
-                  className="rounded-xl border-slate-200 text-xs h-10 font-mono"
+                  placeholder="/images/products/churi-alna.jpg অথবা HTTPS লিংক"
+                  className="rounded-xl border-slate-200 text-xs sm:text-sm h-10 font-mono"
                   required
                 />
               </div>
 
-              {/* Secondary Images List */}
-              <div className="space-y-2 pt-2">
+              {/* Secondary Images Manager */}
+              <div className="space-y-2 pt-2 border-t border-slate-100">
                 <Label className="text-xs font-bold text-slate-700">
-                  অতিরিক্ত ছবিসমূহ (Gallery Previews)
+                  অতিরিক্ত ছবিসমূহ (Secondary Gallery)
                 </Label>
                 
                 <div className="flex gap-2">
                   <Input
                     value={newImageUrl}
                     onChange={(e) => setNewImageUrl(e.target.value)}
-                    placeholder="আরেকটি ছবির লিঙ্ক দিন..."
-                    className="rounded-xl border-slate-200 text-xs h-9 font-mono"
+                    placeholder="অতিরিক্ত ছবির URL দিন..."
+                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-9 font-mono"
                   />
                   <Button
                     type="button"
-                    size="sm"
-                    variant="outline"
                     onClick={addImageUrl}
-                    className="rounded-xl text-xs font-bold shrink-0 border-rose-200 text-[#6B112B] hover:bg-rose-50"
+                    variant="outline"
+                    size="sm"
+                    className="h-9 px-3 rounded-xl border-slate-200 text-xs font-bold text-[#6B112B] shrink-0"
                   >
-                    + যোগ করুন
+                    <Plus className="h-3.5 w-3.5 mr-1" /> যোগ করুন
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-4 gap-3 pt-2">
+                <div className="grid grid-cols-4 gap-2 pt-2">
                   {/* Primary Thumb */}
-                  <div className="relative h-20 rounded-xl overflow-hidden border-2 border-[#6B112B] bg-slate-100 shadow-sm">
+                  <div className="relative h-20 rounded-xl overflow-hidden border-2 border-[#6B112B] bg-slate-100 group">
                     <Image
-                      src={formData.image}
+                      src={formData.image || "/images/products/churi-alna.jpg"}
                       alt="Primary"
                       fill
                       className="object-cover"
                     />
-                    <span className="absolute bottom-1 left-1 bg-[#6B112B] text-white text-[8px] font-bold px-1 rounded">
+                    <span className="absolute bottom-1 left-1 bg-[#6B112B] text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
                       মেইন
                     </span>
                   </div>
@@ -544,7 +709,7 @@ export default function AdminAddProductPage() {
               {/* Product Visual Container */}
               <div className="relative h-64 w-full overflow-hidden bg-slate-100">
                 <Image
-                  src={formData.image}
+                  src={formData.image || "/images/products/churi-alna.jpg"}
                   alt={formData.name || "Product Preview"}
                   fill
                   className="object-cover"
@@ -567,7 +732,7 @@ export default function AdminAddProductPage() {
 
                 {/* Size / Dimensions Tag */}
                 {formData.size && (
-                  <div className="absolute bottom-3 left-3.5 bg-black/75 text-[#F5E6B3] text-[11px] px-2.5 py-1 rounded-md backdrop-blur-sm font-medium border border-white/10">
+                  <div className="absolute bottom-3.5 left-3.5 bg-black/75 text-[#F5E6B3] text-[11px] px-2.5 py-1 rounded-md backdrop-blur-sm font-medium border border-white/10">
                     {formData.size}
                   </div>
                 )}
@@ -583,7 +748,9 @@ export default function AdminAddProductPage() {
                     <div className="flex items-center gap-1 text-amber-500 font-bold">
                       <Star className="h-3.5 w-3.5 fill-amber-500" />
                       <span>৫.০</span>
-                      <span className="text-slate-400 font-normal">(নতুন)</span>
+                      <span className="text-slate-400 font-normal">
+                        {isEditing ? "(আপডেটেড)" : "(নতুন)"}
+                      </span>
                     </div>
                   </div>
 
@@ -639,7 +806,7 @@ export default function AdminAddProductPage() {
                 <span>অটোমেটিক WhatsApp অর্ডার টেক্সট</span>
               </div>
               <p className="text-xs text-emerald-950 font-mono bg-white p-2.5 rounded-xl border border-emerald-200">
-                "আমি '{formData.name} ({formData.price} টাকা)' অর্ডার করতে চাই।"
+                "আমি '{formData.name || "পণ্য"} ({formData.price || "0"} টাকা)' অর্ডার করতে চাই।"
               </p>
               <span className="text-[10px] text-emerald-700 block">
                 গ্রাহক স্টোরে 'অর্ডার করুন' বাটনে চাপ দিলেই এই মেসেজটি স্বয়ংক্রিয়ভাবে ওপেন হবে।
@@ -652,10 +819,21 @@ export default function AdminAddProductPage() {
                 type="button"
                 size="lg"
                 onClick={handleSubmit}
-                className="w-full bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-2xl h-12 text-sm gap-2 shadow-lg shadow-rose-950/20"
+                disabled={submitting}
+                className="w-full bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-2xl h-12 text-sm gap-2 shadow-lg shadow-rose-950/20 disabled:opacity-60"
               >
-                <Save className="h-4 w-4 text-[#F5E6B3]" />
-                <span>পণ্যটি পাবলিশ করুন</span>
+                {submitting ? (
+                  <Loader2 className="h-4 w-4 animate-spin text-[#F5E6B3]" />
+                ) : (
+                  <Save className="h-4 w-4 text-[#F5E6B3]" />
+                )}
+                <span>
+                  {submitting 
+                    ? "সংরক্ষণ হচ্ছে..." 
+                    : isEditing 
+                    ? "পরিবর্তন সংরক্ষণ করুন" 
+                    : "পণ্যটি পাবলিশ করুন"}
+                </span>
               </Button>
             </div>
 
@@ -666,5 +844,20 @@ export default function AdminAddProductPage() {
       </form>
 
     </div>
+  );
+}
+
+export default function AdminAddProductPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="py-24 flex flex-col items-center justify-center space-y-4 max-w-xl mx-auto">
+          <Loader2 className="h-10 w-10 text-[#6B112B] animate-spin" />
+          <p className="text-sm font-semibold text-slate-700">লোড হচ্ছে...</p>
+        </div>
+      }
+    >
+      <ProductFormContent />
+    </Suspense>
   );
 }

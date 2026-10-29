@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -19,7 +19,10 @@ import {
   MessageSquare,
   Phone,
   Sparkles,
-  Lock
+  Lock,
+  Loader2,
+  AlertCircle,
+  Package
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,88 +34,99 @@ interface ProductDetailsPageProps {
   params: Promise<{ id: string }>;
 }
 
-const PRODUCT_DATABASE: Record<string, any> = {
-  "1": {
-    name: "এক্সক্লুসিভ ডাবল ডোর কাঠের চুড়ি আলনা (১৪০ ডজন ধারণক্ষমতা)",
-    category: "চুড়ি আলনা ও বক্স",
-    price: 2250,
-    originalPrice: 2650,
-    rating: 5.0,
-    reviews: 48,
-    sku: "NN-ALNA-01",
-    size: "২১\" x ১৬\" সাইজ",
-    material: "উন্নতমানের পালিশ করা কাঠ ও স্বচ্ছ গ্লাস",
-    capacity: "১৪০+ ডজন চুড়ির ধারণক্ষমতা",
-    features: ["সিকিউরিটি লক ও চাবি", "স্বচ্ছ কাঁচের পাল্লা", "স্মুথ স্লাইডিং উডেন রড", "সহজে পরিষ্কারযোগ্য"],
-    images: [
-      "/images/products/churi-alna.jpg",
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=900&q=80"
-    ],
-    description: "আপনার প্রিয় চুড়ি ও গহনাগুলো নিরাপদে সাজিয়ে রাখতে নারী নিবেদিতের তৈরি প্রিমিয়াম ডাবল ডোর চুড়ি আলনা। বাইরে থেকে পুরো কালেকশন দৃশ্যমান থাকে এবং ধুলাবালি থেকে মুক্ত থাকে। লক ও কি থাকায় মূল্যবান অলংকার থাকে শতভাগ নিরাপদ।"
-  },
-  "2": {
-    name: "কাস্টমাইজড উডেন হোম মন্দির (ওম ও গণেশ এলইডি ব্যাকলিট)",
-    category: "হোম মন্দির ও ডেকোর",
-    price: 3450,
-    originalPrice: 4200,
-    rating: 4.9,
-    reviews: 32,
-    sku: "NN-MANDIR-02",
-    size: "২৪\" x ১৮\" সাইজ",
-    material: "এইচডিএফ ও এক্রিলিক ব্যাকলিট উড",
-    capacity: "দেয়ালে ঝুলানো বা টেবিলে রাখার উপযোগী",
-    features: ["সুক্ষ্ম লেজার কাটিং আর্টওয়ার্ক", "ইন-বিল্ট গোল্ডেন ওয়ার্ম এলইডি লাইট", "প্রার্থনা সামগ্রী রাখার তাক"],
-    images: [
-      "/images/products/home-mandir.jpg",
-      "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=900&q=80",
-      "/images/products/churi-alna.jpg"
-    ],
-    description: "ঘরের পবিত্র পরিবেশকে আরও উজ্জ্বল ও নান্দনিক করতে তৈরি এই কাস্টমাইজড উডেন হোম মন্দির। এলইডি আলো ঘরের আধ্যাত্মিক আমেজ বাড়িয়ে দেয়।"
-  },
-  "3": {
-    name: "উৎসবের রেশমি কাচের চুড়ি স্পেশাল কম্বো সেট (৬০ পিস)",
-    category: "জুয়েলারি ও চুড়ি",
-    price: 580,
-    originalPrice: 720,
-    rating: 4.9,
-    reviews: 65,
-    sku: "NN-CHURI-03",
-    size: "সাইজ ২.৪, ২.৬, ২.৮ এভেইলেবল",
-    material: "ঐতিহ্যবাহী নিখুঁত রেশমি ও কাচ",
-    capacity: "৬০ পিস মাল্টিকালার কম্বো",
-    features: ["উজ্জ্বল টেকসই রঙ", "বিয়ে ও উৎসবের জন্য সেরা", "হাতে পরা আরামদায়ক"],
-    images: [
-      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1576014131795-d4501d5218d6?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=900&q=80"
-    ],
-    description: "যেকোনো শাড়ি বা উৎসবের পোশাকের সাথে মানানসই রেশমি চুড়ির কম্বো সেট। নিখুঁত রঙ ও ঐতিহ্যবাহী কাটিং।"
-  }
-};
-
 export default function ProductDetailsPage({ params }: ProductDetailsPageProps) {
   const resolvedParams = use(params);
   const productId = resolvedParams.id;
-  const product = PRODUCT_DATABASE[productId] || PRODUCT_DATABASE["1"];
 
-  const [selectedImage, setSelectedImage] = useState(product.images[0]);
+  const [product, setProduct] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+
+    fetch(`/api/products/${productId}`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (!isMounted) return;
+        if (json.success && json.data) {
+          const p = json.data;
+          setProduct(p);
+          const initialImg = p.image || (Array.isArray(p.secondaryImages) && p.secondaryImages[0]) || "";
+          setSelectedImage(initialImg);
+        } else {
+          setProduct(null);
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching product details:", err);
+        if (isMounted) setProduct(null);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [productId]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-24 flex flex-col items-center justify-center min-h-[50vh] space-y-4">
+        <Loader2 className="h-10 w-10 text-[#6B112B] animate-spin" />
+        <p className="text-sm font-semibold text-slate-600">পণ্যের তথ্য লোড করা হচ্ছে...</p>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="container mx-auto px-4 py-24 text-center max-w-md space-y-6">
+        <div className="h-16 w-16 mx-auto rounded-3xl bg-rose-50 flex items-center justify-center text-[#6B112B] border border-rose-200">
+          <AlertCircle className="h-8 w-8" />
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-2xl font-black text-slate-900 font-serif">পণ্যটি খুঁজে পাওয়া যায়নি</h2>
+          <p className="text-xs text-slate-500">
+            সম্ভবত পণ্যটি সরিয়ে নেওয়া হয়েছে অথবা লিংকটি ভুল। অনুগ্রহ করে পণ্য সম্ভার চেক করুন।
+          </p>
+        </div>
+        <Link href="/products">
+          <Button className="bg-[#6B112B] hover:bg-[#50091D] text-white rounded-xl">
+            সব পণ্য দেখুন
+          </Button>
+        </Link>
+      </div>
+    );
+  }
+
+  const imagesList: string[] = [
+    product.image,
+    ...(Array.isArray(product.secondaryImages) ? product.secondaryImages : []),
+  ].filter(Boolean);
+
+  const displayImage = selectedImage || imagesList[0] || "/images/products/churi-alna.jpg";
+
+  const featuresList: string[] = product.features && Array.isArray(product.features)
+    ? product.features
+    : product.highlight
+    ? product.highlight.split("•").map((f: string) => f.trim()).filter(Boolean)
+    : ["১০০% কোয়ালিটি নিশ্চয়তা", "নিরাপদ প্যাকেজিং", "ক্যাশ অন ডেলিভারি"];
+
   const whatsappOrderUrl = `https://wa.me/8801614258804?text=${encodeURIComponent(
-    `Hello Nari Nibedito, I want to order ${product.name} (Quantity: ${quantity}, Price: ৳${product.price * quantity}).`
+    `Hello Nari Nibedito, I want to order ${product.name} (Quantity: ${quantity}, Price: ৳${(product.price * quantity).toLocaleString()}).`
   )}`;
 
   const quickOrderProductData: QuickOrderProduct = {
-    id: productId,
+    id: product.id || product._id || productId,
     name: product.name,
     price: product.price,
     originalPrice: product.originalPrice,
-    image: product.images?.[0] || "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=80",
+    image: displayImage,
     size: product.size,
     sku: product.sku,
     category: product.category,
@@ -122,60 +136,69 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
     <div className="container mx-auto px-4 py-8 space-y-10">
       {/* Breadcrumb */}
       <nav className="flex items-center text-xs text-slate-500 gap-1.5">
-        <Link href="/" className="hover:text-[#8B1E3F]">হোম</Link>
+        <Link href="/" className="hover:text-[#6B112B]">হোম</Link>
         <ChevronRight className="h-3 w-3" />
-        <Link href="/products" className="hover:text-[#8B1E3F]">পণ্য সম্ভার</Link>
+        <Link href="/products" className="hover:text-[#6B112B]">পণ্য সম্ভার</Link>
         <ChevronRight className="h-3 w-3" />
-        <span className="text-[#8B1E3F] font-semibold truncate max-w-xs">{product.name}</span>
+        <span className="text-[#6B112B] font-semibold truncate max-w-xs">{product.name}</span>
       </nav>
 
       {/* Product Hero Details Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        {/* Left: Product Images with Unsplash */}
+        {/* Left: Product Images */}
         <div className="space-y-4">
           <div className="relative aspect-square w-full rounded-3xl border border-rose-100 overflow-hidden bg-slate-100 shadow-lg">
             <Image
-              src={selectedImage}
+              src={displayImage}
               alt={product.name}
               fill
               className="object-cover transition-all duration-300"
               priority
             />
-            <Badge className="absolute top-4 left-4 bg-[#8B1E3F] text-white font-medium text-xs shadow-md border-0">
-              {product.category}
-            </Badge>
+            {product.category && (
+              <Badge className="absolute top-4 left-4 bg-[#6B112B] text-white font-medium text-xs shadow-md border-0">
+                {product.category}
+              </Badge>
+            )}
+            {product.badge && (
+              <Badge className="absolute top-4 right-4 bg-amber-500 text-white font-medium text-xs shadow-md border-0">
+                {product.badge}
+              </Badge>
+            )}
           </div>
 
           {/* Thumbnails */}
-          <div className="grid grid-cols-4 gap-3">
-            {product.images.map((imgUrl: string, index: number) => (
-              <button
-                type="button"
-                key={index}
-                onClick={() => setSelectedImage(imgUrl)}
-                className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition-all ${
-                  selectedImage === imgUrl ? "border-[#8B1E3F] shadow-md scale-102" : "border-slate-200 opacity-70 hover:opacity-100"
-                }`}
-              >
-                <Image
-                  src={imgUrl}
-                  alt={`Thumbnail ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </button>
-            ))}
-          </div>
+          {imagesList.length > 1 && (
+            <div className="grid grid-cols-4 gap-3">
+              {imagesList.map((imgUrl: string, index: number) => (
+                <button
+                  type="button"
+                  key={index}
+                  onClick={() => setSelectedImage(imgUrl)}
+                  className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition-all ${
+                    displayImage === imgUrl ? "border-[#6B112B] shadow-md scale-102" : "border-slate-200 opacity-70 hover:opacity-100"
+                  }`}
+                >
+                  <Image
+                    src={imgUrl}
+                    alt={`Thumbnail ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Right: Product Meta & Purchase Actions */}
         <div className="space-y-6">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-[#8B1E3F] border-rose-200 bg-rose-50/60 font-semibold text-xs">
+              <Badge variant="outline" className="text-[#6B112B] border-rose-200 bg-rose-50/60 font-semibold text-xs">
                 {product.category}
               </Badge>
-              <span className="text-xs text-slate-400">SKU: {product.sku}</span>
+              {product.sku && <span className="text-xs text-slate-400">SKU: {product.sku}</span>}
             </div>
 
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-serif leading-snug">
@@ -189,38 +212,46 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
                   <Star key={i} className="h-4 w-4 fill-amber-500" />
                 ))}
               </div>
-              <span className="text-xs font-bold text-slate-800">{product.rating}</span>
-              <span className="text-xs text-slate-500">({product.reviews} জন গ্রাহকের রিভিউ)</span>
+              <span className="text-xs font-bold text-slate-800">{product.rating || "5.0"}</span>
+              <span className="text-xs text-slate-500">({product.reviews || 0} জন গ্রাহকের রিভিউ)</span>
             </div>
           </div>
 
           {/* Price */}
           <div className="flex items-baseline gap-3 p-5 rounded-2xl bg-rose-50/40 border border-rose-100">
-            <span className="text-3xl sm:text-4xl font-black text-[#7A1233]">
-              ৳{product.price.toLocaleString()}
+            <span className="text-3xl sm:text-4xl font-black text-[#6B112B]">
+              ৳{product.price?.toLocaleString()}
             </span>
             {product.originalPrice && (
               <span className="text-base text-slate-400 line-through">
                 ৳{product.originalPrice.toLocaleString()}
               </span>
             )}
-            <Badge className="bg-[#8B1E3F] text-white text-xs">বিশেষ ছাড়</Badge>
+            {product.discount ? (
+              <Badge className="bg-[#6B112B] text-white text-xs">{product.discount}</Badge>
+            ) : (
+              <Badge className="bg-[#6B112B] text-white text-xs">বিশেষ অফার</Badge>
+            )}
           </div>
 
           {/* Short description */}
-          <p className="text-sm leading-relaxed text-slate-600">
-            {product.description}
-          </p>
+          {product.description && (
+            <p className="text-sm leading-relaxed text-slate-600">
+              {product.description}
+            </p>
+          )}
 
           {/* Highlights checklist */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 pt-1">
-            {product.features?.map((f: string, i: number) => (
-              <div key={i} className="flex items-center gap-1.5">
-                <Check className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span>{f}</span>
-              </div>
-            ))}
-          </div>
+          {featuresList.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 pt-1">
+              {featuresList.map((f: string, i: number) => (
+                <div key={i} className="flex items-center gap-1.5">
+                  <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+                  <span>{f}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Quantity Selector */}
           <div className="space-y-2 pt-2">
@@ -286,10 +317,10 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto border-rose-200 text-[#8B1E3F] hover:bg-rose-50 font-bold h-12 rounded-xl gap-2"
+                  className="w-full sm:w-auto border-rose-200 text-[#6B112B] hover:bg-rose-50 font-bold h-12 rounded-xl gap-2"
                 >
-                  <MessageSquare className="h-4 w-4 text-[#8B1E3F]" />
-                  <span>মতামত ও রিভিউ ({product.reviews || 48})</span>
+                  <MessageSquare className="h-4 w-4 text-[#6B112B]" />
+                  <span>মতামত ও রিভিউ ({product.reviews || 0})</span>
                 </Button>
               </a>
 
@@ -305,7 +336,7 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
                 className="border-rose-200 text-slate-700 hover:bg-rose-50 h-12 rounded-xl"
                 title="লিংক শেয়ার করুন"
               >
-                <Share2 className="h-5 w-5 text-[#8B1E3F]" />
+                <Share2 className="h-5 w-5 text-[#6B112B]" />
               </Button>
             </div>
           </div>
@@ -313,7 +344,7 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
           {/* Delivery & Trust highlights */}
           <div className="border-t border-rose-100 pt-6 space-y-3">
             <div className="flex items-center gap-3 text-xs text-slate-600">
-              <Truck className="h-4 w-4 text-[#8B1E3F]" />
+              <Truck className="h-4 w-4 text-[#6B112B]" />
               <span>সারাদেশে দ্রুত ক্যাশ অন ডেলিভারি (পণ্য পেয়ে টাকা দিন)</span>
             </div>
             <div className="flex items-center gap-3 text-xs text-slate-600">
@@ -329,31 +360,41 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
       </div>
 
       {/* Specifications & Details */}
-      <div className="border-t border-rose-100 pt-8 space-y-6">
-        <h2 className="text-xl font-bold text-slate-900 font-serif">পণ্যের বৈশিষ্ট্য ও বিবরণ</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-white p-6 rounded-3xl border border-rose-100 shadow-sm">
-          <div className="flex justify-between py-2.5 border-b border-rose-50">
-            <span className="text-slate-500">ক্যাটাগরি</span>
-            <span className="font-semibold text-slate-900">{product.category}</span>
-          </div>
-          <div className="flex justify-between py-2.5 border-b border-rose-50">
-            <span className="text-slate-500">সাইজ / পরিমাপ</span>
-            <span className="font-semibold text-slate-900">{product.size}</span>
-          </div>
-          <div className="flex justify-between py-2.5 border-b border-rose-50">
-            <span className="text-slate-500">মেটেরিয়াল ও ফিনিশিং</span>
-            <span className="font-semibold text-slate-900">{product.material}</span>
-          </div>
-          <div className="flex justify-between py-2.5 border-b border-rose-50">
-            <span className="text-slate-500">ধারণক্ষমতা</span>
-            <span className="font-semibold text-slate-900">{product.capacity}</span>
+      {(product.material || product.size || product.capacity || product.category) && (
+        <div className="border-t border-rose-100 pt-8 space-y-6">
+          <h2 className="text-xl font-bold text-slate-900 font-serif">পণ্যের বৈশিষ্ট্য ও বিবরণ</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-white p-6 rounded-3xl border border-rose-100 shadow-sm">
+            {product.category && (
+              <div className="flex justify-between py-2.5 border-b border-rose-50">
+                <span className="text-slate-500">ক্যাটাগরি</span>
+                <span className="font-semibold text-slate-900">{product.category}</span>
+              </div>
+            )}
+            {product.size && (
+              <div className="flex justify-between py-2.5 border-b border-rose-50">
+                <span className="text-slate-500">সাইজ / পরিমাপ</span>
+                <span className="font-semibold text-slate-900">{product.size}</span>
+              </div>
+            )}
+            {product.material && (
+              <div className="flex justify-between py-2.5 border-b border-rose-50">
+                <span className="text-slate-500">মেটেরিয়াল ও ফিনিশিং</span>
+                <span className="font-semibold text-slate-900">{product.material}</span>
+              </div>
+            )}
+            {product.capacity && (
+              <div className="flex justify-between py-2.5 border-b border-rose-50">
+                <span className="text-slate-500">ধারণক্ষমতা</span>
+                <span className="font-semibold text-slate-900">{product.capacity}</span>
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      )}
 
       {/* Customer Reviews & Feedback Section */}
-      <div className="border-t border-rose-100 pt-8">
-        <ReviewsSection productId={productId} productTitle={product.name} />
+      <div id="reviews-section" className="border-t border-rose-100 pt-8">
+        <ReviewsSection productId={product.id || product._id || productId} productTitle={product.name} />
       </div>
 
       {/* Quick Order Cash on Delivery Modal */}

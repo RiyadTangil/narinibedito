@@ -12,6 +12,7 @@ import {
   ArrowRight, 
   Eye, 
   Edit,
+  Trash2,
   Sparkles,
   TrendingUp,
   Store,
@@ -24,6 +25,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { DeleteConfirmModal } from "@/components/admin/delete-confirm-modal";
+import { toast } from "sonner";
 
 const STATS = [
   {
@@ -61,7 +64,8 @@ const STATS = [
 ];
 
 // Actual Nari Nibedito inventory items
-const RECENT_PRODUCTS = [
+const RECENT_PRODUCTS: any[] = [];
+/*
   {
     id: "1",
     name: "এক্সক্লুসিভ ডাবল ডোর কাঠের চুড়ি আলনা (১৪০ ডজন ধারণক্ষমতা)",
@@ -123,6 +127,7 @@ const RECENT_PRODUCTS = [
     image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=400&q=80",
   },
 ];
+*/
 
 const CATEGORY_SUMMARY = [
   { name: "চুড়ি আলনা ও শোকেস", count: 14, percent: 30 },
@@ -135,8 +140,44 @@ const CATEGORY_SUMMARY = [
 export default function AdminDashboardPage() {
   const [liveOrders, setLiveOrders] = useState<any[]>([]);
   const [orderStats, setOrderStats] = useState<any>({ total: 0, pending: 0, confirmed: 0, totalRevenue: 0 });
+  const [recentProducts, setRecentProducts] = useState<any[]>([]);
+  const [productToDelete, setProductToDelete] = useState<any | null>(null);
+
+  const confirmDeleteProduct = async () => {
+    if (!productToDelete) return;
+    try {
+      const targetParam = productToDelete._id
+        ? `_id=${productToDelete._id}`
+        : productToDelete.sku
+        ? `sku=${productToDelete.sku}`
+        : `id=${productToDelete.id}`;
+
+      const res = await fetch(`/api/products?${targetParam}`, {
+        method: "DELETE",
+      });
+      const json = await res.json();
+      if (json.success) {
+        setRecentProducts((prev) =>
+          prev.filter(
+            (p) =>
+              (p._id && p._id !== productToDelete._id) &&
+              (p.sku && p.sku !== productToDelete.sku) &&
+              p.id !== productToDelete.id
+          )
+        );
+        toast.success(`"${productToDelete.name}" সফলভাবে ডিলিট করা হয়েছে!`);
+      } else {
+        toast.error(json.message || "ডিলিট ব্যর্থ হয়েছে");
+      }
+    } catch (err) {
+      toast.error("সার্ভার সমস্যা হয়েছে");
+    } finally {
+      setProductToDelete(null);
+    }
+  };
 
   useEffect(() => {
+    // 1. Fetch live orders
     fetch("/api/orders?limit=4")
       .then((res) => res.json())
       .then((json) => {
@@ -145,6 +186,16 @@ export default function AdminDashboardPage() {
           if (json.meta?.stats) {
             setOrderStats(json.meta.stats);
           }
+        }
+      })
+      .catch(() => {});
+
+    // 2. Fetch live products from DB
+    fetch("/api/products?limit=5")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data)) {
+          setRecentProducts(json.data);
         }
       })
       .catch(() => {});
@@ -305,7 +356,7 @@ export default function AdminDashboardPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {RECENT_PRODUCTS.map((item) => (
+                  {recentProducts.map((item) => (
                     <tr key={item.id} className="hover:bg-slate-50/60 transition-colors">
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
@@ -358,11 +409,20 @@ export default function AdminDashboardPage() {
                               <Eye className="h-4 w-4" />
                             </Button>
                           </Link>
-                          <Link href="/admin/products/add">
+                          <Link href={`/admin/products/add?id=${item._id || item.id}`}>
                             <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-blue-600" title="এডিট করুন">
                               <Edit className="h-4 w-4" />
                             </Button>
                           </Link>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => setProductToDelete(item)}
+                            className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                            title="ডিলিট করুন"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
                       </td>
                     </tr>
@@ -457,6 +517,18 @@ export default function AdminDashboardPage() {
         </div>
 
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmModal
+        isOpen={!!productToDelete}
+        onClose={() => setProductToDelete(null)}
+        onConfirm={confirmDeleteProduct}
+        title="পণ্যটি ডিলিট করতে চান?"
+        description="এই পণ্যটি মুছে ফেললে ওয়েবসাইট ক্যাটালগ ও ইনভেন্টরি থেকে অপসারিত হবে।"
+        itemName={productToDelete?.name}
+        itemSku={productToDelete?.sku}
+        itemImage={productToDelete?.image}
+      />
     </div>
   );
 }

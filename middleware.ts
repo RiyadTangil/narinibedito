@@ -24,6 +24,8 @@ const isPublicPath = (path: string) =>
   path.startsWith('/api/auth') ||
   path.startsWith('/api/orders') ||
   path.startsWith('/api/reviews') ||
+  path.startsWith('/api/categories') ||
+  path.startsWith('/api/products') ||
   path.startsWith('/products') ||
   path.startsWith('/_next') ||
   path.startsWith('/static') ||

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -17,141 +17,95 @@ import {
   AlertTriangle,
   Layers,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Loader2
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-// Real Nari Nibedito Products Catalog
-const INITIAL_INVENTORY = [
-  {
-    id: "1",
-    sku: "NN-ALNA-01",
-    name: "এক্সক্লুসিভ ডাবল ডোর কাঠের চুড়ি আলনা (১৪০ ডজন ধারণক্ষমতা)",
-    category: "চুড়ি আলনা ও শোকেস",
-    categorySlug: "churi-alna",
-    price: 2250,
-    originalPrice: 2650,
-    stock: 24,
-    status: "Active",
-    badge: "সেরা বিক্রিত",
-    size: "২১\" x ১৬\" সাইজ",
-    image: "/images/products/churi-alna.jpg",
-  },
-  {
-    id: "2",
-    sku: "NN-MANDIR-02",
-    name: "কাস্টমাইজড উডেন হোম মন্দির (ওম ও গণেশ এলইডি ব্যাকলিট)",
-    category: "হোম মন্দির ও ডেকোর",
-    categorySlug: "home-decor",
-    price: 3450,
-    originalPrice: 4200,
-    stock: 12,
-    status: "Active",
-    badge: "কাস্টমাইজড",
-    size: "২৪\" x ১৮\" ওয়াল মাউন্ট",
-    image: "/images/products/home-mandir.jpg",
-  },
-  {
-    id: "3",
-    sku: "NN-CHURI-03",
-    name: "উৎসবের রেশমি কাচের চুড়ি স্পেশাল কম্বো সেট (৬০ পিস)",
-    category: "ঐতিহ্যবাহী চুড়ি ও গহনা",
-    categorySlug: "jewellery",
-    price: 580,
-    originalPrice: 720,
-    stock: 85,
-    status: "Active",
-    badge: "নতুন কালেকশন",
-    size: "সাইজ ২.৪, ২.৬, ২.৮",
-    image: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=400&q=80",
-  },
-  {
-    id: "4",
-    sku: "NN-BOX-04",
-    name: "এম্বিয়েন্ট এলইডি লাইটিংসহ ড্রয়ারযুক্ত রয়্যাল চুড়ি বক্স",
-    category: "চুড়ি আলনা ও শোকেস",
-    categorySlug: "churi-alna",
-    price: 1950,
-    originalPrice: 2350,
-    stock: 5,
-    status: "Low Stock",
-    badge: "ট্রেন্ডিং",
-    size: "১৮\" x ১৪\" সাইজ",
-    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=400&q=80",
-  },
-  {
-    id: "5",
-    sku: "NN-ORG-05",
-    name: "রয়্যাল মাল্টি-লেয়ার জুয়েলারি ও মেকআপ অর্গানাইজার কেবিনেট",
-    category: "জুয়েলারি বক্স ও কেবিনেট",
-    categorySlug: "organizer",
-    price: 1650,
-    originalPrice: 1950,
-    stock: 16,
-    status: "Active",
-    badge: "জনপ্রিয়",
-    size: "১৬\" x ১২\" সাইজ",
-    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=400&q=80",
-  },
-  {
-    id: "6",
-    sku: "NN-LIGHT-06",
-    name: "হ্যান্ডক্রাফটেড ফেয়ারি লাইট গ্লাস বোটল ডেকোর শোপিস",
-    category: "শোপিস ও ফেয়ারি লাইটিং",
-    categorySlug: "lighting",
-    price: 450,
-    originalPrice: 550,
-    stock: 30,
-    status: "Active",
-    badge: "গিফট চয়েস",
-    size: "স্ট্যান্ডার্ড বোটল",
-    image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=400&q=80",
-  },
-  {
-    id: "7",
-    sku: "NN-BALA-07",
-    name: "ঐতিহ্যবাহী গোল্ড-প্লেটেড ব্রাইডাল বালা ও চুড়ি সেট",
-    category: "ঐতিহ্যবাহী চুড়ি ও গহনা",
-    categorySlug: "jewellery",
-    price: 1150,
-    originalPrice: 1450,
-    stock: 0,
-    status: "Out of Stock",
-    badge: "ব্রাইডাল স্পেশাল",
-    size: "কম্বো সাইজ",
-    image: "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&w=400&q=80",
-  },
-  {
-    id: "8",
-    sku: "NN-KURTI-08",
-    name: "ডিজাইনার এমব্রয়ডারি উৎসব কুর্তি ও থ্রি-পিস সেট",
-    category: "পোশাক ও উৎসবের কুর্তি",
-    categorySlug: "clothing",
-    price: 1850,
-    originalPrice: 2200,
-    stock: 19,
-    status: "Active",
-    badge: "এক্সক্লুসিভ",
-    size: "M, L, XL, XXL",
-    image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80",
-  },
-];
+import { DeleteConfirmModal } from "@/components/admin/delete-confirm-modal";
+import { toast } from "sonner";
 
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState(INITIAL_INVENTORY);
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [categoriesList, setCategoriesList] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [productToDelete, setProductToDelete] = useState<any | null>(null);
 
-  const deleteProduct = (id: string) => {
-    setProducts(products.filter(p => p.id !== id));
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/products");
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        setProducts(json.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+      toast.error("পণ্য তালিকা লোড করা যায়নি");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const filteredProducts = products.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          p.sku.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || p.categorySlug === selectedCategory;
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/categories");
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        setCategoriesList(json.data);
+      }
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    fetchProducts();
+    fetchCategories();
+  }, []);
+
+  const confirmDeleteProduct = async () => {
+    if (!productToDelete) return;
+    try {
+      const targetParam = productToDelete._id
+        ? `_id=${productToDelete._id}`
+        : productToDelete.sku
+        ? `sku=${productToDelete.sku}`
+        : `id=${productToDelete.id}`;
+
+      const res = await fetch(`/api/products?${targetParam}`, {
+        method: "DELETE",
+      });
+      const json = await res.json();
+      if (json.success) {
+        setProducts((prev) =>
+          prev.filter(
+            (p) =>
+              (p._id && p._id !== productToDelete._id) &&
+              (p.sku && p.sku !== productToDelete.sku) &&
+              p.id !== productToDelete.id
+          )
+        );
+        toast.success(`"${productToDelete.name}" ডাটাবেস থেকে সফলভাবে ডিলিট করা হয়েছে!`);
+      } else {
+        toast.error(json.message || "ডিলিট ব্যর্থ হয়েছে");
+      }
+    } catch (err) {
+      toast.error("সার্ভার সমস্যা হয়েছে");
+    } finally {
+      setProductToDelete(null);
+    }
+  };
+
+  const filteredProducts = products.filter((p) => {
+    const matchesSearch =
+      (p.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (p.sku || "").toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "all" ||
+      p.categorySlug === selectedCategory ||
+      p.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -215,12 +169,11 @@ export default function AdminProductsPage() {
               className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-700 focus:border-[#6B112B] focus:outline-none"
             >
               <option value="all">সব ক্যাটাগরি</option>
-              <option value="churi-alna">চুড়ি আলনা ও শোকেস</option>
-              <option value="home-decor">হোম মন্দির ও ডেকোর</option>
-              <option value="jewellery">ঐতিহ্যবাহী চুড়ি ও গহনা</option>
-              <option value="organizer">জুয়েলারি বক্স ও কেবিনেট</option>
-              <option value="lighting">শোপিস ও লাইটিং</option>
-              <option value="clothing">পোশাক ও কুর্তি</option>
+              {categoriesList.map((cat) => (
+                <option key={cat.id || cat._id} value={cat.id}>
+                  {cat.title}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -322,7 +275,7 @@ export default function AdminProductsPage() {
                         </Button>
                       </Link>
 
-                      <Link href="/admin/products/add">
+                      <Link href={`/admin/products/add?id=${p._id || p.id}`}>
                         <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-blue-600" title="এডিট করুন">
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -331,7 +284,7 @@ export default function AdminProductsPage() {
                       <Button
                         size="icon"
                         variant="ghost"
-                        onClick={() => deleteProduct(p.id)}
+                        onClick={() => setProductToDelete(p)}
                         className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
                         title="ডিলিট করুন"
                       >
@@ -346,13 +299,18 @@ export default function AdminProductsPage() {
           </table>
         </div>
 
-        {filteredProducts.length === 0 && (
+        {loading ? (
+          <div className="p-12 text-center space-y-3">
+            <Loader2 className="h-8 w-8 animate-spin text-[#6B112B] mx-auto" />
+            <p className="text-xs text-slate-500">ডাটাবেস থেকে পণ্য তালিকা লোড হচ্ছে...</p>
+          </div>
+        ) : filteredProducts.length === 0 ? (
           <div className="p-12 text-center space-y-3">
             <Package className="h-10 w-10 text-slate-300 mx-auto" />
             <h4 className="text-sm font-bold text-slate-700">কোনো পণ্য পাওয়া যায়নি</h4>
             <p className="text-xs text-slate-400">ফিল্টার পরিবর্তন করুন বা নতুন পণ্য যোগ করুন</p>
           </div>
-        )}
+        ) : null}
 
         <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs text-slate-500">
           <span>মোট {filteredProducts.length}টি পণ্য প্রদর্শিত হচ্ছে</span>
@@ -362,6 +320,18 @@ export default function AdminProductsPage() {
           </div>
         </div>
       </Card>
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmModal
+        isOpen={!!productToDelete}
+        onClose={() => setProductToDelete(null)}
+        onConfirm={confirmDeleteProduct}
+        title="পণ্যটি ডিলিট করতে চান?"
+        description="এই পণ্যটি মুছে ফেললে ওয়েবসাইট ক্যাটালগ ও ইনভেন্টরি থেকে অপসারিত হবে।"
+        itemName={productToDelete?.name}
+        itemSku={productToDelete?.sku}
+        itemImage={productToDelete?.image}
+      />
 
     </div>
   );
