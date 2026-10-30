@@ -77,7 +77,23 @@ export default function AdminLayout({
     <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row antialiased">
       {/* Mobile Header Bar */}
       <div className="lg:hidden h-16 bg-[#50091D] text-white flex items-center justify-between px-4 border-b border-[#6B112B] shrink-0 sticky top-0 z-40">
+        {/* Left: Hamburger Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="text-white hover:bg-[#6B112B] h-9 w-9 rounded-xl -ml-1"
+          aria-label="Toggle navigation menu"
+        >
+          {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </Button>
+
+        {/* Right: Logo and Brand Text */}
         <div className="flex items-center gap-2.5">
+          <div className="flex flex-col text-right">
+            <span className="font-extrabold text-sm tracking-tight font-serif">নারী নিবেদিত</span>
+            <span className="text-[10px] text-[#F5E6B3]">এডমিন প্যানেল</span>
+          </div>
           <div className="relative h-9 w-9 rounded-full overflow-hidden border border-[#D4AF37] bg-white p-0.5 shrink-0">
             <Image
               src="/images/logo.jpg"
@@ -86,20 +102,7 @@ export default function AdminLayout({
               className="object-contain rounded-full"
             />
           </div>
-          <div className="flex flex-col">
-            <span className="font-extrabold text-sm tracking-tight font-serif">নারী নিবেদিত</span>
-            <span className="text-[10px] text-[#F5E6B3]">এডমিন প্যানেল</span>
-          </div>
         </div>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="text-white hover:bg-[#6B112B] h-9 w-9 rounded-xl"
-        >
-          {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
       </div>
 
       {/* Sidebar Overlay for Mobile */}
@@ -233,8 +236,8 @@ export default function AdminLayout({
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
-        {/* Top Navbar */}
-        <header className="h-16 bg-white border-b border-slate-200/90 flex items-center justify-between px-6 sm:px-8 shrink-0 sticky top-0 z-30 shadow-xs">
+        {/* Top Navbar for Desktop */}
+        <header className="hidden lg:flex h-16 bg-white border-b border-slate-200/90 items-center justify-between px-6 sm:px-8 shrink-0 sticky top-0 z-30 shadow-xs">
           <div className="flex items-center gap-3">
             <h2 className="text-base sm:text-lg font-extrabold text-slate-800 tracking-tight font-serif">
               {navItems.find((n) => n.active)?.title || "এডমিন প্যানেল"}
@@ -271,7 +274,7 @@ export default function AdminLayout({
         </header>
 
         {/* Content Body */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-3 sm:p-5 lg:p-8 max-w-7xl w-full mx-auto">
           {children}
         </main>
       </div>
