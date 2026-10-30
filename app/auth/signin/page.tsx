@@ -7,8 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FloatingInput } from "@/components/ui/floating-input";
 import {
   Card,
   CardContent,
@@ -138,47 +137,32 @@ function SignInContent() {
                 </Alert>
               )}
 
-              <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-xs font-bold text-slate-700">
-                  ইমেইল অ্যাড্রেস (Email Address)
-                </Label>
-                <div className="relative group">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#6B112B] transition-colors" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="admin@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 h-11 bg-white border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#6B112B] focus:ring-[#6B112B]/10 transition-all"
-                    required
-                  />
-                </div>
-              </div>
+              <FloatingInput
+                type="email"
+                label="ইমেইল অ্যাড্রেস (Email Address)"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                icon={<Mail className="h-4 w-4 text-slate-400" />}
+                required
+              />
 
-              <div className="space-y-1.5">
-                <Label htmlFor="password" className="text-xs font-bold text-slate-700">
-                  পাসওয়ার্ড (Password)
-                </Label>
-                <div className="relative group">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#6B112B] transition-colors" />
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="আপনার পাসওয়ার্ড দিন"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 h-11 bg-white border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#6B112B] focus:ring-[#6B112B]/10 transition-all"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#6B112B] transition-colors"
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
+              <div className="relative">
+                <FloatingInput
+                  type={showPassword ? "text" : "password"}
+                  label="পাসওয়ার্ড (Password)"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  icon={<Lock className="h-4 w-4 text-slate-400" />}
+                  className="pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#6B112B] transition-colors z-10"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
 
               <div className="flex items-center justify-between text-xs pt-1">

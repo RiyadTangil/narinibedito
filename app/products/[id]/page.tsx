@@ -8,8 +8,6 @@ import {
   Star, 
   Truck, 
   ShieldCheck, 
-  RotateCcw, 
-  Heart, 
   Share2, 
   Check, 
   Minus, 
@@ -18,14 +16,11 @@ import {
   MessageCircle,
   MessageSquare,
   Phone,
-  Sparkles,
-  Lock,
-  Loader2,
   AlertCircle,
-  Package
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ReviewsSection } from "@/components/reviews-section";
 import { QuickOrderModal, type QuickOrderProduct } from "@/components/quick-order-modal";
 import { toast } from "sonner";
@@ -76,9 +71,47 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-24 flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <Loader2 className="h-10 w-10 text-[#6B112B] animate-spin" />
-        <p className="text-sm font-semibold text-slate-600">পণ্যের তথ্য লোড করা হচ্ছে...</p>
+      <div className="container mx-auto px-4 py-6 sm:py-10 space-y-8">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-12 bg-slate-200" />
+          <Skeleton className="h-4 w-20 bg-slate-200" />
+          <Skeleton className="h-4 w-40 bg-rose-100" />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
+          <div className="space-y-3">
+            <Skeleton className="aspect-square w-full rounded-3xl bg-rose-100/50" />
+            <div className="grid grid-cols-4 gap-3">
+              {Array.from({ length: 4 }).map((_, idx) => (
+                <Skeleton key={idx} className="aspect-square rounded-2xl bg-slate-100" />
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <div className="space-y-2.5">
+              <Skeleton className="h-5 w-28 rounded-full bg-rose-100" />
+              <Skeleton className="h-8 w-4/5 rounded-lg bg-slate-200" />
+              <Skeleton className="h-8 w-3/5 rounded-lg bg-slate-200" />
+              <Skeleton className="h-4 w-36 rounded-md bg-amber-100" />
+            </div>
+
+            <Skeleton className="h-20 w-full rounded-2xl bg-rose-50" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full bg-slate-100" />
+              <Skeleton className="h-4 w-5/6 bg-slate-100" />
+              <Skeleton className="h-4 w-2/3 bg-slate-100" />
+            </div>
+
+            <div className="space-y-3 pt-2">
+              <Skeleton className="h-14 w-full rounded-2xl bg-rose-200/70" />
+              <div className="grid grid-cols-2 gap-3">
+                <Skeleton className="h-12 rounded-xl bg-emerald-100" />
+                <Skeleton className="h-12 rounded-xl bg-slate-100" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -133,35 +166,36 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-10">
+    <div className="container mx-auto px-4 py-4 sm:py-8 space-y-8 sm:space-y-10 pb-24 lg:pb-10 overflow-x-hidden">
       {/* Breadcrumb */}
-      <nav className="flex items-center text-xs text-slate-500 gap-1.5">
-        <Link href="/" className="hover:text-[#6B112B]">হোম</Link>
-        <ChevronRight className="h-3 w-3" />
-        <Link href="/products" className="hover:text-[#6B112B]">পণ্য সম্ভার</Link>
-        <ChevronRight className="h-3 w-3" />
-        <span className="text-[#6B112B] font-semibold truncate max-w-xs">{product.name}</span>
+      <nav className="flex items-center text-xs text-slate-500 gap-1.5 overflow-x-auto no-scrollbar whitespace-nowrap">
+        <Link href="/" className="hover:text-[#6B112B] shrink-0">হোম</Link>
+        <ChevronRight className="h-3 w-3 shrink-0" />
+        <Link href="/products" className="hover:text-[#6B112B] shrink-0">পণ্য সম্ভার</Link>
+        <ChevronRight className="h-3 w-3 shrink-0" />
+        <span className="text-[#6B112B] font-semibold truncate">{product.name}</span>
       </nav>
 
       {/* Product Hero Details Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
         {/* Left: Product Images */}
-        <div className="space-y-4">
-          <div className="relative aspect-square w-full rounded-3xl border border-rose-100 overflow-hidden bg-slate-100 shadow-lg">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="relative aspect-square w-full rounded-2xl sm:rounded-3xl border border-rose-100 overflow-hidden bg-slate-100 shadow-lg">
             <Image
               src={displayImage}
               alt={product.name}
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover transition-all duration-300"
               priority
             />
             {product.category && (
-              <Badge className="absolute top-4 left-4 bg-[#6B112B] text-white font-medium text-xs shadow-md border-0">
+              <Badge className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-[#6B112B] text-white font-medium text-xs shadow-md border-0">
                 {product.category}
               </Badge>
             )}
             {product.badge && (
-              <Badge className="absolute top-4 right-4 bg-amber-500 text-white font-medium text-xs shadow-md border-0">
+              <Badge className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-amber-500 text-white font-medium text-xs shadow-md border-0">
                 {product.badge}
               </Badge>
             )}
@@ -169,13 +203,13 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
 
           {/* Thumbnails */}
           {imagesList.length > 1 && (
-            <div className="grid grid-cols-4 gap-3">
+            <div className="flex sm:grid sm:grid-cols-4 gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar pb-1">
               {imagesList.map((imgUrl: string, index: number) => (
                 <button
                   type="button"
                   key={index}
                   onClick={() => setSelectedImage(imgUrl)}
-                  className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition-all ${
+                  className={`relative h-16 w-16 sm:h-auto sm:w-auto sm:aspect-square shrink-0 rounded-xl sm:rounded-2xl overflow-hidden border-2 transition-all ${
                     displayImage === imgUrl ? "border-[#6B112B] shadow-md scale-102" : "border-slate-200 opacity-70 hover:opacity-100"
                   }`}
                 >
@@ -183,6 +217,7 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
                     src={imgUrl}
                     alt={`Thumbnail ${index + 1}`}
                     fill
+                    sizes="96px"
                     className="object-cover"
                   />
                 </button>
@@ -192,21 +227,21 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
         </div>
 
         {/* Right: Product Meta & Purchase Actions */}
-        <div className="space-y-6">
+        <div className="space-y-5 sm:space-y-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Badge variant="outline" className="text-[#6B112B] border-rose-200 bg-rose-50/60 font-semibold text-xs">
                 {product.category}
               </Badge>
-              {product.sku && <span className="text-xs text-slate-400">SKU: {product.sku}</span>}
+              {product.sku && <span className="text-xs text-slate-400 font-mono">SKU: {product.sku}</span>}
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-serif leading-snug">
+            <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-serif leading-snug">
               {product.name}
             </h1>
 
             {/* Rating */}
-            <div className="flex items-center gap-2 pt-1">
+            <div className="flex items-center gap-2 pt-0.5">
               <div className="flex items-center text-amber-500 font-bold">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="h-4 w-4 fill-amber-500" />
@@ -218,12 +253,12 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
           </div>
 
           {/* Price */}
-          <div className="flex items-baseline gap-3 p-5 rounded-2xl bg-rose-50/40 border border-rose-100">
-            <span className="text-3xl sm:text-4xl font-black text-[#6B112B]">
+          <div className="flex flex-wrap items-baseline gap-2.5 sm:gap-3 p-4 sm:p-5 rounded-2xl bg-rose-50/40 border border-rose-100">
+            <span className="text-2xl sm:text-4xl font-black text-[#6B112B]">
               ৳{product.price?.toLocaleString()}
             </span>
             {product.originalPrice && (
-              <span className="text-base text-slate-400 line-through">
+              <span className="text-sm sm:text-base text-slate-400 line-through">
                 ৳{product.originalPrice.toLocaleString()}
               </span>
             )}
@@ -236,7 +271,7 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
 
           {/* Short description */}
           {product.description && (
-            <p className="text-sm leading-relaxed text-slate-600">
+            <p className="text-xs sm:text-sm leading-relaxed text-slate-600">
               {product.description}
             </p>
           )}
@@ -254,11 +289,11 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
           )}
 
           {/* Quantity Selector */}
-          <div className="space-y-2 pt-2">
+          <div className="space-y-2 pt-1">
             <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
               পরিমাণ (Quantity)
             </label>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-white">
                 <button
                   type="button"
@@ -290,14 +325,14 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
             <Button
               size="lg"
               onClick={() => setIsOrderModalOpen(true)}
-              className="w-full bg-gradient-to-r from-[#6B112B] via-[#8B1E3F] to-[#9E1B42] hover:from-[#52091E] hover:to-[#6B112B] text-white font-extrabold h-14 rounded-2xl shadow-xl shadow-rose-950/25 gap-3 text-base active:scale-[0.99] transition-all cursor-pointer"
+              className="w-full bg-gradient-to-r from-[#6B112B] via-[#8B1E3F] to-[#9E1B42] hover:from-[#52091E] hover:to-[#6B112B] text-white font-extrabold h-13 sm:h-14 rounded-2xl shadow-xl shadow-rose-950/25 gap-2.5 text-sm sm:text-base active:scale-[0.99] transition-all cursor-pointer"
             >
               <ShoppingBag className="h-5 w-5" />
               <span>সরাসরি অর্ডার করুন (ক্যাশ অন ডেলিভারি)</span>
             </Button>
 
             {/* Secondary actions: WhatsApp Order & Inquiry, Reviews, Share */}
-            <div className="flex flex-col sm:flex-row gap-2.5">
+            <div className="grid grid-cols-1 sm:flex sm:flex-row gap-2.5">
               <a
                 href={whatsappOrderUrl}
                 target="_blank"
@@ -306,53 +341,55 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
               >
                 <Button
                   size="lg"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 rounded-xl shadow-md gap-2"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-11 sm:h-12 rounded-xl shadow-md gap-2 text-xs sm:text-sm"
                 >
                   <MessageCircle className="h-4 w-4 fill-white" />
                   <span>হোয়াটসঅ্যাপে অর্ডার / তথ্য</span>
                 </Button>
               </a>
 
-              <a href="#reviews-section" className="shrink-0">
+              <div className="flex items-center gap-2">
+                <a href="#reviews-section" className="flex-1 sm:flex-none">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full border-rose-200 text-[#6B112B] hover:bg-rose-50 font-bold h-11 sm:h-12 rounded-xl gap-2 text-xs sm:text-sm"
+                  >
+                    <MessageSquare className="h-4 w-4 text-[#6B112B]" />
+                    <span>মতামত ও রিভিউ ({product.reviews || 0})</span>
+                  </Button>
+                </a>
+
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto border-rose-200 text-[#6B112B] hover:bg-rose-50 font-bold h-12 rounded-xl gap-2"
+                  onClick={() => {
+                    if (typeof window !== "undefined") {
+                      navigator.clipboard?.writeText(window.location.href);
+                      toast.success("পণ্যটির লিংক কপি করা হয়েছে!");
+                    }
+                  }}
+                  className="border-rose-200 text-slate-700 hover:bg-rose-50 h-11 sm:h-12 w-11 sm:w-12 p-0 rounded-xl shrink-0"
+                  title="লিংক শেয়ার করুন"
                 >
-                  <MessageSquare className="h-4 w-4 text-[#6B112B]" />
-                  <span>মতামত ও রিভিউ ({product.reviews || 0})</span>
+                  <Share2 className="h-4 w-4 sm:h-5 sm:w-5 text-[#6B112B]" />
                 </Button>
-              </a>
-
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => {
-                  if (typeof window !== "undefined") {
-                    navigator.clipboard?.writeText(window.location.href);
-                    toast.success("পণ্যটির লিংক কপি করা হয়েছে!");
-                  }
-                }}
-                className="border-rose-200 text-slate-700 hover:bg-rose-50 h-12 rounded-xl"
-                title="লিংক শেয়ার করুন"
-              >
-                <Share2 className="h-5 w-5 text-[#6B112B]" />
-              </Button>
+              </div>
             </div>
           </div>
 
           {/* Delivery & Trust highlights */}
-          <div className="border-t border-rose-100 pt-6 space-y-3">
+          <div className="border-t border-rose-100 pt-5 space-y-2.5">
             <div className="flex items-center gap-3 text-xs text-slate-600">
-              <Truck className="h-4 w-4 text-[#6B112B]" />
+              <Truck className="h-4 w-4 text-[#6B112B] shrink-0" />
               <span>সারাদেশে দ্রুত ক্যাশ অন ডেলিভারি (পণ্য পেয়ে টাকা দিন)</span>
             </div>
             <div className="flex items-center gap-3 text-xs text-slate-600">
-              <ShieldCheck className="h-4 w-4 text-emerald-600" />
+              <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
               <span>সুরক্ষিত কাঠের প্যাকিংয়ে নিরাপদে কুরিয়ার করা হয়</span>
             </div>
             <div className="flex items-center gap-3 text-xs text-slate-600">
-              <Phone className="h-4 w-4 text-[#D4AF37]" />
+              <Phone className="h-4 w-4 text-[#D4AF37] shrink-0" />
               <span>সরাসরি অর্ডার করতে কল করুন: <strong>01614-258804</strong></span>
             </div>
           </div>
@@ -361,31 +398,31 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
 
       {/* Specifications & Details */}
       {(product.material || product.size || product.capacity || product.category) && (
-        <div className="border-t border-rose-100 pt-8 space-y-6">
-          <h2 className="text-xl font-bold text-slate-900 font-serif">পণ্যের বৈশিষ্ট্য ও বিবরণ</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-white p-6 rounded-3xl border border-rose-100 shadow-sm">
+        <div className="border-t border-rose-100 pt-6 sm:pt-8 space-y-4 sm:space-y-6">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 font-serif">পণ্যের বৈশিষ্ট্য ও বিবরণ</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-rose-100 shadow-sm">
             {product.category && (
-              <div className="flex justify-between py-2.5 border-b border-rose-50">
+              <div className="flex justify-between py-2 border-b border-rose-50 gap-2">
                 <span className="text-slate-500">ক্যাটাগরি</span>
-                <span className="font-semibold text-slate-900">{product.category}</span>
+                <span className="font-semibold text-slate-900 text-right">{product.category}</span>
               </div>
             )}
             {product.size && (
-              <div className="flex justify-between py-2.5 border-b border-rose-50">
+              <div className="flex justify-between py-2 border-b border-rose-50 gap-2">
                 <span className="text-slate-500">সাইজ / পরিমাপ</span>
-                <span className="font-semibold text-slate-900">{product.size}</span>
+                <span className="font-semibold text-slate-900 text-right">{product.size}</span>
               </div>
             )}
             {product.material && (
-              <div className="flex justify-between py-2.5 border-b border-rose-50">
+              <div className="flex justify-between py-2 border-b border-rose-50 gap-2">
                 <span className="text-slate-500">মেটেরিয়াল ও ফিনিশিং</span>
-                <span className="font-semibold text-slate-900">{product.material}</span>
+                <span className="font-semibold text-slate-900 text-right">{product.material}</span>
               </div>
             )}
             {product.capacity && (
-              <div className="flex justify-between py-2.5 border-b border-rose-50">
+              <div className="flex justify-between py-2 border-b border-rose-50 gap-2">
                 <span className="text-slate-500">ধারণক্ষমতা</span>
-                <span className="font-semibold text-slate-900">{product.capacity}</span>
+                <span className="font-semibold text-slate-900 text-right">{product.capacity}</span>
               </div>
             )}
           </div>
@@ -393,8 +430,47 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
       )}
 
       {/* Customer Reviews & Feedback Section */}
-      <div id="reviews-section" className="border-t border-rose-100 pt-8">
+      <div id="reviews-section" className="border-t border-rose-100 pt-6 sm:pt-8">
         <ReviewsSection productId={product.id || product._id || productId} productTitle={product.name} />
+      </div>
+
+      {/* Sticky Mobile Purchase Bar */}
+      <div className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-rose-200 px-3 py-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))] shadow-[0_-6px_20px_-6px_rgba(107,17,43,0.18)]">
+        <div className="flex items-center justify-between gap-2.5">
+          <div className="min-w-0">
+            <span className="text-[10px] text-slate-500 block leading-none">মূল্য ({quantity}টি)</span>
+            <div className="flex items-baseline gap-1.5 mt-0.5">
+              <span className="text-lg font-black text-[#6B112B]">
+                ৳{((product.price || 0) * quantity).toLocaleString()}
+              </span>
+              {product.originalPrice && (
+                <span className="text-[11px] text-slate-400 line-through">
+                  ৳{(product.originalPrice * quantity).toLocaleString()}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <a
+              href={whatsappOrderUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp অর্ডার"
+              className="h-11 w-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm tap-scale"
+            >
+              <MessageCircle className="h-5 w-5 fill-white" />
+            </a>
+
+            <Button
+              onClick={() => setIsOrderModalOpen(true)}
+              className="h-11 px-5 rounded-xl bg-[#6B112B] hover:bg-[#50091D] text-white font-bold text-xs gap-1.5 shadow-md tap-scale"
+            >
+              <ShoppingBag className="h-4 w-4 text-[#D4AF37]" />
+              <span>অর্ডার করুন</span>
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* Quick Order Cash on Delivery Modal */}

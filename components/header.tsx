@@ -20,6 +20,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FloatingInput } from "@/components/ui/floating-input";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
 export function Header() {
@@ -179,18 +180,16 @@ export function Header() {
             <div className="relative hidden md:block">
               {searchOpen ? (
                 <form onSubmit={handleSearch} className="flex items-center animate-in fade-in duration-200">
-                  <div className="relative">
-                    <input
+                  <div className="relative w-52 lg:w-64">
+                    <FloatingInput
                       type="search"
+                      label="পণ্য খুঁজুন..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="পণ্য খুঁজুন..."
                       autoFocus
-                      className="h-9 w-44 lg:w-56 rounded-full border border-rose-300 bg-rose-50/40 pl-3 pr-8 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-[#6B112B]"
+                      icon={<Search className="h-3.5 w-3.5" />}
+                      className="h-10 sm:h-10"
                     />
-                    <button type="submit" aria-label="খুঁজুন" className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#6B112B]">
-                      <Search className="h-3.5 w-3.5" />
-                    </button>
                   </div>
                   <button
                     type="button"
@@ -269,22 +268,22 @@ export function Header() {
         </div>
 
         {/* ========================================================= */}
-        {/* 3. MOBILE SEARCH BAR (Real form, thumb-friendly height)   */}
+        {/* 3. MOBILE SEARCH BAR (Floating Input + Submit Button)     */}
         {/* ========================================================= */}
         <form onSubmit={handleSearch} className="md:hidden px-3 pb-2.5" role="search">
           <div className="relative w-full flex items-center">
-            <Search className="absolute left-3.5 h-4 w-4 text-slate-400 pointer-events-none" />
-            <input
+            <FloatingInput
               type="search"
               enterKeyHint="search"
+              label="চুড়ি আলনা, মন্দির, গহনা খুঁজুন..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="চুড়ি আলনা, মন্দির, গহনা খুঁজুন..."
-              className="h-10 w-full rounded-full border border-rose-200 bg-rose-50/40 pl-10 pr-[4.5rem] text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-[#6B112B] focus:ring-2 focus:ring-[#6B112B]/10"
+              icon={<Search className="h-4 w-4" />}
+              className="h-11 pr-20"
             />
             <button
               type="submit"
-              className="absolute right-1 top-1 h-8 px-3.5 rounded-full bg-[#6B112B] text-white text-xs font-semibold tap-scale"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 px-3.5 rounded-lg bg-[#6B112B] text-white text-xs font-semibold tap-scale z-10"
             >
               খুঁজুন
             </button>

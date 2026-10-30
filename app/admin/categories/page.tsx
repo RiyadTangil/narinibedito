@@ -22,9 +22,9 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { FloatingInput } from "@/components/ui/floating-input";
 import { DeleteConfirmModal } from "@/components/admin/delete-confirm-modal";
 import { toast } from "sonner";
 
@@ -250,75 +250,42 @@ export default function AdminCategoriesPage() {
             </CardHeader>
 
             <CardContent className="pt-4">
-              <form onSubmit={handleAddCategory} className="space-y-4">
+              <form onSubmit={handleAddCategory} className="space-y-3.5 sm:space-y-4">
                 
-                <div className="space-y-1.5">
-                  <Label htmlFor="catTitle" className="text-xs font-bold text-slate-700">
-                    ক্যাটাগরির বাংলা নাম <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="catTitle"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    placeholder="যেমন: ঐতিহ্যবাহী ব্রাইডাল সেট"
-                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
-                    required
+                <FloatingInput
+                  label="ক্যাটাগরির বাংলা নাম (যেমন: ঐতিহ্যবাহী ব্রাইডাল সেট)"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  required
+                />
+
+                <FloatingInput
+                  label="সাব-টাইটেল / ইংরেজি নাম (e.g. Bridal Jewellery)"
+                  value={formData.subtitle}
+                  onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+                />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <FloatingInput
+                    label="URL Slug (e.g. bridal-set)"
+                    value={formData.id}
+                    onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+                    className="font-mono lowercase"
+                  />
+
+                  <FloatingInput
+                    label="হাইলাইট ব্যাজ (e.g. এক্সক্লুসিভ)"
+                    value={formData.badge}
+                    onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="catSubtitle" className="text-xs font-bold text-slate-700">
-                    সাব-টাইটেল / ইংরেজি নাম
-                  </Label>
-                  <Input
-                    id="catSubtitle"
-                    value={formData.subtitle}
-                    onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                    placeholder="e.g. Bridal Jewellery Collection"
-                    className="rounded-xl border-slate-200 text-xs h-10"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="catSlug" className="text-xs font-bold text-slate-700">
-                      URL Slug
-                    </Label>
-                    <Input
-                      id="catSlug"
-                      value={formData.id}
-                      onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                      placeholder="e.g. bridal-set"
-                      className="rounded-xl border-slate-200 text-xs h-10 font-mono lowercase"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <Label htmlFor="catBadge" className="text-xs font-bold text-slate-700">
-                      হাইলাইট ব্যাজ
-                    </Label>
-                    <Input
-                      id="catBadge"
-                      value={formData.badge}
-                      onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                      placeholder="e.g. এক্সক্লুসিভ"
-                      className="rounded-xl border-slate-200 text-xs h-10"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="catImage" className="text-xs font-bold text-slate-700">
-                    কাভার ছবির লিঙ্ক (Image URL)
-                  </Label>
-                  <Input
-                    id="catImage"
-                    value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    placeholder="https://images.unsplash.com/..."
-                    className="rounded-xl border-slate-200 text-xs h-10 font-mono"
-                  />
-                </div>
+                <FloatingInput
+                  label="কাভার ছবির লিঙ্ক (Image URL)"
+                  value={formData.image}
+                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                  className="font-mono"
+                />
 
                 {/* Real-time Category Card Preview */}
                 <div className="pt-2 space-y-1.5">
@@ -377,98 +344,114 @@ export default function AdminCategoriesPage() {
           {/* Search Bar */}
           <div className="flex items-center gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 h-4 w-4 text-slate-400" />
-              <input
+              <FloatingInput
                 type="search"
+                label="ক্যাটাগরি খুঁজুন..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="ক্যাটাগরি খুঁজুন..."
-                className="h-10 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-[#6B112B]"
+                icon={<Search className="h-4 w-4" />}
               />
             </div>
           </div>
 
           {/* Categories Grid List */}
           <div className="space-y-3">
-            {filteredCategories.map((cat) => (
-              <div
-                key={cat.id}
-                className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs hover:shadow-md transition-all flex items-center justify-between gap-4"
-              >
-                <div className="flex items-center gap-3.5 overflow-hidden">
-                  <div className="relative h-14 w-14 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
-                    <Image
-                      src={cat.image}
-                      alt={cat.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-
-                  <div className="flex flex-col truncate">
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-bold text-sm text-slate-900 font-serif truncate">
-                        {cat.title}
-                      </h4>
-                      {cat.badge && (
-                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-[#6B112B] border border-rose-200 shrink-0">
-                          {cat.badge}
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-xs text-slate-500 truncate">
-                      {cat.subtitle} • <span className="font-mono text-[11px] text-slate-400">/{cat.id}</span>
-                    </span>
-                    <span className="text-[11px] text-[#B8860B] font-bold mt-0.5">
-                      {cat.count}টি পণ্য লাইভ
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => toggleStatus(cat)}
-                    className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-colors ${
-                      cat.status === 1 || cat.status === true
-                        ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
-                        : "bg-slate-100 text-slate-500 border border-slate-200"
-                    }`}
-                  >
-                    {cat.status === 1 || cat.status === true ? "সক্রিয়" : "বন্ধ"}
-                  </button>
-
-                  <Link href={`/products?category=${cat.id}`} target="_blank">
-                    <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-[#6B112B]" title="স্টোরে প্রিভিউ দেখুন">
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                  </Link>
-
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => setCategoryToDelete(cat)}
-                    className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
-                    title="ডিলিট করুন"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-
             {loading ? (
-              <div className="bg-white p-12 rounded-2xl border border-slate-200 text-center space-y-3">
-                <Loader2 className="h-8 w-8 animate-spin text-[#6B112B] mx-auto" />
-                <p className="text-xs text-slate-500">ডাটাবেস থেকে ক্যাটাগরি লোড হচ্ছে...</p>
-              </div>
+              Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={`cat-admin-skel-${i}`}
+                  className="bg-white rounded-2xl border border-slate-200/90 p-3.5 sm:p-4 flex items-center justify-between gap-4"
+                >
+                  <div className="flex items-center gap-3.5 flex-1">
+                    <Skeleton className="h-14 w-14 rounded-xl bg-rose-100/60 shrink-0" />
+                    <div className="space-y-2 flex-1">
+                      <Skeleton className="h-4 w-40 bg-slate-200" />
+                      <Skeleton className="h-3 w-32 bg-slate-100" />
+                      <Skeleton className="h-3 w-20 bg-amber-100/60" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Skeleton className="h-6 w-14 rounded-full bg-emerald-100/70" />
+                    <Skeleton className="h-8 w-8 rounded-lg bg-slate-100" />
+                    <Skeleton className="h-8 w-8 rounded-lg bg-slate-100" />
+                  </div>
+                </div>
+              ))
             ) : filteredCategories.length === 0 ? (
               <div className="bg-white p-8 rounded-2xl border border-slate-200 text-center space-y-2">
                 <Layers className="h-8 w-8 text-slate-300 mx-auto" />
                 <h4 className="text-sm font-bold text-slate-700">কোনো ক্যাটাগরি পাওয়া যায়নি</h4>
-                <p className="text-xs text-slate-400">নতুন নাম দিয়ে সার্চ করুন অথবা বাম পাশের ফর্ম দিয়ে যোগ করুন</p>
+                <p className="text-xs text-slate-400">নতুন নাম দিয়ে সার্চ করুন অথবা ফর্ম দিয়ে যোগ করুন</p>
               </div>
-            ) : null}
+            ) : (
+              filteredCategories.map((cat) => (
+                <div
+                  key={cat.id || cat._id}
+                  className="bg-white rounded-2xl border border-slate-200/90 p-3.5 sm:p-4 shadow-xs hover:shadow-md transition-all flex items-center justify-between gap-3 sm:gap-4"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="relative h-12 w-12 sm:h-14 sm:w-14 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                      <Image
+                        src={cat.image || "/images/products/churi-alna.jpg"}
+                        alt={cat.title}
+                        fill
+                        sizes="56px"
+                        className="object-cover"
+                      />
+                    </div>
+
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <h4 className="font-bold text-xs sm:text-sm text-slate-900 font-serif truncate">
+                          {cat.title}
+                        </h4>
+                        {cat.badge && (
+                          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-[#6B112B] border border-rose-200 shrink-0">
+                            {cat.badge}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[11px] sm:text-xs text-slate-500 truncate">
+                        {cat.subtitle} • <span className="font-mono text-[10px] sm:text-[11px] text-slate-400">/{cat.id}</span>
+                      </span>
+                      <span className="text-[10px] sm:text-[11px] text-[#B8860B] font-bold mt-0.5">
+                        {cat.count || 0}টি পণ্য লাইভ
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => toggleStatus(cat)}
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-colors ${
+                        cat.status === 1 || cat.status === true
+                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
+                          : "bg-slate-100 text-slate-500 border border-slate-200"
+                      }`}
+                    >
+                      {cat.status === 1 || cat.status === true ? "সক্রিয়" : "বন্ধ"}
+                    </button>
+
+                    <Link href={`/products?category=${cat.id}`} target="_blank">
+                      <Button size="icon" variant="ghost" className="h-9 w-9 text-slate-500 hover:text-[#6B112B]" title="স্টোরে প্রিভিউ দেখুন">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                    </Link>
+
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => setCategoryToDelete(cat)}
+                      className="h-9 w-9 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                      title="ডিলিট করুন"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
         </div>

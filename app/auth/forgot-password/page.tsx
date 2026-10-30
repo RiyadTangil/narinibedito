@@ -1,12 +1,10 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { FloatingInput } from "@/components/ui/floating-input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Mail, ArrowLeft, CheckCircle, KeyRound } from "lucide-react"
@@ -48,32 +46,22 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-900 to-pink-900 flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-orange-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-        </div>
-
-        <div className="w-full max-w-md relative z-10">
-          <Card className="shadow-2xl border-0 bg-white/10 backdrop-blur-xl border border-white/20">
-            <CardContent className="pt-8">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl mb-6 shadow-2xl">
-                  <CheckCircle className="h-10 w-10 text-white" />
-                </div>
-                <h1 className="text-3xl font-bold text-white mb-4">Check Your Email</h1>
-                <p className="text-gray-300 mb-8 text-lg leading-relaxed">
-                  If an account with that email exists, we've sent you a password reset link.
-                </p>
-                <Link href="/auth/signin">
-                  <Button className="w-full h-14 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold text-base shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
-                    <ArrowLeft className="mr-2 h-5 w-5" />
-                    Back to Sign In
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
+      <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <Card className="shadow-2xl border border-rose-100 bg-white rounded-3xl p-6 text-center space-y-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-50 rounded-2xl mx-auto">
+              <CheckCircle className="h-9 w-9 text-emerald-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900 font-serif">ইমেইল চেক করুন</h1>
+            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+              আপনার ইমেইলে পাসওয়ার্ড রিসেট করার লিংক পাঠানো হয়েছে।
+            </p>
+            <Link href="/auth/signin" className="block pt-2">
+              <Button className="w-full h-11 bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                লগইন পেজে ফিরে যান
+              </Button>
+            </Link>
           </Card>
         </div>
       </div>
@@ -81,83 +69,51 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-900 via-orange-900 to-red-900 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-amber-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-red-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-orange-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
-      </div>
-
-      <div className="w-full max-w-md relative z-10">
-        {/* Logo and Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl mb-6 shadow-2xl">
-            <KeyRound className="h-10 w-10 text-white" />
-          </div>
-          <h1 className="text-4xl font-bold text-white mb-2">Forgot Password</h1>
-          <p className="text-gray-300 text-lg">We'll send you a reset link</p>
-        </div>
-
-        <Card className="shadow-2xl border-0 bg-white/10 backdrop-blur-xl border border-white/20">
-          <CardHeader className="space-y-1 pb-8">
-            <CardTitle className="text-3xl font-bold text-center text-white">Reset Password</CardTitle>
-            <CardDescription className="text-center text-gray-300 text-base">
-              Enter your email address and we'll send you a link to reset your password
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <Card className="shadow-2xl border border-rose-100 bg-white rounded-3xl overflow-hidden">
+          <CardHeader className="space-y-2 text-center pt-8 pb-4">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-rose-50 text-[#6B112B] rounded-2xl mx-auto border border-rose-100">
+              <KeyRound className="h-7 w-7" />
+            </div>
+            <CardTitle className="text-2xl font-black text-[#6B112B] font-serif">পাসওয়ার্ড রিসেট</CardTitle>
+            <CardDescription className="text-xs text-slate-500">
+              আপনার রেজিস্টার্ড ইমেইল দিন, আমরা পাসওয়ার্ড রিসেট লিংক পাঠিয়ে দেবো
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <CardContent className="space-y-5 px-6 sm:px-8 pb-8">
+            <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <Alert className="border-red-400/50 bg-red-500/10 backdrop-blur-sm">
-                  <AlertDescription className="text-red-300">{error}</AlertDescription>
+                <Alert className="border-red-200 bg-red-50 text-red-600 rounded-xl text-xs">
+                  <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
 
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-200">
-                  Email Address
-                </Label>
-                <div className="relative group">
-                  <Mail className="absolute left-4 top-4 h-5 w-5 text-gray-400 group-focus-within:text-amber-400 transition-colors" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-12 h-14 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20 backdrop-blur-sm"
-                    required
-                  />
-                </div>
-              </div>
+              <FloatingInput
+                type="email"
+                label="ইমেইল অ্যাড্রেস (Email Address)"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                icon={<Mail className="h-4 w-4" />}
+                required
+              />
 
               <Button
                 type="submit"
-                className="w-full h-14 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold text-base shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                className="w-full h-11 bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl text-sm shadow-md"
                 disabled={isLoading}
               >
-                {isLoading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                    Sending reset link...
-                  </div>
-                ) : (
-                  <div className="flex items-center">
-                    <Mail className="mr-2 h-5 w-5" />
-                    Send Reset Link
-                  </div>
-                )}
+                {isLoading ? "পাঠানো হচ্ছে..." : "রিসেট লিংক পাঠান"}
               </Button>
             </form>
 
             <div className="text-center">
               <Link
                 href="/auth/signin"
-                className="inline-flex items-center text-sm text-amber-400 hover:text-amber-300 hover:underline transition-colors"
+                className="inline-flex items-center text-xs font-semibold text-[#6B112B] hover:underline"
               >
-                <ArrowLeft className="mr-1 h-4 w-4" />
-                Back to Sign In
+                <ArrowLeft className="mr-1 h-3.5 w-3.5" />
+                লগইন পেজে ফিরে যান
               </Link>
             </div>
           </CardContent>

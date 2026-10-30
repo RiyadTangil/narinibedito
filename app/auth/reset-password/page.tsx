@@ -1,18 +1,16 @@
 "use client"
 
 import type React from "react"
-
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { FloatingInput } from "@/components/ui/floating-input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, Lock, CheckCircle, Shield } from "lucide-react"
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -72,32 +70,22 @@ export default function ResetPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-green-900 to-teal-900 flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-teal-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-        </div>
-
-        <div className="w-full max-w-md relative z-10">
-          <Card className="shadow-2xl border-0 bg-white/10 backdrop-blur-xl border border-white/20">
-            <CardContent className="pt-8">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl mb-6 shadow-2xl">
-                  <CheckCircle className="h-10 w-10 text-white" />
-                </div>
-                <h1 className="text-3xl font-bold text-white mb-4">Password Reset Successfully</h1>
-                <p className="text-gray-300 mb-8 text-lg leading-relaxed">
-                  Your password has been reset. You can now sign in with your new password.
-                </p>
-                <Button
-                  onClick={() => router.push("/auth/signin")}
-                  className="w-full h-14 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-semibold text-base shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
-                >
-                  Continue to Sign In
-                </Button>
-              </div>
-            </CardContent>
+      <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <Card className="shadow-2xl border border-rose-100 bg-white rounded-3xl p-6 text-center space-y-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-50 rounded-2xl mx-auto">
+              <CheckCircle className="h-9 w-9 text-emerald-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900 font-serif">পাসওয়ার্ড পরিবর্তন সফল!</h1>
+            <p className="text-slate-600 text-xs sm:text-sm">
+              আপনার নতুন পাসওয়ার্ড সেট করা হয়েছে। এখন লগইন করতে পারেন।
+            </p>
+            <Button
+              onClick={() => router.push("/auth/signin")}
+              className="w-full h-11 bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl"
+            >
+              লগইন করুন
+            </Button>
           </Card>
         </div>
       </div>
@@ -105,119 +93,92 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-900 via-purple-900 to-fuchsia-900 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-violet-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-fuchsia-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
-      </div>
-
-      <div className="w-full max-w-md relative z-10">
-        {/* Logo and Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl mb-6 shadow-2xl">
-            <Shield className="h-10 w-10 text-white" />
-          </div>
-          <h1 className="text-4xl font-bold text-white mb-2">Reset Password</h1>
-          <p className="text-gray-300 text-lg">Enter your new password</p>
-        </div>
-
-        <Card className="shadow-2xl border-0 bg-white/10 backdrop-blur-xl border border-white/20">
-          <CardHeader className="space-y-1 pb-8">
-            <CardTitle className="text-3xl font-bold text-center text-white">New Password</CardTitle>
-            <CardDescription className="text-center text-gray-300 text-base">
-              Choose a strong password for your account
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <Card className="shadow-2xl border border-rose-100 bg-white rounded-3xl overflow-hidden">
+          <CardHeader className="space-y-2 text-center pt-8 pb-4">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-rose-50 text-[#6B112B] rounded-2xl mx-auto border border-rose-100">
+              <Shield className="h-7 w-7" />
+            </div>
+            <CardTitle className="text-2xl font-black text-[#6B112B] font-serif">নতুন পাসওয়ার্ড দিন</CardTitle>
+            <CardDescription className="text-xs text-slate-500">
+              আপনার একাউন্টের জন্য শক্তিশালী নতুন পাসওয়ার্ড নির্বাচন করুন
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <CardContent className="space-y-5 px-6 sm:px-8 pb-8">
+            <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <Alert className="border-red-400/50 bg-red-500/10 backdrop-blur-sm">
-                  <AlertDescription className="text-red-300">{error}</AlertDescription>
+                <Alert className="border-red-200 bg-red-50 text-red-600 rounded-xl text-xs">
+                  <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-200">
-                  New Password
-                </Label>
-                <div className="relative group">
-                  <Lock className="absolute left-4 top-4 h-5 w-5 text-gray-400 group-focus-within:text-violet-400 transition-colors" />
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter new password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-12 pr-12 h-14 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-violet-400 focus:ring-violet-400/20 backdrop-blur-sm"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-4 text-gray-400 hover:text-white transition-colors"
-                  >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                  </button>
-                </div>
+              <div className="relative">
+                <FloatingInput
+                  type={showPassword ? "text" : "password"}
+                  label="নতুন পাসওয়ার্ড (New Password)"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  icon={<Lock className="h-4 w-4" />}
+                  className="pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#6B112B] z-10"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-200">
-                  Confirm New Password
-                </Label>
-                <div className="relative group">
-                  <Lock className="absolute left-4 top-4 h-5 w-5 text-gray-400 group-focus-within:text-violet-400 transition-colors" />
-                  <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm new password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-12 pr-12 h-14 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-violet-400 focus:ring-violet-400/20 backdrop-blur-sm"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-4 top-4 text-gray-400 hover:text-white transition-colors"
-                  >
-                    {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                  </button>
-                </div>
+              <div className="relative">
+                <FloatingInput
+                  type={showConfirmPassword ? "text" : "password"}
+                  label="পুনরায় নতুন পাসওয়ার্ড দিন"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  icon={<Lock className="h-4 w-4" />}
+                  className="pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#6B112B] z-10"
+                >
+                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-14 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-semibold text-base shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                className="w-full h-11 bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl text-sm shadow-md"
                 disabled={isLoading || !token}
               >
-                {isLoading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                    Resetting password...
-                  </div>
-                ) : (
-                  <div className="flex items-center">
-                    <Shield className="mr-2 h-5 w-5" />
-                    Reset Password
-                  </div>
-                )}
+                {isLoading ? "সংরক্ষণ হচ্ছে..." : "পাসওয়ার্ড আপডেট করুন"}
               </Button>
             </form>
 
             <div className="text-center">
               <Link
                 href="/auth/signin"
-                className="text-sm text-violet-400 hover:text-violet-300 hover:underline transition-colors"
+                className="text-xs font-semibold text-[#6B112B] hover:underline"
               >
-                Back to Sign In
+                লগইন পেজে ফিরে যান
               </Link>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
+  )
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-rose-50/40 text-xs text-[#6B112B] font-bold">লোড হচ্ছে...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
   )
 }

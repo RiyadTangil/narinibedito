@@ -25,6 +25,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteConfirmModal } from "@/components/admin/delete-confirm-modal";
 import { toast } from "sonner";
 
@@ -141,6 +142,8 @@ export default function AdminDashboardPage() {
   const [liveOrders, setLiveOrders] = useState<any[]>([]);
   const [orderStats, setOrderStats] = useState<any>({ total: 0, pending: 0, confirmed: 0, totalRevenue: 0 });
   const [recentProducts, setRecentProducts] = useState<any[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+  const [loadingProducts, setLoadingProducts] = useState(true);
   const [productToDelete, setProductToDelete] = useState<any | null>(null);
 
   const confirmDeleteProduct = async () => {
@@ -188,7 +191,8 @@ export default function AdminDashboardPage() {
           }
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoadingOrders(false));
 
     // 2. Fetch live products from DB
     fetch("/api/products?limit=5")
@@ -198,22 +202,23 @@ export default function AdminDashboardPage() {
           setRecentProducts(json.data);
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoadingProducts(false));
   }, []);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5 sm:space-y-8">
       {/* 1. Welcome & Quick Action Hero Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#50091D] via-[#6B112B] to-[#400717] text-white p-6 sm:p-8 shadow-xl border border-rose-300/20">
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#50091D] via-[#6B112B] to-[#400717] text-white p-4 sm:p-8 shadow-xl border border-rose-300/20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.2),transparent_60%)] pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-xs font-bold text-[#FBEBB5]">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
+          <div className="space-y-1.5 sm:space-y-2 max-w-xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[11px] sm:text-xs font-bold text-[#FBEBB5]">
               <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
               <span>নারী নিবেদিত এডমিন ড্যাশবোর্ড</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-serif text-white">
+            <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight font-serif text-white">
               স্বাগতম, নারী নিবেদিত ম্যানেজমেন্ট!
             </h1>
             <p className="text-xs sm:text-sm text-rose-100/90 leading-relaxed">
@@ -221,23 +226,23 @@ export default function AdminDashboardPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Link href="/admin/orders">
-              <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-md gap-2 h-11 text-xs sm:text-sm">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3">
+            <Link href="/admin/orders" className="col-span-2 sm:col-span-1">
+              <Button size="lg" className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl sm:rounded-2xl shadow-md gap-2 h-10 sm:h-11 text-xs sm:text-sm">
                 <ShoppingBag className="h-4 w-4" />
                 <span>কাস্টমার অর্ডারসমূহ ({orderStats.total})</span>
               </Button>
             </Link>
 
             <Link href="/admin/products/add">
-              <Button size="lg" className="bg-[#D4AF37] hover:bg-[#c29e2e] text-[#4A0A1C] font-bold rounded-2xl shadow-md gap-2 h-11 text-xs sm:text-sm">
+              <Button size="lg" className="w-full sm:w-auto bg-[#D4AF37] hover:bg-[#c29e2e] text-[#4A0A1C] font-bold rounded-xl sm:rounded-2xl shadow-md gap-2 h-10 sm:h-11 text-xs sm:text-sm">
                 <PlusCircle className="h-4 w-4" />
                 <span>নতুন পণ্য যোগ</span>
               </Button>
             </Link>
 
             <Link href="/admin/categories">
-              <Button size="lg" variant="outline" className="border-rose-300/40 bg-white/10 text-white hover:bg-white/20 rounded-2xl gap-2 h-11 text-xs sm:text-sm">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto border-rose-300/40 bg-white/10 text-white hover:bg-white/20 rounded-xl sm:rounded-2xl gap-2 h-10 sm:h-11 text-xs sm:text-sm">
                 <Layers className="h-4 w-4 text-[#D4AF37]" />
                 <span>ক্যাটাগরি</span>
               </Button>
@@ -246,26 +251,26 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* 2. Key Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      {/* 2. Key Metric Cards (2-col on mobile) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         {STATS.map((stat, idx) => {
           const Icon = stat.icon;
           return (
             <Card key={idx} className="border-slate-200/90 shadow-sm rounded-2xl hover:shadow-md transition-all">
-              <CardContent className="p-5 flex items-center justify-between">
-                <div className="space-y-1">
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+              <CardContent className="p-3.5 sm:p-5 flex items-center justify-between gap-2">
+                <div className="space-y-0.5 sm:space-y-1 min-w-0">
+                  <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider block truncate">
                     {stat.title}
                   </span>
-                  <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                  <div className="text-xl sm:text-3xl font-black text-slate-900 tracking-tight">
                     {stat.value}
                   </div>
-                  <span className="text-xs text-slate-500 block">
+                  <span className="text-[10px] sm:text-xs text-slate-500 block truncate">
                     {stat.change}
                   </span>
                 </div>
-                <div className={`h-12 w-12 rounded-2xl border flex items-center justify-center shrink-0 ${stat.color}`}>
-                  <Icon className="h-6 w-6" />
+                <div className={`h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl border flex items-center justify-center shrink-0 ${stat.color}`}>
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
               </CardContent>
             </Card>
@@ -274,28 +279,41 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Incoming Customer Orders Section */}
-      <div className="bg-white p-5 rounded-2xl border border-rose-100 shadow-sm space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-rose-100 shadow-sm space-y-4">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="h-9 w-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0">
               <ShoppingBag className="h-5 w-5" />
             </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900 tracking-tight font-serif">
-                সাম্প্রতিক কাস্টমার অর্ডারসমূহ (Recent Customer Orders)
+            <div className="min-w-0">
+              <h2 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight font-serif truncate">
+                সাম্প্রতিক কাস্টমার অর্ডারসমূহ
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-[11px] sm:text-xs text-slate-500 truncate">
                 ওয়েবসাইট থেকে সরাসরি আসা ক্যাশ অন ডেলিভারি অর্ডার
               </p>
             </div>
           </div>
 
-          <Link href="/admin/orders" className="text-xs font-bold text-[#6B112B] hover:underline flex items-center gap-1">
-            সকল অর্ডার দেখুন ({orderStats.total}) <ArrowRight className="h-3.5 w-3.5" />
+          <Link href="/admin/orders" className="text-xs font-bold text-[#6B112B] hover:underline flex items-center gap-1 shrink-0">
+            সব ({orderStats.total}) <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 
-        {liveOrders.length === 0 ? (
+        {loadingOrders ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="p-3.5 rounded-xl border border-slate-100 space-y-2">
+                <div className="flex justify-between">
+                  <Skeleton className="h-4 w-24 bg-rose-100" />
+                  <Skeleton className="h-4 w-14 bg-emerald-100" />
+                </div>
+                <Skeleton className="h-4 w-32 bg-slate-200" />
+                <Skeleton className="h-3 w-24 bg-slate-100" />
+              </div>
+            ))}
+          </div>
+        ) : liveOrders.length === 0 ? (
           <div className="p-6 text-center text-xs text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
             এখনো কোনো নতুন অর্ডার আসেনি। গ্রাহকরা অর্ডার করলে এখানে সাথে সাথে দেখা যাবে।
           </div>
@@ -344,92 +362,162 @@ export default function AdminDashboardPage() {
           </div>
 
           <Card className="border-slate-200/90 shadow-sm rounded-2xl overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="bg-slate-50/80 text-[11px] uppercase tracking-wider text-slate-500 border-b border-slate-200/80 font-bold">
-                  <tr>
-                    <th className="py-3 px-4">পণ্য ও ছবি</th>
-                    <th className="py-3 px-4">ক্যাটাগরি</th>
-                    <th className="py-3 px-4">মূল্য</th>
-                    <th className="py-3 px-4">স্টক</th>
-                    <th className="py-3 px-4 text-right">একশন</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
+            {loadingProducts ? (
+              <div className="p-4 space-y-3">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between gap-3 p-2">
+                    <div className="flex items-center gap-3 flex-1">
+                      <Skeleton className="h-12 w-12 rounded-xl bg-rose-100/60 shrink-0" />
+                      <div className="space-y-1.5 flex-1">
+                        <Skeleton className="h-4 w-2/3 bg-slate-200" />
+                        <Skeleton className="h-3 w-24 bg-slate-100" />
+                      </div>
+                    </div>
+                    <Skeleton className="h-6 w-16 rounded-lg bg-rose-100/70" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                {/* Mobile Stacked Cards */}
+                <div className="md:hidden divide-y divide-slate-100">
                   {recentProducts.map((item) => (
-                    <tr key={item.id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="py-3 px-4">
-                        <div className="flex items-center gap-3">
-                          <div className="relative h-11 w-11 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
-                            <Image
-                              src={item.image}
-                              alt={item.name}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                          <div className="flex flex-col max-w-xs">
-                            <span className="font-bold text-slate-900 text-xs sm:text-sm line-clamp-1 leading-snug">
-                              {item.name}
-                            </span>
-                            <span className="text-[10px] text-slate-400 font-mono">
-                              SKU: {item.sku}
-                            </span>
-                          </div>
+                    <div key={item.id || item._id} className="p-3.5 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="relative h-14 w-14 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                          <Image
+                            src={item.image || "/images/products/churi-alna.jpg"}
+                            alt={item.name}
+                            fill
+                            sizes="56px"
+                            className="object-cover"
+                          />
                         </div>
-                      </td>
+                        <div className="min-w-0 space-y-0.5">
+                          <h4 className="font-bold text-slate-900 text-xs line-clamp-1">
+                            {item.name}
+                          </h4>
+                          <div className="flex items-center gap-2 text-[11px]">
+                            <span className="font-black text-[#6B112B]">৳{item.price?.toLocaleString()}</span>
+                            <span className="text-slate-400">•</span>
+                            <span className="text-emerald-700 font-semibold">{item.stock} পিস</span>
+                          </div>
+                          <span className="text-[10px] text-slate-400 font-mono block truncate">
+                            {item.category}
+                          </span>
+                        </div>
+                      </div>
 
-                      <td className="py-3 px-4 text-xs font-medium text-slate-600 whitespace-nowrap">
-                        <Badge variant="outline" className="bg-rose-50 text-[#6B112B] border-rose-200 font-semibold text-[10px]">
-                          {item.category}
-                        </Badge>
-                      </td>
-
-                      <td className="py-3 px-4 font-bold text-[#6B112B] whitespace-nowrap">
-                        ৳{item.price.toLocaleString()}
-                        <span className="text-[10px] text-slate-400 line-through ml-1.5 font-normal">
-                          ৳{item.originalPrice.toLocaleString()}
-                        </span>
-                      </td>
-
-                      <td className="py-3 px-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                          item.status === "Active" 
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                            : "bg-amber-50 text-amber-700 border border-amber-200"
-                        }`}>
-                          {item.stock} পিস ({item.status === "Active" ? "ইন-স্টক" : "সীমিত"})
-                        </span>
-                      </td>
-
-                      <td className="py-3 px-4 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <Link href={`/products/${item.id}`} target="_blank">
-                            <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-[#6B112B]" title="ওয়েবসাইটে প্রিভিউ দেখুন">
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                          <Link href={`/admin/products/add?id=${item._id || item.id}`}>
-                            <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-blue-600" title="এডিট করুন">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            onClick={() => setProductToDelete(item)}
-                            className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
-                            title="ডিলিট করুন"
-                          >
-                            <Trash2 className="h-4 w-4" />
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Link href={`/admin/products/add?id=${item._id || item.id}`}>
+                          <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl text-slate-600 hover:text-blue-600 bg-slate-50">
+                            <Edit className="h-4 w-4" />
                           </Button>
-                        </div>
-                      </td>
-                    </tr>
+                        </Link>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => setProductToDelete(item)}
+                          className="h-9 w-9 rounded-xl text-slate-400 hover:text-red-600 bg-slate-50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
+                </div>
+
+                {/* Desktop Table */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-left text-xs sm:text-sm">
+                    <thead className="bg-slate-50/80 text-[11px] uppercase tracking-wider text-slate-500 border-b border-slate-200/80 font-bold">
+                      <tr>
+                        <th className="py-3 px-4">পণ্য ও ছবি</th>
+                        <th className="py-3 px-4">ক্যাটাগরি</th>
+                        <th className="py-3 px-4">মূল্য</th>
+                        <th className="py-3 px-4">স্টক</th>
+                        <th className="py-3 px-4 text-right">একশন</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {recentProducts.map((item) => (
+                        <tr key={item.id || item._id} className="hover:bg-slate-50/60 transition-colors">
+                          <td className="py-3 px-4">
+                            <div className="flex items-center gap-3">
+                              <div className="relative h-11 w-11 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                                <Image
+                                  src={item.image || "/images/products/churi-alna.jpg"}
+                                  alt={item.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div className="flex flex-col max-w-xs">
+                                <span className="font-bold text-slate-900 text-xs sm:text-sm line-clamp-1 leading-snug">
+                                  {item.name}
+                                </span>
+                                <span className="text-[10px] text-slate-400 font-mono">
+                                  SKU: {item.sku}
+                                </span>
+                              </div>
+                            </div>
+                          </td>
+
+                          <td className="py-3 px-4 text-xs font-medium text-slate-600 whitespace-nowrap">
+                            <Badge variant="outline" className="bg-rose-50 text-[#6B112B] border-rose-200 font-semibold text-[10px]">
+                              {item.category}
+                            </Badge>
+                          </td>
+
+                          <td className="py-3 px-4 font-bold text-[#6B112B] whitespace-nowrap">
+                            ৳{item.price?.toLocaleString()}
+                            {item.originalPrice && (
+                              <span className="text-[10px] text-slate-400 line-through ml-1.5 font-normal">
+                                ৳{item.originalPrice.toLocaleString()}
+                              </span>
+                            )}
+                          </td>
+
+                          <td className="py-3 px-4 whitespace-nowrap">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                              item.status === "Active" 
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : "bg-amber-50 text-amber-700 border border-amber-200"
+                            }`}>
+                              {item.stock} পিস ({item.status === "Active" ? "ইন-স্টক" : "সীমিত"})
+                            </span>
+                          </td>
+
+                          <td className="py-3 px-4 text-right whitespace-nowrap">
+                            <div className="flex items-center justify-end gap-1.5">
+                              <Link href={`/products/${item.id}`} target="_blank">
+                                <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-[#6B112B]" title="ওয়েবসাইটে প্রিভিউ দেখুন">
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                              </Link>
+                              <Link href={`/admin/products/add?id=${item._id || item.id}`}>
+                                <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-blue-600" title="এডিট করুন">
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                              </Link>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => setProductToDelete(item)}
+                                className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                                title="ডিলিট করুন"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
 
             <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs text-slate-500">
               <span>মোট ৪৮টি পণ্যের মধ্যে ৫টি প্রদর্শিত হচ্ছে</span>

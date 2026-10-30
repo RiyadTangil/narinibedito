@@ -1,37 +1,38 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { 
   Star, 
-  Filter, 
   ArrowUpDown, 
   MessageCircle, 
   Eye, 
   Heart, 
   Sparkles, 
   ShoppingBag,
-  Loader2,
   Package,
-  Layers,
   Search
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { FloatingInput, FloatingSelect } from "@/components/ui/floating-input";
 import { QuickOrderModal, type QuickOrderProduct } from "@/components/quick-order-modal";
 
-export default function ProductsPage() {
+function ProductsCatalogContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category") || "all";
+  const searchParam = searchParams.get("search") || "";
+  const focusParam = searchParams.get("focus") || "";
+
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState(categoryParam);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(searchParam);
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
   const [orderModalProduct, setOrderModalProduct] = useState<QuickOrderProduct | null>(null);
 
@@ -40,6 +41,17 @@ export default function ProductsPage() {
       setActiveCategory(categoryParam);
     }
   }, [categoryParam]);
+
+  useEffect(() => {
+    setSearchQuery(searchParam);
+  }, [searchParam]);
+
+  useEffect(() => {
+    if (focusParam === "search" && searchInputRef.current) {
+      searchInputRef.current.focus();
+      searchInputRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [focusParam]);
 
   useEffect(() => {
     let isMounted = true;
@@ -112,77 +124,111 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        <div className="flex w-full md:w-auto flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-2.5">
-          {/* Search Box */}
-          <div className="relative w-full sm:w-60">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-3.5 sm:w-3.5 text-slate-400" />
-            <Input
+        <div className="grid grid-cols-1 sm:flex w-full md:w-auto items-center gap-2.5">
+          {/* Floating Search Box */}
+          <div className="w-full sm:w-64">
+            <FloatingInput
+              ref={searchInputRef}
+              label="পণ্য খুঁজুন..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="পণ্য খুঁজুন..."
-              className="pl-9 h-11 sm:h-9 text-sm sm:text-xs rounded-xl border-rose-200 focus:border-[#6B112B]"
+              icon={<Search className="h-4 w-4" />}
             />
           </div>
 
-          {/* Sort Selector */}
-          <div className="relative flex-1 sm:flex-none min-w-0">
-            <ArrowUpDown className="sm:hidden absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              aria-label="সাজান"
-              className="w-full sm:w-auto h-11 sm:h-9 pl-9 sm:pl-3 pr-3 rounded-xl border border-rose-200 bg-white text-sm sm:text-xs font-medium text-slate-700 focus:outline-none focus:border-[#6B112B]"
-            >
-              <option value="default">মূল্য অনুযায়ী সাজান</option>
-              <option value="price-asc">কম থেকে বেশি মূল্য</option>
-              <option value="price-desc">বেশি থেকে কম মূল্য</option>
-            </select>
-          </div>
+          {/* Floating Sort Selector + WhatsApp */}
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex-1 sm:w-52">
+              <FloatingSelect
+                label="সাজান (Sort By)"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                icon={<ArrowUpDown className="h-4 w-4" />}
+              >
+                <option value="default">ডিফল্ট তালিকা</option>
+                <option value="price-asc">কম থেকে বেশি মূল্য</option>
+                <option value="price-desc">বেশি থেকে কম মূল্য</option>
+              </FloatingSelect>
+            </div>
 
-          <a
-            href="https://wa.me/8801614258804?text=Hello%20Nari%20Nibedito,%20I%20want%20to%20order"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0"
-          >
-            <Button size="sm" className="h-11 sm:h-9 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs gap-1.5 shadow-sm tap-scale">
-              <MessageCircle className="h-4 w-4 fill-white" /> WhatsApp
-            </Button>
-          </a>
+            <a
+              href="https://wa.me/8801614258804?text=Hello%20Nari%20Nibedito,%20I%20want%20to%20order"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0"
+            >
+              <Button size="sm" className="h-11 sm:h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs gap-1.5 px-3.5 shadow-sm tap-scale">
+                <MessageCircle className="h-4 w-4 fill-white" />
+                <span className="hidden xs:inline">WhatsApp</span>
+              </Button>
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* Category Filter Pills (Dynamically loaded from DB) */}
+      {/* Category Filter Pills (Skeleton when loading) */}
       <div className="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 pb-1 sm:mx-0 sm:px-0 sm:pb-2">
-        <button
-          type="button"
-          onClick={() => setActiveCategory("all")}
-          className={chipClass(activeCategory === "all")}
-        >
-          সব পণ্য ({products.length})
-        </button>
-        {categories.map((cat) => {
-          const count = products.filter(
-            (p) => p.categorySlug === cat.id || p.category === cat.title
-          ).length;
-          return (
+        {loading ? (
+          Array.from({ length: 6 }).map((_, idx) => (
+            <Skeleton key={`cat-chip-skel-${idx}`} className="h-10 w-28 rounded-full shrink-0 bg-rose-100/60" />
+          ))
+        ) : (
+          <>
             <button
               type="button"
-              key={cat.id || cat._id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={chipClass(activeCategory === cat.id)}
+              onClick={() => setActiveCategory("all")}
+              className={chipClass(activeCategory === "all")}
             >
-              {cat.title} {count > 0 && `(${count})`}
+              সব পণ্য ({products.length})
             </button>
-          );
-        })}
+            {categories.map((cat) => {
+              const count = products.filter(
+                (p) => p.categorySlug === cat.id || p.category === cat.title
+              ).length;
+              return (
+                <button
+                  type="button"
+                  key={cat.id || cat._id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={chipClass(activeCategory === cat.id)}
+                >
+                  {cat.title} {count > 0 && `(${count})`}
+                </button>
+              );
+            })}
+          </>
+        )}
       </div>
 
-      {/* Loading State */}
+      {/* Loading Skeleton State */}
       {loading ? (
-        <div className="py-24 flex flex-col items-center justify-center space-y-3">
-          <Loader2 className="h-9 w-9 text-[#6B112B] animate-spin" />
-          <p className="text-xs font-medium text-slate-500">পণ্য তালিকা লোড করা হচ্ছে...</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-7">
+          {Array.from({ length: 8 }).map((_, idx) => (
+            <div
+              key={`shop-skel-${idx}`}
+              className="rounded-2xl sm:rounded-[28px] border border-rose-100 bg-white p-2 sm:p-3.5 shadow-xs space-y-3"
+            >
+              <Skeleton className="aspect-square sm:aspect-[4/5] w-full rounded-xl sm:rounded-2xl bg-rose-100/50" />
+              <div className="space-y-2 px-1">
+                <div className="hidden sm:flex items-center justify-between gap-2">
+                  <Skeleton className="h-4 w-20 rounded-full bg-rose-100/60" />
+                  <Skeleton className="h-4 w-12 rounded-full bg-amber-100/60" />
+                </div>
+                <Skeleton className="h-4 w-full rounded-md bg-slate-200/70" />
+                <Skeleton className="h-4 w-2/3 rounded-md bg-slate-100" />
+                <div className="pt-2 border-t border-rose-50 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Skeleton className="h-6 w-20 rounded-md bg-rose-100/80" />
+                    <Skeleton className="h-4 w-12 rounded-full bg-emerald-100/60 hidden sm:block" />
+                  </div>
+                  <div className="flex gap-1.5">
+                    <Skeleton className="h-9 flex-1 rounded-xl bg-rose-200/60" />
+                    <Skeleton className="h-9 w-9 sm:flex-1 rounded-xl bg-emerald-100/60" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       ) : sortedProducts.length === 0 ? (
         <div className="py-16 sm:py-20 text-center max-w-sm mx-auto space-y-4">
@@ -233,7 +279,6 @@ export default function ProductsPage() {
               >
                 {/* Inset Rounded Image Container */}
                 <div className="relative aspect-square sm:aspect-[4/5] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-b from-stone-50 via-rose-50/20 to-stone-100">
-                  {/* Whole image is tappable on mobile → product details */}
                   <Link href={`/products/${prodId}`} aria-label={product.name} className="absolute inset-0 z-0">
                     <Image
                       src={product.image || "/images/products/churi-alna.jpg"}
@@ -255,7 +300,7 @@ export default function ProductsPage() {
                     </div>
                   )}
 
-                  {/* Top Right: Wishlist Heart Button (always visible on touch, hover-reveal on desktop) */}
+                  {/* Top Right: Wishlist Heart Button */}
                   <button
                     type="button"
                     aria-label="Wishlist"
@@ -273,7 +318,7 @@ export default function ProductsPage() {
                     </div>
                   )}
 
-                  {/* Hover Quick Action (desktop only; on mobile the image itself is a link) */}
+                  {/* Hover Quick Action (desktop only) */}
                   <Link
                     href={`/products/${prodId}`}
                     className="absolute inset-x-3 bottom-3 z-20 hidden lg:group-hover:flex items-center justify-center gap-1.5 bg-white/95 backdrop-blur-md text-[#6B112B] font-bold text-xs py-2 rounded-xl shadow-lg border border-rose-200/80 transition-all duration-300"
@@ -357,7 +402,6 @@ export default function ProductsPage() {
                     </div>
 
                     <div className="hidden sm:grid grid-cols-2 gap-2 pt-0.5">
-                      {/* Button 1: Ask Info on WhatsApp */}
                       <a
                         href={whatsappInfoUrl}
                         target="_blank"
@@ -374,7 +418,6 @@ export default function ProductsPage() {
                         </Button>
                       </a>
 
-                      {/* Button 2: Direct Order Modal Trigger */}
                       <Button 
                         size="sm" 
                         onClick={() => setOrderModalProduct(quickOrderData)}
@@ -399,5 +442,27 @@ export default function ProductsPage() {
         onClose={() => setOrderModalProduct(null)}
       />
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto px-4 py-8 space-y-6">
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-28 bg-rose-100" />
+            <Skeleton className="h-8 w-56 bg-slate-200" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton key={i} className="aspect-square rounded-2xl bg-rose-100/50" />
+            ))}
+          </div>
+        </div>
+      }
+    >
+      <ProductsCatalogContent />
+    </Suspense>
   );
 }

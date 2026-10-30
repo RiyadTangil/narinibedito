@@ -25,7 +25,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="border-t bg-gradient-to-b from-[#2B0511] via-[#1F030B] to-[#120106] text-rose-100">
+    <footer className="border-t bg-gradient-to-b from-[#2B0511] via-[#1F030B] to-[#120106] text-rose-100 pb-[var(--store-bottom-nav)]">
       {/* Feature trust bar */}
       <div className="border-b border-rose-950/60 bg-black/20">
         <div className="container mx-auto grid grid-cols-2 gap-4 px-4 py-8 md:grid-cols-4 md:px-6">

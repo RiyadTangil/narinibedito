@@ -27,9 +27,10 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { FloatingInput, FloatingTextarea, FloatingSelect } from "@/components/ui/floating-input";
 import { toast } from "sonner";
 
 const BADGE_OPTIONS = [
@@ -244,10 +245,37 @@ function ProductFormContent() {
 
   if (loadingProduct) {
     return (
-      <div className="py-24 flex flex-col items-center justify-center space-y-4 max-w-xl mx-auto">
-        <Loader2 className="h-10 w-10 text-[#6B112B] animate-spin" />
-        <p className="text-sm font-semibold text-slate-700">পণ্যের তথ্য লোড করা হচ্ছে...</p>
-        <span className="text-xs text-slate-400">অনুগ্রহ করে একটু অপেক্ষা করুন</span>
+      <div className="space-y-6 max-w-6xl mx-auto pb-16">
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <Skeleton className="h-7 w-64 bg-slate-200 rounded-xl" />
+            <Skeleton className="h-4 w-48 bg-slate-100 rounded-md" />
+          </div>
+          <Skeleton className="h-10 w-36 rounded-xl bg-rose-200/70" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-7 space-y-6">
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 space-y-4">
+              <Skeleton className="h-5 w-44 bg-slate-200" />
+              <Skeleton className="h-12 w-full rounded-xl bg-slate-100" />
+              <div className="grid grid-cols-2 gap-4">
+                <Skeleton className="h-12 w-full rounded-xl bg-slate-100" />
+                <Skeleton className="h-12 w-full rounded-xl bg-slate-100" />
+              </div>
+            </div>
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 space-y-4">
+              <Skeleton className="h-5 w-44 bg-slate-200" />
+              <div className="grid grid-cols-3 gap-4">
+                <Skeleton className="h-12 w-full rounded-xl bg-slate-100" />
+                <Skeleton className="h-12 w-full rounded-xl bg-slate-100" />
+                <Skeleton className="h-12 w-full rounded-xl bg-slate-100" />
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-5">
+            <Skeleton className="h-96 w-full rounded-3xl bg-rose-100/50" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -351,55 +379,37 @@ function ProductFormContent() {
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
               
-              <div className="space-y-1.5">
-                <Label htmlFor="name" className="text-xs font-bold text-slate-700">
-                  পণ্যের পূর্ণ নাম / টাইটেল <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="যেমন: এক্সক্লুসিভ ডাবল ডোর কাঠের চুড়ি আলনা"
-                  className="rounded-xl border-slate-200 text-xs sm:text-sm h-10 focus:border-[#6B112B]"
-                  required
-                />
-              </div>
+              <FloatingInput
+                label="পণ্যের পূর্ণ নাম / টাইটেল (যেমন: ডাবল ডোর কাঠের চুড়ি আলনা)"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="category" className="text-xs font-bold text-slate-700">
-                    ক্যাটাগরি নির্বাচন করুন <span className="text-red-500">*</span>
-                  </Label>
-                  <select
-                    id="category"
-                    value={formData.categorySlug}
-                    onChange={(e) => setFormData({ ...formData, categorySlug: e.target.value })}
-                    className="w-full h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs sm:text-sm text-slate-800 focus:border-[#6B112B] focus:outline-none"
-                  >
-                    {categoriesList.length === 0 ? (
-                      <option value="">ক্যাটাগরি লোড হচ্ছে...</option>
-                    ) : (
-                      categoriesList.map((cat) => (
-                        <option key={cat.id || cat._id} value={cat.id}>
-                          {cat.title}
-                        </option>
-                      ))
-                    )}
-                  </select>
-                </div>
+                <FloatingSelect
+                  label="ক্যাটাগরি নির্বাচন করুন"
+                  value={formData.categorySlug}
+                  onChange={(e) => setFormData({ ...formData, categorySlug: e.target.value })}
+                  required
+                >
+                  {categoriesList.length === 0 ? (
+                    <option value="">ক্যাটাগরি লোড হচ্ছে...</option>
+                  ) : (
+                    categoriesList.map((cat) => (
+                      <option key={cat.id || cat._id} value={cat.id}>
+                        {cat.title}
+                      </option>
+                    ))
+                  )}
+                </FloatingSelect>
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="sku" className="text-xs font-bold text-slate-700">
-                    SKU / প্রোডাক্ট কোড
-                  </Label>
-                  <Input
-                    id="sku"
-                    value={formData.sku}
-                    onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                    placeholder="e.g. NN-ALNA-01"
-                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10 uppercase font-mono"
-                  />
-                </div>
+                <FloatingInput
+                  label="SKU / প্রোডাক্ট কোড (e.g. NN-ALNA-01)"
+                  value={formData.sku}
+                  onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                  className="uppercase font-mono"
+                />
               </div>
 
               {/* Promotional Badge & Status */}
@@ -473,48 +483,28 @@ function ProductFormContent() {
             <CardContent className="space-y-4 pt-4">
               
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="price" className="text-xs font-bold text-slate-700">
-                    বিক্রয় মূল্য (৳) <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    placeholder="2250"
-                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10 font-bold text-[#6B112B]"
-                    required
-                  />
-                </div>
+                <FloatingInput
+                  type="number"
+                  label="বিক্রয় মূল্য (৳)"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  className="font-bold text-[#6B112B]"
+                  required
+                />
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="originalPrice" className="text-xs font-bold text-slate-700">
-                    পূর্বের রেগুলার মূল্য (৳)
-                  </Label>
-                  <Input
-                    id="originalPrice"
-                    type="number"
-                    value={formData.originalPrice}
-                    onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
-                    placeholder="2650"
-                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
-                  />
-                </div>
+                <FloatingInput
+                  type="number"
+                  label="পূর্বের রেগুলার মূল্য (৳)"
+                  value={formData.originalPrice}
+                  onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
+                />
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="stock" className="text-xs font-bold text-slate-700">
-                    মজুদ স্টক সংখ্যা
-                  </Label>
-                  <Input
-                    id="stock"
-                    type="number"
-                    value={formData.stock}
-                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                    placeholder="35"
-                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
-                  />
-                </div>
+                <FloatingInput
+                  type="number"
+                  label="মজুদ স্টক সংখ্যা"
+                  value={formData.stock}
+                  onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                />
               </div>
 
             </CardContent>
@@ -531,72 +521,37 @@ function ProductFormContent() {
             <CardContent className="space-y-4 pt-4">
               
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="size" className="text-xs font-bold text-slate-700">
-                    সাইজ / পরিমাপ
-                  </Label>
-                  <Input
-                    id="size"
-                    value={formData.size}
-                    onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-                    placeholder={'যেমন: ২১" x ১৬" সাইজ'}
-                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
-                  />
-                </div>
+                <FloatingInput
+                  label='সাইজ / পরিমাপ (যেমন: ২১" x ১৬")'
+                  value={formData.size}
+                  onChange={(e) => setFormData({ ...formData, size: e.target.value })}
+                />
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="capacity" className="text-xs font-bold text-slate-700">
-                    ধারণক্ষমতা
-                  </Label>
-                  <Input
-                    id="capacity"
-                    value={formData.capacity}
-                    onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
-                    placeholder="যেমন: ১৪০ ডজন চুড়ি"
-                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
-                  />
-                </div>
+                <FloatingInput
+                  label="ধারণক্ষমতা (যেমন: ১৪০ ডজন চুড়ি)"
+                  value={formData.capacity}
+                  onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
+                />
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="material" className="text-xs font-bold text-slate-700">
-                    মেটেরিয়াল ও কাঠ
-                  </Label>
-                  <Input
-                    id="material"
-                    value={formData.material}
-                    onChange={(e) => setFormData({ ...formData, material: e.target.value })}
-                    placeholder="মেহগনি কাঠ ও স্বচ্ছ গ্লাস"
-                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="highlight" className="text-xs font-bold text-slate-700">
-                  মূল বৈশিষ্ট্য ও হাইলাইটস (বুলেট পয়েন্ট)
-                </Label>
-                <Input
-                  id="highlight"
-                  value={formData.highlight}
-                  onChange={(e) => setFormData({ ...formData, highlight: e.target.value })}
-                  placeholder="যেমন: স্বচ্ছ গ্লাস ডোর • সিকিউরিটি লক ও চাবি • ১৪০ ডজন ধারণক্ষমতা"
-                  className="rounded-xl border-slate-200 text-xs sm:text-sm h-10"
+                <FloatingInput
+                  label="মেটেরিয়াল ও কাঠ"
+                  value={formData.material}
+                  onChange={(e) => setFormData({ ...formData, material: e.target.value })}
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <Label htmlFor="description" className="text-xs font-bold text-slate-700">
-                  পণ্যের বিস্তারিত বিবরণ (Full Description)
-                </Label>
-                <textarea
-                  id="description"
-                  rows={4}
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="আপনার প্রিয় চুড়ি ও গহনাগুলো সাজিয়ে রাখার বিস্তারিত বিবরণ..."
-                  className="w-full rounded-xl border border-slate-200 p-3 text-xs sm:text-sm focus:border-[#6B112B] focus:outline-none leading-relaxed"
-                />
-              </div>
+              <FloatingInput
+                label="মূল বৈশিষ্ট্য ও হাইলাইটস (• দিয়ে আলাদা করুন)"
+                value={formData.highlight}
+                onChange={(e) => setFormData({ ...formData, highlight: e.target.value })}
+              />
+
+              <FloatingTextarea
+                label="পণ্যের বিস্তারিত বিবরণ (Full Description)"
+                rows={4}
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              />
 
             </CardContent>
           </Card>
@@ -611,19 +566,13 @@ function ProductFormContent() {
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
               
-              <div className="space-y-1.5">
-                <Label htmlFor="image" className="text-xs font-bold text-slate-700">
-                  প্রধান ছবির লিংক (Primary Image URL) <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="image"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="/images/products/churi-alna.jpg অথবা HTTPS লিংক"
-                  className="rounded-xl border-slate-200 text-xs sm:text-sm h-10 font-mono"
-                  required
-                />
-              </div>
+              <FloatingInput
+                label="প্রধান ছবির লিংক (Primary Image URL)"
+                value={formData.image}
+                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                className="font-mono"
+                required
+              />
 
               {/* Secondary Images Manager */}
               <div className="space-y-2 pt-2 border-t border-slate-100">
@@ -631,19 +580,21 @@ function ProductFormContent() {
                   অতিরিক্ত ছবিসমূহ (Secondary Gallery)
                 </Label>
                 
-                <div className="flex gap-2">
-                  <Input
-                    value={newImageUrl}
-                    onChange={(e) => setNewImageUrl(e.target.value)}
-                    placeholder="অতিরিক্ত ছবির URL দিন..."
-                    className="rounded-xl border-slate-200 text-xs sm:text-sm h-9 font-mono"
-                  />
+                <div className="flex gap-2 items-center">
+                  <div className="flex-1">
+                    <FloatingInput
+                      label="অতিরিক্ত ছবির URL দিন..."
+                      value={newImageUrl}
+                      onChange={(e) => setNewImageUrl(e.target.value)}
+                      className="font-mono"
+                    />
+                  </div>
                   <Button
                     type="button"
                     onClick={addImageUrl}
                     variant="outline"
                     size="sm"
-                    className="h-9 px-3 rounded-xl border-slate-200 text-xs font-bold text-[#6B112B] shrink-0"
+                    className="h-11 sm:h-12 px-4 rounded-xl border-slate-200 text-xs font-bold text-[#6B112B] shrink-0"
                   >
                     <Plus className="h-3.5 w-3.5 mr-1" /> যোগ করুন
                   </Button>

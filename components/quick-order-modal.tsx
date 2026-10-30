@@ -25,8 +25,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { FloatingInput, FloatingTextarea } from "@/components/ui/floating-input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
@@ -293,42 +292,33 @@ export function QuickOrderModal({
               {/* Right Column: Customer Details Checkout Form (7 Cols)     */}
               {/* ========================================================= */}
               <div className="md:col-span-7">
-                <form onSubmit={handleSubmit} className="space-y-4 text-left">
+                <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4 text-left">
                   {/* Customer Name */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-800 flex items-center gap-1">
-                      <User className="h-3.5 w-3.5 text-[#6B112B]" /> আপনার পুরো নাম *
-                    </label>
-                    <Input
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="উদাঃ জান্নাতুল ফেরদৌস"
-                      className="rounded-xl border-slate-200 focus:border-[#6B112B] text-xs h-10 shadow-sm"
-                      required
-                    />
-                  </div>
+                  <FloatingInput
+                    label="আপনার পুরো নাম (উদাঃ জান্নাতুল ফেরদৌস)"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    icon={<User className="h-4 w-4 text-[#6B112B]" />}
+                    required
+                  />
 
                   {/* Customer Phone */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-800 flex items-center gap-1">
-                      <Phone className="h-3.5 w-3.5 text-[#6B112B]" /> মোবাইল নম্বর (১১ ডিজিট) *
-                    </label>
-                    <Input
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="017XXXXXXXX"
-                      className="rounded-xl border-slate-200 focus:border-[#6B112B] text-xs h-10 font-mono shadow-sm"
-                      required
-                    />
-                  </div>
+                  <FloatingInput
+                    type="tel"
+                    label="মোবাইল নম্বর (১১ ডিজিট - 017XXXXXXXX)"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    icon={<Phone className="h-4 w-4 text-[#6B112B]" />}
+                    className="font-mono"
+                    required
+                  />
 
                   {/* Delivery Area Selector Cards */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-800 flex items-center gap-1">
                       <Truck className="h-3.5 w-3.5 text-[#6B112B]" /> ডেলিভারি এরিয়া বেছে নিন *
                     </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div className="grid grid-cols-2 gap-2.5">
                       <button
                         type="button"
                         onClick={() => setDeliveryArea("inside_dhaka")}
@@ -362,32 +352,20 @@ export function QuickOrderModal({
                   </div>
 
                   {/* Full Delivery Address */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-800 flex items-center gap-1">
-                      <MapPin className="h-3.5 w-3.5 text-[#6B112B]" /> সম্পূর্ণ ডেলিভারি ঠিকানা *
-                    </label>
-                    <Textarea
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      placeholder="বাসা নং, রোড নং, এলাকা/থানা এবং জেলা উল্লেখ করুন..."
-                      rows={2}
-                      className="rounded-xl border-slate-200 focus:border-[#6B112B] text-xs leading-relaxed shadow-sm resize-none"
-                      required
-                    />
-                  </div>
+                  <FloatingTextarea
+                    label="সম্পূর্ণ ডেলিভারি ঠিকানা (বাসা নং, রোড, থানা ও জেলা)"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    rows={2}
+                    required
+                  />
 
                   {/* Optional Note */}
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-semibold text-slate-600">
-                      অর্ডার সংক্রান্ত বিশেষ নির্দেশনা (ঐচ্ছিক)
-                    </label>
-                    <Input
-                      value={note}
-                      onChange={(e) => setNote(e.target.value)}
-                      placeholder="উদাঃ বিকেলে ডেলিভারি দিলে ভালো হয়"
-                      className="rounded-xl border-slate-200 text-xs h-9 shadow-sm"
-                    />
-                  </div>
+                  <FloatingInput
+                    label="বিশেষ নির্দেশনা / নোট (ঐচ্ছিক)"
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                  />
 
                   {/* Submit Order Button */}
                   <div className="pt-2 space-y-2">

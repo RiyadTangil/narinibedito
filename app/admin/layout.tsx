@@ -76,25 +76,34 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row antialiased">
       {/* Mobile Header Bar */}
-      <div className="lg:hidden h-16 bg-[#50091D] text-white flex items-center justify-between px-4 border-b border-[#6B112B] shrink-0 sticky top-0 z-40">
-        {/* Left: Hamburger Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="text-white hover:bg-[#6B112B] h-9 w-9 rounded-xl -ml-1"
-          aria-label="Toggle navigation menu"
-        >
-          {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
+      <div className="lg:hidden h-14 bg-[#50091D] text-white flex items-center justify-between px-3 border-b border-[#6B112B] shrink-0 sticky top-0 z-40">
+        {/* Left: Hamburger Button + Active Page Title */}
+        <div className="flex items-center gap-2 min-w-0">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-white hover:bg-[#6B112B] h-9 w-9 rounded-xl shrink-0"
+            aria-label="Toggle navigation menu"
+          >
+            {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+          <span className="font-bold text-xs text-[#F5E6B3] truncate">
+            {navItems.find((n) => n.active)?.title || "এডমিন প্যানেল"}
+          </span>
+        </div>
 
-        {/* Right: Logo and Brand Text */}
-        <div className="flex items-center gap-2.5">
-          <div className="flex flex-col text-right">
-            <span className="font-extrabold text-sm tracking-tight font-serif">নারী নিবেদিত</span>
-            <span className="text-[10px] text-[#F5E6B3]">এডমিন প্যানেল</span>
-          </div>
-          <div className="relative h-9 w-9 rounded-full overflow-hidden border border-[#D4AF37] bg-white p-0.5 shrink-0">
+        {/* Right: Quick Store Link & Brand Logo */}
+        <div className="flex items-center gap-2 shrink-0">
+          <Link
+            href="/"
+            target="_blank"
+            className="h-8 px-2.5 rounded-lg bg-white/10 text-[11px] font-semibold text-rose-100 flex items-center gap-1 border border-white/15"
+          >
+            <Store className="h-3 w-3 text-[#D4AF37]" />
+            <span>স্টোর</span>
+          </Link>
+          <div className="relative h-8 w-8 rounded-full overflow-hidden border border-[#D4AF37] bg-white p-0.5 shrink-0">
             <Image
               src="/images/logo.jpg"
               alt="নারী নিবেদিত"
@@ -274,9 +283,68 @@ export default function AdminLayout({
         </header>
 
         {/* Content Body */}
-        <main className="flex-1 p-3 sm:p-5 lg:p-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-3 sm:p-5 lg:p-8 pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-8 max-w-7xl w-full mx-auto">
           {children}
         </main>
+
+        {/* Mobile Bottom Quick Tab Bar for Admin */}
+        <nav
+          aria-label="অ্যাডমিন মোবাইল ন্যাভিগেশন"
+          className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-[#1E040B]/95 backdrop-blur-md border-t border-[#380714] text-slate-300 pb-safe shadow-[0_-6px_20px_rgba(0,0,0,0.3)]"
+        >
+          <div className="grid grid-cols-5 h-16 items-stretch">
+            <Link
+              href="/admin"
+              className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tap-scale ${
+                pathname === "/admin" ? "text-[#F5E6B3]" : "text-slate-400"
+              }`}
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              <span>হোম</span>
+            </Link>
+
+            <Link
+              href="/admin/products"
+              className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tap-scale ${
+                pathname === "/admin/products" ? "text-[#F5E6B3]" : "text-slate-400"
+              }`}
+            >
+              <Package className="h-4 w-4" />
+              <span>পণ্য</span>
+            </Link>
+
+            {/* Center raised Add Product button */}
+            <Link
+              href="/admin/products/add"
+              className="flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-[#F5E6B3] tap-scale"
+            >
+              <span className="-mt-4 h-10 w-10 rounded-full bg-gradient-to-tr from-[#6B112B] to-[#D4AF37] text-white flex items-center justify-center shadow-lg ring-4 ring-[#1E040B]">
+                <PlusCircle className="h-5 w-5" />
+              </span>
+              <span>নতুন যোগ</span>
+            </Link>
+
+            <Link
+              href="/admin/orders"
+              className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tap-scale ${
+                pathname.startsWith("/admin/orders") ? "text-[#F5E6B3]" : "text-slate-400"
+              }`}
+            >
+              <ShoppingBag className="h-4 w-4" />
+              <span>অর্ডার</span>
+            </Link>
+
+            <Link
+              href="/admin/categories"
+              className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tap-scale ${
+                pathname === "/admin/categories" ? "text-[#F5E6B3]" : "text-slate-400"
+              }`}
+            >
+              <Layers className="h-4 w-4" />
+              <span>ক্যাটাগরি</span>
+            </Link>
+          </div>
+        </nav>
       </div>
     </div>
   );

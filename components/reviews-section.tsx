@@ -18,8 +18,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Skeleton } from "@/components/ui/skeleton";
+import { FloatingInput, FloatingTextarea } from "@/components/ui/floating-input";
+import { Phone } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -343,58 +344,38 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
 
                   {/* Name and Location */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="space-y-1 text-left">
-                      <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
-                        <User className="h-3.5 w-3.5 text-[#6B112B]" /> আপনার নাম *
-                      </label>
-                      <Input
-                        value={formName}
-                        onChange={(e) => setFormName(e.target.value)}
-                        placeholder="উদাঃ রাবেয়া আক্তার"
-                        className="rounded-xl border-rose-200 text-xs h-10"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-1 text-left">
-                      <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
-                        <MapPin className="h-3.5 w-3.5 text-[#6B112B]" /> আপনার এলাকা / জেলা
-                      </label>
-                      <Input
-                        value={formLocation}
-                        onChange={(e) => setFormLocation(e.target.value)}
-                        placeholder="উদাঃ মিরপুর, ঢাকা"
-                        className="rounded-xl border-rose-200 text-xs h-10"
-                      />
-                    </div>
+                    <FloatingInput
+                      label="আপনার নাম"
+                      value={formName}
+                      onChange={(e) => setFormName(e.target.value)}
+                      icon={<User className="h-4 w-4 text-[#6B112B]" />}
+                      required
+                    />
+                    <FloatingInput
+                      label="আপনার এলাকা / জেলা"
+                      value={formLocation}
+                      onChange={(e) => setFormLocation(e.target.value)}
+                      icon={<MapPin className="h-4 w-4 text-[#6B112B]" />}
+                    />
                   </div>
 
                   {/* Phone (optional) */}
-                  <div className="space-y-1 text-left">
-                    <label className="text-xs font-bold text-slate-700">
-                      মোবাইল / হোয়াটসঅ্যাপ নম্বর (ঐচ্ছিক - ভেরিফিকেশনের জন্য)
-                    </label>
-                    <Input
-                      value={formPhone}
-                      onChange={(e) => setFormPhone(e.target.value)}
-                      placeholder="01XXXXXXXXX"
-                      className="rounded-xl border-rose-200 text-xs h-10"
-                    />
-                  </div>
+                  <FloatingInput
+                    type="tel"
+                    label="মোবাইল / হোয়াটসঅ্যাপ নম্বর (ঐচ্ছিক)"
+                    value={formPhone}
+                    onChange={(e) => setFormPhone(e.target.value)}
+                    icon={<Phone className="h-4 w-4 text-[#6B112B]" />}
+                  />
 
                   {/* Review / Comment Text */}
-                  <div className="space-y-1 text-left">
-                    <label className="text-xs font-bold text-slate-700">
-                      আপনার বিস্তারিত মতামত ও পরামর্শ *
-                    </label>
-                    <Textarea
-                      value={formComment}
-                      onChange={(e) => setFormComment(e.target.value)}
-                      placeholder="কাঠের কোয়ালিটি, গ্লাস ফিনিশিং, কুরিয়ার সার্ভিস অথবা প্যাকেজিং কেমন ছিল?"
-                      rows={4}
-                      className="rounded-xl border-rose-200 text-xs leading-relaxed"
-                      required
-                    />
-                  </div>
+                  <FloatingTextarea
+                    label="আপনার বিস্তারিত মতামত ও পরামর্শ"
+                    value={formComment}
+                    onChange={(e) => setFormComment(e.target.value)}
+                    rows={4}
+                    required
+                  />
 
                   {/* Submit Button */}
                   <Button
@@ -503,7 +484,20 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-44 rounded-3xl bg-slate-100 animate-pulse" />
+            <div key={i} className="p-5 rounded-3xl bg-white border border-rose-100 space-y-3">
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-10 w-10 rounded-2xl bg-rose-100" />
+                <div className="space-y-1.5 flex-1">
+                  <Skeleton className="h-4 w-32 bg-slate-200" />
+                  <Skeleton className="h-3 w-20 bg-slate-100" />
+                </div>
+              </div>
+              <Skeleton className="h-16 w-full rounded-2xl bg-rose-50/70" />
+              <div className="flex justify-between pt-2">
+                <Skeleton className="h-3 w-24 bg-slate-100" />
+                <Skeleton className="h-5 w-20 rounded-full bg-rose-100/60" />
+              </div>
+            </div>
           ))}
         </div>
       ) : filteredReviews.length === 0 ? (
