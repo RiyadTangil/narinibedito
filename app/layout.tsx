@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Providers } from './providers'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { MobileBottomNav } from '@/components/mobile-bottom-nav'
 
 export const metadata: Metadata = {
   title: 'নারী নিবেদিত | Nari Nibedito - সৌন্দর্য • রুচি • ভালোবাসা',
-  description: 'নারী নিবেদিত - নারীর সৌন্দর্য, রুচি ও ভালোবাসার বিশ্বস্ত ঠিকানা। এক্সক্লুসিভ কাঠের চুড়ি আলনা, জুয়েলারি বক্স, কাস্টমাইজড হোম ডেকোর, মন্দির ও ফ্যাশন পোশাক।',
+  description: 'নারী নিবেদিত - নারীর সৌন্দর্য, রুচি ও ভালোবাসার বিশ্বস্ত ঠিকানা। এক্সক্লুসিভ কাঠের চুড়ি আলনা, জুয়েলারি বক্স, কাস্টমাইজড হোম ডেকোর, মন্দির ও ফ্যাশন পোশাক।',
   icons: {
     icon: [
       { url: '/images/logo.jpg' },
@@ -16,6 +17,14 @@ export const metadata: Metadata = {
     shortcut: '/images/logo.jpg',
     apple: '/images/logo.jpg',
   },
+}
+
+// Mobile browser chrome color + notch / home-indicator safe areas
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#5A0D22',
 }
 
 export default function RootLayout({
@@ -30,6 +39,7 @@ export default function RootLayout({
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
+          <MobileBottomNav />
         </Providers>
       </body>
     </html>

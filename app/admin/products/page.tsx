@@ -312,11 +312,11 @@ export default function AdminProductsPage() {
           </div>
         ) : null}
 
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs text-slate-500">
+        <div className="p-3 sm:p-4 border-t border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
           <span>মোট {filteredProducts.length}টি পণ্য প্রদর্শিত হচ্ছে</span>
           <div className="flex items-center gap-2">
-            <Button size="sm" variant="outline" disabled className="rounded-xl h-8 text-xs">পূর্ববর্তী</Button>
-            <Button size="sm" variant="outline" disabled className="rounded-xl h-8 text-xs">পরবর্তী</Button>
+            <Button size="sm" variant="outline" disabled className="rounded-xl h-10 sm:h-8 text-xs">পূর্ববর্তী</Button>
+            <Button size="sm" variant="outline" disabled className="rounded-xl h-10 sm:h-8 text-xs">পরবর্তী</Button>
           </div>
         </div>
       </Card>
