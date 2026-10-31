@@ -120,8 +120,8 @@ export default function AdminOrdersPage() {
       {/* Header and Title */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-slate-200 pb-4 sm:pb-5">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-[#6B112B] bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
-            <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" /> রিয়েল-টাইম অর্ডার ট্র্যাকিং
+          <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">
+            <Sparkles className="h-3.5 w-3.5 text-amber-500" /> রিয়েল-টাইম অর্ডার ট্র্যাকিং
           </div>
           <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-serif mt-1">
             কাস্টমার অর্ডারসমূহ
@@ -176,10 +176,10 @@ export default function AdminOrdersPage() {
           <span className="text-[10px] text-emerald-700 font-medium">সফল ক্যাশ রিসিভড</span>
         </div>
 
-        <div className="bg-rose-50/70 p-3 sm:p-3.5 rounded-2xl border border-rose-200 shadow-sm space-y-0.5">
-          <span className="text-[10px] sm:text-[11px] font-bold text-[#6B112B] uppercase">মোট বিক্রি</span>
-          <div className="text-lg sm:text-xl font-black text-[#6B112B]">৳{stats.totalRevenue?.toLocaleString()}</div>
-          <span className="text-[10px] text-rose-700 font-medium">ক্যাশ অন ডেলিভারি</span>
+        <div className="bg-slate-900 p-3 sm:p-3.5 rounded-2xl border border-slate-800 shadow-sm space-y-0.5 text-white">
+          <span className="text-[10px] sm:text-[11px] font-bold text-indigo-300 uppercase">মোট বিক্রি</span>
+          <div className="text-lg sm:text-xl font-black text-white">৳{stats.totalRevenue?.toLocaleString()}</div>
+          <span className="text-[10px] text-slate-400 font-medium">ক্যাশ অন ডেলিভারি</span>
         </div>
       </div>
 
@@ -202,7 +202,7 @@ export default function AdminOrdersPage() {
             onClick={() => setSelectedStatus("all")}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 ${
               selectedStatus === "all"
-                ? "bg-[#6B112B] text-white shadow-sm"
+                ? "bg-slate-900 text-white shadow-sm"
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >
@@ -265,7 +265,7 @@ export default function AdminOrdersPage() {
           {[1, 2, 3].map((i) => (
             <div key={i} className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <Skeleton className="h-6 w-28 rounded-lg bg-rose-100" />
+                <Skeleton className="h-6 w-28 rounded-lg bg-slate-200" />
                 <Skeleton className="h-6 w-24 rounded-full bg-amber-100" />
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -276,7 +276,7 @@ export default function AdminOrdersPage() {
                 </div>
                 <div className="lg:col-span-7 space-y-2">
                   <Skeleton className="h-14 w-full rounded-xl bg-slate-100" />
-                  <Skeleton className="h-12 w-full rounded-xl bg-rose-50" />
+                  <Skeleton className="h-12 w-full rounded-xl bg-slate-100" />
                 </div>
               </div>
             </div>
@@ -284,7 +284,7 @@ export default function AdminOrdersPage() {
         </div>
       ) : orders.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8 space-y-3">
-          <div className="h-14 w-14 rounded-full bg-rose-50 text-[#6B112B] flex items-center justify-center mx-auto">
+          <div className="h-14 w-14 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
             <ShoppingBag className="h-7 w-7" />
           </div>
           <h3 className="text-base font-bold text-slate-800">কোনো কাস্টমার অর্ডার পাওয়া যায়নি</h3>
@@ -319,7 +319,7 @@ export default function AdminOrdersPage() {
                     <button
                       type="button"
                       onClick={() => copyToClipboard(order.orderNumber, "অর্ডার নম্বর")}
-                      className="flex items-center gap-1.5 font-mono text-xs font-bold text-[#6B112B] bg-rose-50 hover:bg-rose-100 px-2.5 py-1 rounded-lg border border-rose-200 transition-colors"
+                      className="flex items-center gap-1.5 font-mono text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg border border-indigo-200 transition-colors"
                       title="কপি করুন"
                     >
                       <span>{order.orderNumber}</span>
@@ -340,7 +340,7 @@ export default function AdminOrdersPage() {
                       value={order.status}
                       disabled={updatingId === order._id}
                       onChange={(e) => handleUpdateStatus(order._id, Number(e.target.value))}
-                      className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 font-semibold text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-1 focus:ring-[#6B112B]"
+                      className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 font-semibold text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-1 focus:ring-indigo-600"
                     >
                       <option value={ORDER_STATUS.PENDING}>পেন্ডিং</option>
                       <option value={ORDER_STATUS.CONFIRMED}>কনফার্মড</option>
@@ -358,7 +358,7 @@ export default function AdminOrdersPage() {
                   <div className="lg:col-span-5 space-y-2.5 bg-slate-50/70 p-4 rounded-xl border border-slate-100 text-xs">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
-                        <User className="h-4 w-4 text-[#6B112B]" /> {order.customerName}
+                        <User className="h-4 w-4 text-indigo-600" /> {order.customerName}
                       </span>
                       <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px]">
                         ক্যাশ অন ডেলিভারি
@@ -368,7 +368,7 @@ export default function AdminOrdersPage() {
                     <div className="flex items-center gap-3 pt-1">
                       <a
                         href={`tel:${order.phone}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-[#6B112B] text-slate-800 font-bold transition-colors shadow-sm"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-indigo-500 text-slate-800 font-bold transition-colors shadow-sm"
                       >
                         <Phone className="h-3.5 w-3.5 text-emerald-600" />
                         <span>{order.phone}</span>
@@ -388,7 +388,7 @@ export default function AdminOrdersPage() {
                     </div>
 
                     <div className="flex items-start gap-1.5 text-slate-600 pt-1">
-                      <MapPin className="h-4 w-4 text-[#6B112B] shrink-0 mt-0.5" />
+                      <MapPin className="h-4 w-4 text-indigo-600 shrink-0 mt-0.5" />
                       <span className="leading-relaxed font-medium">{order.address}</span>
                     </div>
 
@@ -450,14 +450,14 @@ export default function AdminOrdersPage() {
                     </div>
 
                     {/* Financials Summary Footer */}
-                    <div className="bg-rose-50/50 p-3 rounded-xl border border-rose-100 flex items-center justify-between text-xs">
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
                       <div className="space-x-3 text-slate-600">
                         <span>সাবটোটাল: <strong>৳{order.subtotal?.toLocaleString()}</strong></span>
                         <span>ডেলিভারি চার্জ: <strong>৳{order.deliveryFee || (order.deliveryArea === "inside_dhaka" ? 60 : 130)}</strong></span>
                       </div>
                       <div className="text-right">
                         <span className="text-[11px] text-slate-500 block">সর্বমোট প্রদেয়</span>
-                        <span className="text-base font-black text-[#6B112B]">
+                        <span className="text-base font-black text-indigo-600">
                           ৳{order.totalAmount?.toLocaleString()}
                         </span>
                       </div>

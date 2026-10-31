@@ -36,7 +36,7 @@ const STATS = [
     value: "৪৮টি",
     change: "+৮টি নতুন এই মাসে",
     icon: Package,
-    color: "text-[#6B112B] bg-rose-50 border-rose-200",
+    color: "text-indigo-600 bg-indigo-50 border-indigo-200",
   },
   {
     title: "ইন-স্টক ও সক্রিয় পণ্য",
@@ -209,19 +209,19 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-5 sm:space-y-8">
       {/* 1. Welcome & Quick Action Hero Banner */}
-      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#50091D] via-[#6B112B] to-[#400717] text-white p-4 sm:p-8 shadow-xl border border-rose-300/20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.2),transparent_60%)] pointer-events-none" />
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-4 sm:p-8 shadow-xl border border-indigo-400/20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.2),transparent_60%)] pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
           <div className="space-y-1.5 sm:space-y-2 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[11px] sm:text-xs font-bold text-[#FBEBB5]">
-              <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-[11px] sm:text-xs font-bold text-indigo-200">
+              <Sparkles className="h-3.5 w-3.5 text-amber-400" />
               <span>নারী নিবেদিত এডমিন ড্যাশবোর্ড</span>
             </div>
             <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight font-serif text-white">
               স্বাগতম, নারী নিবেদিত ম্যানেজমেন্ট!
             </h1>
-            <p className="text-xs sm:text-sm text-rose-100/90 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               আপনার ই-কমার্স স্টোরের পণ্য তালিকা, নতুন কালেকশন যুক্ত করা, গ্রাহকদের অর্ডার ট্র্যাকিং এবং ক্যাটাগরি সম্পূর্ণ নিয়ন্ত্রণ করুন এক স্থান থেকেই।
             </p>
           </div>
@@ -235,15 +235,15 @@ export default function AdminDashboardPage() {
             </Link>
 
             <Link href="/admin/products/add">
-              <Button size="lg" className="w-full sm:w-auto bg-[#D4AF37] hover:bg-[#c29e2e] text-[#4A0A1C] font-bold rounded-xl sm:rounded-2xl shadow-md gap-2 h-10 sm:h-11 text-xs sm:text-sm">
+              <Button size="lg" className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl sm:rounded-2xl shadow-md gap-2 h-10 sm:h-11 text-xs sm:text-sm">
                 <PlusCircle className="h-4 w-4" />
                 <span>নতুন পণ্য যোগ</span>
               </Button>
             </Link>
 
             <Link href="/admin/categories">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto border-rose-300/40 bg-white/10 text-white hover:bg-white/20 rounded-xl sm:rounded-2xl gap-2 h-10 sm:h-11 text-xs sm:text-sm">
-                <Layers className="h-4 w-4 text-[#D4AF37]" />
+              <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-700 bg-white/10 text-white hover:bg-white/20 rounded-xl sm:rounded-2xl gap-2 h-10 sm:h-11 text-xs sm:text-sm">
+                <Layers className="h-4 w-4 text-amber-400" />
                 <span>ক্যাটাগরি</span>
               </Button>
             </Link>
@@ -279,7 +279,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Incoming Customer Orders Section */}
-      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-rose-100 shadow-sm space-y-4">
+      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="h-9 w-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0">
@@ -295,7 +295,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          <Link href="/admin/orders" className="text-xs font-bold text-[#6B112B] hover:underline flex items-center gap-1 shrink-0">
+          <Link href="/admin/orders" className="text-xs font-bold text-indigo-600 hover:underline flex items-center gap-1 shrink-0">
             সব ({orderStats.total}) <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
@@ -305,7 +305,7 @@ export default function AdminDashboardPage() {
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="p-3.5 rounded-xl border border-slate-100 space-y-2">
                 <div className="flex justify-between">
-                  <Skeleton className="h-4 w-24 bg-rose-100" />
+                  <Skeleton className="h-4 w-24 bg-indigo-100" />
                   <Skeleton className="h-4 w-14 bg-emerald-100" />
                 </div>
                 <Skeleton className="h-4 w-32 bg-slate-200" />
@@ -322,7 +322,7 @@ export default function AdminDashboardPage() {
             {liveOrders.map((ord: any) => (
               <div key={ord._id} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2 hover:bg-white hover:shadow-sm transition-all text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-[#6B112B] text-[11px]">{ord.orderNumber}</span>
+                  <span className="font-mono font-bold text-indigo-600 text-[11px]">{ord.orderNumber}</span>
                   <Badge variant="outline" className="text-[10px] bg-emerald-50 text-emerald-700 border-emerald-200 font-bold">
                     ৳{ord.totalAmount?.toLocaleString()}
                   </Badge>
@@ -356,7 +356,7 @@ export default function AdminDashboardPage() {
               </p>
             </div>
 
-            <Link href="/admin/products" className="text-xs font-bold text-[#6B112B] hover:underline flex items-center gap-1">
+            <Link href="/admin/products" className="text-xs font-bold text-indigo-600 hover:underline flex items-center gap-1">
               সকল পণ্য দেখুন <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -367,13 +367,13 @@ export default function AdminDashboardPage() {
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div key={i} className="flex items-center justify-between gap-3 p-2">
                     <div className="flex items-center gap-3 flex-1">
-                      <Skeleton className="h-12 w-12 rounded-xl bg-rose-100/60 shrink-0" />
+                      <Skeleton className="h-12 w-12 rounded-xl bg-slate-200 shrink-0" />
                       <div className="space-y-1.5 flex-1">
                         <Skeleton className="h-4 w-2/3 bg-slate-200" />
                         <Skeleton className="h-3 w-24 bg-slate-100" />
                       </div>
                     </div>
-                    <Skeleton className="h-6 w-16 rounded-lg bg-rose-100/70" />
+                    <Skeleton className="h-6 w-16 rounded-lg bg-slate-200" />
                   </div>
                 ))}
               </div>
@@ -398,7 +398,7 @@ export default function AdminDashboardPage() {
                             {item.name}
                           </h4>
                           <div className="flex items-center gap-2 text-[11px]">
-                            <span className="font-black text-[#6B112B]">৳{item.price?.toLocaleString()}</span>
+                            <span className="font-black text-slate-900">৳{item.price?.toLocaleString()}</span>
                             <span className="text-slate-400">•</span>
                             <span className="text-emerald-700 font-semibold">{item.stock} পিস</span>
                           </div>
@@ -410,7 +410,7 @@ export default function AdminDashboardPage() {
 
                       <div className="flex items-center gap-1 shrink-0">
                         <Link href={`/admin/products/add?id=${item._id || item.id}`}>
-                          <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl text-slate-600 hover:text-blue-600 bg-slate-50">
+                          <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl text-slate-600 hover:text-indigo-600 bg-slate-50">
                             <Edit className="h-4 w-4" />
                           </Button>
                         </Link>
@@ -464,12 +464,12 @@ export default function AdminDashboardPage() {
                           </td>
 
                           <td className="py-3 px-4 text-xs font-medium text-slate-600 whitespace-nowrap">
-                            <Badge variant="outline" className="bg-rose-50 text-[#6B112B] border-rose-200 font-semibold text-[10px]">
+                            <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200 font-semibold text-[10px]">
                               {item.category}
                             </Badge>
                           </td>
 
-                          <td className="py-3 px-4 font-bold text-[#6B112B] whitespace-nowrap">
+                          <td className="py-3 px-4 font-bold text-slate-900 whitespace-nowrap">
                             ৳{item.price?.toLocaleString()}
                             {item.originalPrice && (
                               <span className="text-[10px] text-slate-400 line-through ml-1.5 font-normal">
@@ -491,12 +491,12 @@ export default function AdminDashboardPage() {
                           <td className="py-3 px-4 text-right whitespace-nowrap">
                             <div className="flex items-center justify-end gap-1.5">
                               <Link href={`/products/${item.id}`} target="_blank">
-                                <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-[#6B112B]" title="ওয়েবসাইটে প্রিভিউ দেখুন">
+                                <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-indigo-600" title="ওয়েবসাইটে প্রিভিউ দেখুন">
                                   <Eye className="h-4 w-4" />
                                 </Button>
                               </Link>
                               <Link href={`/admin/products/add?id=${item._id || item.id}`}>
-                                <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-blue-600" title="এডিট করুন">
+                                <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-indigo-600" title="এডিট করুন">
                                   <Edit className="h-4 w-4" />
                                 </Button>
                               </Link>
@@ -540,7 +540,7 @@ export default function AdminDashboardPage() {
                 <CardTitle className="text-base font-bold text-slate-900 font-serif">
                   ক্যাটাগরি ভিত্তিক ইনভেন্টরি
                 </CardTitle>
-                <Link href="/admin/categories" className="text-xs text-[#6B112B] font-bold hover:underline">
+                <Link href="/admin/categories" className="text-xs text-indigo-600 font-bold hover:underline">
                   সবগুলো
                 </Link>
               </div>
@@ -553,11 +553,11 @@ export default function AdminDashboardPage() {
                 <div key={idx} className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
                     <span>{cat.name}</span>
-                    <span className="text-[#6B112B] font-bold">{cat.count}টি পণ্য</span>
+                    <span className="text-indigo-600 font-bold">{cat.count}টি পণ্য</span>
                   </div>
                   <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-[#6B112B] to-[#D4AF37] rounded-full transition-all duration-500"
+                      className="h-full bg-gradient-to-r from-indigo-600 to-indigo-400 rounded-full transition-all duration-500"
                       style={{ width: `${cat.percent}%` }}
                     />
                   </div>
@@ -566,7 +566,7 @@ export default function AdminDashboardPage() {
 
               <div className="pt-3">
                 <Link href="/admin/categories">
-                  <Button variant="outline" size="sm" className="w-full rounded-xl border-rose-200 text-[#6B112B] hover:bg-rose-50 text-xs font-bold gap-1.5">
+                  <Button variant="outline" size="sm" className="w-full rounded-xl border-indigo-200 text-indigo-600 hover:bg-indigo-50 text-xs font-bold gap-1.5">
                     <PlusCircle className="h-3.5 w-3.5" />
                     <span>নতুন ক্যাটাগরি যুক্ত করুন</span>
                   </Button>
@@ -576,8 +576,8 @@ export default function AdminDashboardPage() {
           </Card>
 
           {/* Quick Hotline & Order Dispatch Card */}
-          <Card className="border-rose-100 bg-gradient-to-br from-white to-rose-50/50 shadow-sm rounded-2xl p-5 space-y-3">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#6B112B]">
+          <Card className="border-slate-200 bg-gradient-to-br from-white to-slate-50 shadow-sm rounded-2xl p-5 space-y-3">
+            <div className="flex items-center gap-2 text-xs font-bold text-indigo-600">
               <MessageCircle className="h-4 w-4 text-emerald-600 fill-emerald-600" />
               <span>WhatsApp হটলাইন সাপোর্ট</span>
             </div>

@@ -46,9 +46,9 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          <Card className="shadow-2xl border border-rose-100 bg-white rounded-3xl p-6 text-center space-y-4">
+          <Card className="shadow-2xl border border-slate-200 bg-white rounded-3xl p-6 text-center space-y-4">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-50 rounded-2xl mx-auto">
               <CheckCircle className="h-9 w-9 text-emerald-600" />
             </div>
@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
               আপনার ইমেইলে পাসওয়ার্ড রিসেট করার লিংক পাঠানো হয়েছে।
             </p>
             <Link href="/auth/signin" className="block pt-2">
-              <Button className="w-full h-11 bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl">
+              <Button className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 লগইন পেজে ফিরে যান
               </Button>
@@ -69,14 +69,14 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <Card className="shadow-2xl border border-rose-100 bg-white rounded-3xl overflow-hidden">
+        <Card className="shadow-2xl border border-slate-200 bg-white rounded-3xl overflow-hidden">
           <CardHeader className="space-y-2 text-center pt-8 pb-4">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-rose-50 text-[#6B112B] rounded-2xl mx-auto border border-rose-100">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl mx-auto border border-indigo-100">
               <KeyRound className="h-7 w-7" />
             </div>
-            <CardTitle className="text-2xl font-black text-[#6B112B] font-serif">পাসওয়ার্ড রিসেট</CardTitle>
+            <CardTitle className="text-2xl font-black text-slate-900 font-serif">পাসওয়ার্ড রিসেট</CardTitle>
             <CardDescription className="text-xs text-slate-500">
               আপনার রেজিস্টার্ড ইমেইল দিন, আমরা পাসওয়ার্ড রিসেট লিংক পাঠিয়ে দেবো
             </CardDescription>
@@ -100,7 +100,7 @@ export default function ForgotPasswordPage() {
 
               <Button
                 type="submit"
-                className="w-full h-11 bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl text-sm shadow-md"
+                className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm shadow-md"
                 disabled={isLoading}
               >
                 {isLoading ? "পাঠানো হচ্ছে..." : "রিসেট লিংক পাঠান"}
@@ -110,7 +110,7 @@ export default function ForgotPasswordPage() {
             <div className="text-center">
               <Link
                 href="/auth/signin"
-                className="inline-flex items-center text-xs font-semibold text-[#6B112B] hover:underline"
+                className="inline-flex items-center text-xs font-semibold text-indigo-600 hover:underline"
               >
                 <ArrowLeft className="mr-1 h-3.5 w-3.5" />
                 লগইন পেজে ফিরে যান

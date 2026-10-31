@@ -70,9 +70,9 @@ function ResetPasswordContent() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          <Card className="shadow-2xl border border-rose-100 bg-white rounded-3xl p-6 text-center space-y-4">
+          <Card className="shadow-2xl border border-slate-200 bg-white rounded-3xl p-6 text-center space-y-4">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-50 rounded-2xl mx-auto">
               <CheckCircle className="h-9 w-9 text-emerald-600" />
             </div>
@@ -82,7 +82,7 @@ function ResetPasswordContent() {
             </p>
             <Button
               onClick={() => router.push("/auth/signin")}
-              className="w-full h-11 bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl"
+              className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl"
             >
               লগইন করুন
             </Button>
@@ -93,14 +93,14 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <Card className="shadow-2xl border border-rose-100 bg-white rounded-3xl overflow-hidden">
+        <Card className="shadow-2xl border border-slate-200 bg-white rounded-3xl overflow-hidden">
           <CardHeader className="space-y-2 text-center pt-8 pb-4">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-rose-50 text-[#6B112B] rounded-2xl mx-auto border border-rose-100">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl mx-auto border border-indigo-100">
               <Shield className="h-7 w-7" />
             </div>
-            <CardTitle className="text-2xl font-black text-[#6B112B] font-serif">নতুন পাসওয়ার্ড দিন</CardTitle>
+            <CardTitle className="text-2xl font-black text-slate-900 font-serif">নতুন পাসওয়ার্ড দিন</CardTitle>
             <CardDescription className="text-xs text-slate-500">
               আপনার একাউন্টের জন্য শক্তিশালী নতুন পাসওয়ার্ড নির্বাচন করুন
             </CardDescription>
@@ -126,7 +126,7 @@ function ResetPasswordContent() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#6B112B] z-10"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 z-10"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -145,7 +145,7 @@ function ResetPasswordContent() {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#6B112B] z-10"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 z-10"
                 >
                   {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -153,7 +153,7 @@ function ResetPasswordContent() {
 
               <Button
                 type="submit"
-                className="w-full h-11 bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl text-sm shadow-md"
+                className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm shadow-md"
                 disabled={isLoading || !token}
               >
                 {isLoading ? "সংরক্ষণ হচ্ছে..." : "পাসওয়ার্ড আপডেট করুন"}
@@ -163,7 +163,7 @@ function ResetPasswordContent() {
             <div className="text-center">
               <Link
                 href="/auth/signin"
-                className="text-xs font-semibold text-[#6B112B] hover:underline"
+                className="text-xs font-semibold text-indigo-600 hover:underline"
               >
                 লগইন পেজে ফিরে যান
               </Link>
@@ -177,7 +177,7 @@ function ResetPasswordContent() {
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-rose-50/40 text-xs text-[#6B112B] font-bold">লোড হচ্ছে...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-50 text-xs text-slate-800 font-bold">লোড হচ্ছে...</div>}>
       <ResetPasswordContent />
     </Suspense>
   )

@@ -6,7 +6,7 @@ import { Footer } from '@/components/footer'
 import { MobileBottomNav } from '@/components/mobile-bottom-nav'
 
 export const metadata: Metadata = {
-  title: 'নারী নিবেদিত | Nari Nibedito - সৌন্দর্য • রুচি • ভালোবাসা',
+  title: 'নারী নিবেদিত | Nari Nibedito -নারীদের জন্য',
   description: 'নারী নিবেদিত - নারীর সৌন্দর্য, রুচি ও ভালোবাসার বিশ্বস্ত ঠিকানা। এক্সক্লুসিভ কাঠের চুড়ি আলনা, জুয়েলারি বক্স, কাস্টমাইজড হোম ডেকোর, মন্দির ও ফ্যাশন পোশাক।',
   icons: {
     icon: [
@@ -24,7 +24,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#5A0D22',
+  themeColor: '#0F172A',
 }
 
 export default function RootLayout({
@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="bn">
-      <body suppressHydrationWarning className="min-h-screen flex flex-col bg-[#FFFDFD] text-slate-900 antialiased selection:bg-[#8B1E3F]/15 selection:text-[#8B1E3F]">
+      <body suppressHydrationWarning className="min-h-screen flex flex-col bg-slate-50/40 text-slate-900 antialiased selection:bg-indigo-600/15 selection:text-indigo-700">
         <Providers>
           <Header />
           <main className="flex-1">{children}</main>

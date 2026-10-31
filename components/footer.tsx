@@ -25,35 +25,35 @@ export function Footer() {
   }
 
   return (
-    <footer className="border-t bg-gradient-to-b from-[#2B0511] via-[#1F030B] to-[#120106] text-rose-100 pb-[var(--store-bottom-nav)]">
+    <footer className="border-t border-slate-800 bg-gradient-to-b from-slate-900 via-slate-950 to-black text-slate-300 pb-[var(--store-bottom-nav)]">
       {/* Feature trust bar */}
-      <div className="border-b border-rose-950/60 bg-black/20">
+      <div className="border-b border-slate-800/80 bg-slate-950/50">
         <div className="container mx-auto grid grid-cols-2 gap-4 px-4 py-8 md:grid-cols-4 md:px-6">
           <div className="flex items-center gap-3.5">
-            <div className="rounded-xl bg-[#D4AF37]/10 p-3 text-[#D4AF37] border border-[#D4AF37]/20">
+            <div className="rounded-xl bg-indigo-500/10 p-3 text-indigo-400 border border-indigo-500/20">
               <Truck className="h-5 w-5" />
             </div>
             <div>
               <h4 className="text-sm font-bold text-white">ক্যাশ অন ডেলিভারি</h4>
-              <p className="text-xs text-rose-300">সারাদেশে হোম ডেলিভারি সুবিধা</p>
+              <p className="text-xs text-slate-400">সারাদেশে হোম ডেলিভারি সুবিধা</p>
             </div>
           </div>
           <div className="flex items-center gap-3.5">
-            <div className="rounded-xl bg-rose-500/10 p-3 text-rose-400 border border-rose-500/20">
+            <div className="rounded-xl bg-amber-500/10 p-3 text-amber-400 border border-amber-500/20">
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
               <h4 className="text-sm font-bold text-white">সেরা মানের কাঠের কাজ</h4>
-              <p className="text-xs text-rose-300">নিখুঁত কারিগরি ও দীর্ঘস্থায়ী</p>
+              <p className="text-xs text-slate-400">নিখুঁত কারিগরি ও দীর্ঘস্থায়ী</p>
             </div>
           </div>
           <div className="flex items-center gap-3.5">
-            <div className="rounded-xl bg-[#D4AF37]/10 p-3 text-[#D4AF37] border border-[#D4AF37]/20">
+            <div className="rounded-xl bg-sky-500/10 p-3 text-sky-400 border border-sky-500/20">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
               <h4 className="text-sm font-bold text-white">কাস্টমাইজড অর্ডার</h4>
-              <p className="text-xs text-rose-300">পছন্দের সাইজ ও রঙে তৈরি</p>
+              <p className="text-xs text-slate-400">পছন্দের সাইজ ও রঙে তৈরি</p>
             </div>
           </div>
           <div className="flex items-center gap-3.5">
@@ -62,7 +62,7 @@ export function Footer() {
             </div>
             <div>
               <h4 className="text-sm font-bold text-white">২৪/৭ কাস্টমার সাপোর্ট</h4>
-              <p className="text-xs text-rose-300">যেকোনো তথ্যে সরাসরি কল ও চ্যাট</p>
+              <p className="text-xs text-slate-400">যেকোনো তথ্যে সরাসরি কল ও চ্যাট</p>
             </div>
           </div>
         </div>
@@ -74,7 +74,7 @@ export function Footer() {
           {/* Brand info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="relative h-14 w-14 overflow-hidden rounded-full border-2 border-[#D4AF37] p-0.5 bg-white">
+              <div className="relative h-14 w-14 overflow-hidden rounded-full border-2 border-indigo-400/50 p-0.5 bg-white">
                 <Image
                   src="/images/logo.jpg"
                   alt="নারী নিবেদিত"
@@ -84,27 +84,27 @@ export function Footer() {
               </div>
               <div>
                 <h3 className="text-xl font-black text-white font-serif">নারী নিবেদিত</h3>
-                <span className="text-xs text-[#D4AF37] font-medium block">
-                  সৌন্দর্য • রুচি • ভালোবাসা
+                <span className="text-xs text-indigo-400 font-medium block">
+                নারীদের জন্য
                 </span>
               </div>
             </div>
-            <p className="text-xs leading-relaxed text-rose-200/80">
+            <p className="text-xs leading-relaxed text-slate-400">
               নারীর সৌন্দর্য, রুচি ও ভালোবাসার বিশ্বস্ত ঠিকানা। আপনার প্রিয় চুড়ি, জুয়েলারি ও ঘর সাজানোর জন্য সেরা মানের হস্তশিল্প ও কাঠের অনন্য সংগ্রহ।
             </p>
             <div className="pt-1">
-              <span className="inline-flex items-center gap-1.5 text-xs text-[#F5E6B3] bg-[#7A1233]/60 px-3 py-1.5 rounded-full border border-[#D4AF37]/30">
-                <Heart className="h-3 w-3 fill-rose-400 text-rose-400" /> ভালোবাসা দিয়ে তৈরি, আপনার জন্য নিবেদিত
+              <span className="inline-flex items-center gap-1.5 text-xs text-indigo-200 bg-indigo-950/60 px-3 py-1.5 rounded-full border border-indigo-500/30">
+                <Heart className="h-3 w-3 fill-indigo-400 text-indigo-400" /> ভালোবাসা দিয়ে তৈরি, আপনার জন্য নিবেদিত
               </span>
             </div>
           </div>
 
           {/* Quick Category Links */}
           <div>
-            <h4 className="mb-4 text-sm font-bold text-white uppercase tracking-wider text-[#D4AF37]">
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-white">
               জনপ্রিয় ক্যাটাগরি
             </h4>
-            <ul className="space-y-2.5 text-xs text-rose-200/90">
+            <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <Link href="/products?category=churi-alna" className="hover:text-white hover:translate-x-1 inline-block transition-all">
                   • চুড়ি আলনা ও গহনার বক্স
@@ -135,10 +135,10 @@ export function Footer() {
 
           {/* Quick Customer Links */}
           <div>
-            <h4 className="mb-4 text-sm font-bold text-white uppercase tracking-wider text-[#D4AF37]">
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-white">
               গ্রাহক সেবা ও লিংক
             </h4>
-            <ul className="space-y-2.5 text-xs text-rose-200/90">
+            <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <Link href="/" className="hover:text-white transition-colors">হোম পেজ</Link>
               </li>
@@ -166,17 +166,17 @@ export function Footer() {
 
           {/* Contact Details from FB Page */}
           <div>
-            <h4 className="mb-4 text-sm font-bold text-white uppercase tracking-wider text-[#D4AF37]">
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-white">
               যোগাযোগ ও অর্ডার
             </h4>
-            <div className="space-y-3 text-xs text-rose-200/90">
+            <div className="space-y-3 text-xs text-slate-400">
               <div className="flex items-start gap-2.5">
-                <MapPin className="h-4 w-4 text-[#D4AF37] shrink-0 mt-0.5" />
+                <MapPin className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
                 <span>ঢাকা, বাংলাদেশ (সারাদেশে হোম ডেলিভারি)</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Phone className="h-4 w-4 text-[#D4AF37] shrink-0" />
-                <a href="tel:01614258804" className="hover:text-white transition-colors font-semibold">
+                <Phone className="h-4 w-4 text-indigo-400 shrink-0" />
+                <a href="tel:01614258804" className="hover:text-white transition-colors font-semibold text-slate-200">
                   01614-258804
                 </a>
               </div>
@@ -192,7 +192,7 @@ export function Footer() {
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
-                <Mail className="h-4 w-4 text-[#D4AF37] shrink-0" />
+                <Mail className="h-4 w-4 text-indigo-400 shrink-0" />
                 <a href="mailto:narinibediti@gmail.com" className="hover:text-white transition-colors">
                   narinibediti@gmail.com
                 </a>
@@ -214,12 +214,12 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 border-t border-rose-950/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-rose-300/60">
+        <div className="mt-12 border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>
-            © {new Date().getFullYear()} <strong className="text-white font-medium">নারী নিবেদিত</strong> (Nari Nibedito). সর্বস্বত্ব সংরক্ষিত।
+            © {new Date().getFullYear()} <strong className="text-slate-300 font-medium">নারী নিবেদিত</strong> (Nari Nibedito). সর্বস্বত্ব সংরক্ষিত।
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-[11px]">সৌন্দর্য • রুচি • ভালোবাসা</span>
+            <span className="text-[11px]">নারীদের জন্য</span>
             <span>•</span>
             <span className="text-[11px]">Dhaka, Bangladesh</span>
           </div>

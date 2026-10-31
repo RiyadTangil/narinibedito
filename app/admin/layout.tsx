@@ -76,19 +76,19 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row antialiased">
       {/* Mobile Header Bar */}
-      <div className="lg:hidden h-14 bg-[#50091D] text-white flex items-center justify-between px-3 border-b border-[#6B112B] shrink-0 sticky top-0 z-40">
+      <div className="lg:hidden h-14 bg-slate-900 text-white flex items-center justify-between px-3 border-b border-slate-800 shrink-0 sticky top-0 z-40">
         {/* Left: Hamburger Button + Active Page Title */}
         <div className="flex items-center gap-2 min-w-0">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white hover:bg-[#6B112B] h-9 w-9 rounded-xl shrink-0"
+            className="text-white hover:bg-slate-800 h-9 w-9 rounded-xl shrink-0"
             aria-label="Toggle navigation menu"
           >
             {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
-          <span className="font-bold text-xs text-[#F5E6B3] truncate">
+          <span className="font-bold text-xs text-indigo-200 truncate">
             {navItems.find((n) => n.active)?.title || "এডমিন প্যানেল"}
           </span>
         </div>
@@ -98,12 +98,12 @@ export default function AdminLayout({
           <Link
             href="/"
             target="_blank"
-            className="h-8 px-2.5 rounded-lg bg-white/10 text-[11px] font-semibold text-rose-100 flex items-center gap-1 border border-white/15"
+            className="h-8 px-2.5 rounded-lg bg-white/10 text-[11px] font-semibold text-slate-200 flex items-center gap-1 border border-white/15"
           >
-            <Store className="h-3 w-3 text-[#D4AF37]" />
+            <Store className="h-3 w-3 text-amber-400" />
             <span>স্টোর</span>
           </Link>
-          <div className="relative h-8 w-8 rounded-full overflow-hidden border border-[#D4AF37] bg-white p-0.5 shrink-0">
+          <div className="relative h-8 w-8 rounded-full overflow-hidden border border-slate-600 bg-white p-0.5 shrink-0">
             <Image
               src="/images/logo.jpg"
               alt="নারী নিবেদিত"
@@ -125,13 +125,13 @@ export default function AdminLayout({
       {/* Modern Desktop & Mobile Sidebar */}
       <aside className={`
         fixed lg:static inset-y-0 left-0 z-50
-        w-72 bg-[#1E040B] text-slate-200 flex flex-col shrink-0 border-r border-[#380714]
+        w-72 bg-slate-900 text-slate-200 flex flex-col shrink-0 border-r border-slate-800
         transition-transform duration-300 ease-in-out
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
       `}>
         {/* Brand Banner */}
-        <div className="h-20 flex items-center gap-3 px-6 border-b border-[#380714] bg-[#160308]">
-          <div className="relative h-11 w-11 rounded-full overflow-hidden border-2 border-[#D4AF37] bg-white p-0.5 shrink-0 shadow-md">
+        <div className="h-20 flex items-center gap-3 px-6 border-b border-slate-800 bg-slate-950">
+          <div className="relative h-11 w-11 rounded-full overflow-hidden border-2 border-indigo-400/60 bg-white p-0.5 shrink-0 shadow-md">
             <Image
               src="/images/logo.jpg"
               alt="নারী নিবেদিত"
@@ -144,11 +144,11 @@ export default function AdminLayout({
               <span className="font-extrabold text-white text-base leading-tight font-serif tracking-tight">
                 নারী নিবেদিত
               </span>
-              <Badge className="bg-[#D4AF37] text-[#4A0A1C] hover:bg-[#D4AF37] text-[9px] px-1.5 py-0 font-black rounded-md border-0">
+              <Badge className="bg-indigo-600 text-white hover:bg-indigo-600 text-[9px] px-1.5 py-0 font-black rounded-md border-0">
                 PRO
               </Badge>
             </div>
-            <span className="text-[11px] text-[#F5E6B3] font-medium tracking-wide">
+            <span className="text-[11px] text-slate-400 font-medium tracking-wide">
               ই-কমার্স কন্ট্রোল প্যানেল
             </span>
           </div>
@@ -156,8 +156,8 @@ export default function AdminLayout({
 
         {/* Navigation Section */}
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
-          <div className="px-3 py-2 text-[10px] font-bold text-rose-300/60 uppercase tracking-widest flex items-center gap-1.5">
-            <Sparkles className="h-3 w-3 text-[#D4AF37]" />
+          <div className="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+            <Sparkles className="h-3 w-3 text-indigo-400" />
             <span>ই-কমার্স ম্যানেজমেন্ট</span>
           </div>
 
@@ -170,14 +170,14 @@ export default function AdminLayout({
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center justify-between px-3.5 py-3 rounded-2xl text-sm font-medium transition-all group ${
                   item.active
-                    ? "bg-gradient-to-r from-[#6B112B] to-[#881337] text-white shadow-lg shadow-rose-950/40 font-semibold border border-rose-400/20"
+                    ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-950/40 font-semibold border border-indigo-400/20"
                     : "text-slate-300 hover:bg-white/5 hover:text-white"
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div className={`h-8 w-8 rounded-xl flex items-center justify-center transition-colors ${
                     item.active 
-                      ? "bg-white/20 text-[#F5E6B3]" 
+                      ? "bg-white/20 text-white" 
                       : "bg-white/5 text-slate-400 group-hover:text-white group-hover:bg-white/10"
                   }`}>
                     <Icon className="h-4 w-4" />
@@ -189,7 +189,7 @@ export default function AdminLayout({
                 </div>
 
                 {item.highlight && !item.active && (
-                  <Badge variant="outline" className="text-[10px] bg-rose-500/10 text-rose-300 border-rose-500/30 font-bold px-1.5 py-0">
+                  <Badge variant="outline" className="text-[10px] bg-indigo-500/10 text-indigo-300 border-indigo-500/30 font-bold px-1.5 py-0">
                     + যোগ
                   </Badge>
                 )}
@@ -197,7 +197,7 @@ export default function AdminLayout({
             );
           })}
 
-          <div className="pt-6 px-3 py-2 text-[10px] font-bold text-rose-300/60 uppercase tracking-widest">
+          <div className="pt-6 px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
             কুইক এক্সেস
           </div>
 
@@ -205,10 +205,10 @@ export default function AdminLayout({
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-semibold text-rose-200 hover:bg-white/5 hover:text-white transition-all border border-rose-300/10"
+            className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-semibold text-slate-200 hover:bg-white/5 hover:text-white transition-all border border-slate-800"
           >
             <div className="flex items-center gap-2.5">
-              <Store className="h-4 w-4 text-[#D4AF37]" />
+              <Store className="h-4 w-4 text-amber-400" />
               <span>লাইভ ওয়েবসাইট ভিজিট</span>
             </div>
             <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
@@ -216,16 +216,16 @@ export default function AdminLayout({
         </nav>
 
         {/* User Profile & Sign Out Footer */}
-        <div className="p-4 border-t border-[#380714] bg-[#160308]/80 flex items-center justify-between">
+        <div className="p-4 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-[#6B112B] to-[#D4AF37] flex items-center justify-center text-white shrink-0 font-bold text-xs shadow-sm">
+            <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-400 flex items-center justify-center text-white shrink-0 font-bold text-xs shadow-sm">
               <ShieldCheck className="h-4 w-4" />
             </div>
             <div className="flex flex-col truncate">
               <span className="text-xs font-bold text-white truncate">
                 {session?.user?.name || "এডমিন ইউজার"}
               </span>
-              <span className="text-[10px] text-[#F5E6B3] truncate">
+              <span className="text-[10px] text-slate-400 truncate">
                 {session?.user?.email || "narinibediti@gmail.com"}
               </span>
             </div>
@@ -260,22 +260,22 @@ export default function AdminLayout({
           {/* Quick Action Buttons */}
           <div className="flex items-center gap-2.5">
             <Link href="/admin/categories">
-              <Button size="sm" variant="outline" className="border-rose-200 text-[#6B112B] hover:bg-rose-50 rounded-xl h-9 text-xs font-bold gap-1.5 hidden sm:inline-flex">
+              <Button size="sm" variant="outline" className="border-slate-200 text-indigo-600 hover:bg-indigo-50 rounded-xl h-9 text-xs font-bold gap-1.5 hidden sm:inline-flex">
                 <Layers className="h-3.5 w-3.5" />
                 <span>ক্যাটাগরি</span>
               </Button>
             </Link>
 
             <Link href="/admin/products/add">
-              <Button size="sm" className="bg-[#6B112B] hover:bg-[#50091D] text-white rounded-xl h-9 text-xs font-bold gap-1.5 shadow-sm shadow-rose-950/20">
-                <PlusCircle className="h-3.5 w-3.5 text-[#F5E6B3]" />
+              <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl h-9 text-xs font-bold gap-1.5 shadow-sm shadow-indigo-950/20">
+                <PlusCircle className="h-3.5 w-3.5 text-indigo-100" />
                 <span>নতুন পণ্য যোগ</span>
               </Button>
             </Link>
 
             <Link href="/" target="_blank" rel="noopener noreferrer">
               <Button size="sm" variant="ghost" className="text-slate-600 hover:text-slate-900 rounded-xl h-9 text-xs font-semibold gap-1 hidden md:inline-flex">
-                <Store className="h-3.5 w-3.5 text-[#D4AF37]" />
+                <Store className="h-3.5 w-3.5 text-amber-500" />
                 <span>ওয়েবসাইট</span>
               </Button>
             </Link>
@@ -290,13 +290,13 @@ export default function AdminLayout({
         {/* Mobile Bottom Quick Tab Bar for Admin */}
         <nav
           aria-label="অ্যাডমিন মোবাইল ন্যাভিগেশন"
-          className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-[#1E040B]/95 backdrop-blur-md border-t border-[#380714] text-slate-300 pb-safe shadow-[0_-6px_20px_rgba(0,0,0,0.3)]"
+          className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 text-slate-300 pb-safe shadow-[0_-6px_20px_rgba(0,0,0,0.3)]"
         >
           <div className="grid grid-cols-5 h-16 items-stretch">
             <Link
               href="/admin"
               className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tap-scale ${
-                pathname === "/admin" ? "text-[#F5E6B3]" : "text-slate-400"
+                pathname === "/admin" ? "text-indigo-400" : "text-slate-400"
               }`}
             >
               <LayoutDashboard className="h-4 w-4" />
@@ -306,7 +306,7 @@ export default function AdminLayout({
             <Link
               href="/admin/products"
               className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tap-scale ${
-                pathname === "/admin/products" ? "text-[#F5E6B3]" : "text-slate-400"
+                pathname === "/admin/products" ? "text-indigo-400" : "text-slate-400"
               }`}
             >
               <Package className="h-4 w-4" />
@@ -316,9 +316,9 @@ export default function AdminLayout({
             {/* Center raised Add Product button */}
             <Link
               href="/admin/products/add"
-              className="flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-[#F5E6B3] tap-scale"
+              className="flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-indigo-300 tap-scale"
             >
-              <span className="-mt-4 h-10 w-10 rounded-full bg-gradient-to-tr from-[#6B112B] to-[#D4AF37] text-white flex items-center justify-center shadow-lg ring-4 ring-[#1E040B]">
+              <span className="-mt-4 h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-400 text-white flex items-center justify-center shadow-lg ring-4 ring-slate-900">
                 <PlusCircle className="h-5 w-5" />
               </span>
               <span>নতুন যোগ</span>
@@ -327,7 +327,7 @@ export default function AdminLayout({
             <Link
               href="/admin/orders"
               className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tap-scale ${
-                pathname.startsWith("/admin/orders") ? "text-[#F5E6B3]" : "text-slate-400"
+                pathname.startsWith("/admin/orders") ? "text-indigo-400" : "text-slate-400"
               }`}
             >
               <ShoppingBag className="h-4 w-4" />
@@ -337,7 +337,7 @@ export default function AdminLayout({
             <Link
               href="/admin/categories"
               className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tap-scale ${
-                pathname === "/admin/categories" ? "text-[#F5E6B3]" : "text-slate-400"
+                pathname === "/admin/categories" ? "text-indigo-400" : "text-slate-400"
               }`}
             >
               <Layers className="h-4 w-4" />

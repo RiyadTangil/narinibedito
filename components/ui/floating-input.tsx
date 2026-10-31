@@ -46,7 +46,7 @@ export const FloatingInput = React.forwardRef<HTMLInputElement, FloatingInputPro
         <div
           className={cn(
             "relative w-full rounded-xl border border-slate-200 bg-white transition-all duration-200",
-            "focus-within:border-[#6B112B] focus-within:ring-2 focus-within:ring-[#6B112B]/15",
+            "focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600/15",
             error && "border-red-400 focus-within:border-red-500 focus-within:ring-red-150"
           )}
         >
@@ -83,7 +83,7 @@ export const FloatingInput = React.forwardRef<HTMLInputElement, FloatingInputPro
               isFilled
                 ? "top-1 text-[10px] sm:text-[11px] font-bold text-slate-600"
                 : "top-1/2 -translate-y-1/2 text-xs sm:text-sm",
-              "peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-[10px] sm:peer-focus:text-[11px] peer-focus:font-bold peer-focus:text-[#6B112B]",
+              "peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-[10px] sm:peer-focus:text-[11px] peer-focus:font-bold peer-focus:text-indigo-600",
               "peer-[:not(:placeholder-shown)]:top-1 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px] sm:peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:text-slate-600"
             )}
           >
@@ -147,7 +147,7 @@ export const FloatingTextarea = React.forwardRef<
         <div
           className={cn(
             "relative w-full rounded-xl border border-slate-200 bg-white transition-all duration-200",
-            "focus-within:border-[#6B112B] focus-within:ring-2 focus-within:ring-[#6B112B]/15",
+            "focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600/15",
             error && "border-red-400 focus-within:border-red-500"
           )}
         >
@@ -174,7 +174,7 @@ export const FloatingTextarea = React.forwardRef<
               isFilled
                 ? "top-1.5 text-[10px] sm:text-[11px] font-bold text-slate-600"
                 : "top-3.5 text-xs sm:text-sm",
-              "peer-focus:top-1.5 peer-focus:text-[10px] sm:peer-focus:text-[11px] peer-focus:font-bold peer-focus:text-[#6B112B]",
+              "peer-focus:top-1.5 peer-focus:text-[10px] sm:peer-focus:text-[11px] peer-focus:font-bold peer-focus:text-indigo-600",
               "peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] sm:peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:text-slate-600"
             )}
           >
@@ -226,7 +226,7 @@ export const FloatingSelect = React.forwardRef<
         <div
           className={cn(
             "relative w-full rounded-xl border border-slate-200 bg-white transition-all duration-200",
-            "focus-within:border-[#6B112B] focus-within:ring-2 focus-within:ring-[#6B112B]/15",
+            "focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600/15",
             error && "border-red-400 focus-within:border-red-500"
           )}
         >
@@ -257,7 +257,7 @@ export const FloatingSelect = React.forwardRef<
             className={cn(
               "absolute transition-all duration-200 pointer-events-none select-none text-[10px] sm:text-[11px] font-bold text-slate-600 truncate max-w-[80%]",
               icon ? "left-9 sm:left-10" : "left-3.5",
-              "top-1 focus-within:text-[#6B112B]"
+              "top-1 focus-within:text-indigo-600"
             )}
           >
             {label} {required && <span className="text-red-500">*</span>}

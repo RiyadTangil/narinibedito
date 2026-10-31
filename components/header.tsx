@@ -60,21 +60,21 @@ export function Header() {
       {/* ========================================================= */}
       {/* 1. SLIM TOP ANNOUNCEMENT BAR (scrolls away, not sticky)    */}
       {/* ========================================================= */}
-      <div className="bg-[#5A0D22] text-rose-100 text-[11px] sm:text-xs py-1.5 px-4 border-b border-[#72122C]">
+      <div className="bg-slate-900 text-slate-200 text-[11px] sm:text-xs py-1.5 px-4 border-b border-slate-800">
         <div className="container mx-auto px-0 flex items-center justify-center sm:justify-between gap-3">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="hidden sm:inline-flex items-center gap-1 text-[#F5E6B3] font-semibold">
-              <Sparkles className="h-3 w-3 text-[#D4AF37]" /> সৌন্দর্য • রুচি • ভালোবাসা
+            <span className="hidden sm:inline-flex items-center gap-1 text-amber-300 font-semibold">
+              <Sparkles className="h-3 w-3 text-amber-400" /> নারীদের জন্য
             </span>
-            <span className="hidden md:inline text-rose-300/40">|</span>
+            <span className="hidden md:inline text-slate-600">|</span>
             {/* Mobile: one clear value proposition */}
-            <span className="inline-flex items-center gap-1.5 text-rose-100 sm:hidden truncate">
-              <Truck className="h-3.5 w-3.5 text-[#D4AF37] shrink-0" />
+            <span className="inline-flex items-center gap-1.5 text-slate-200 sm:hidden truncate">
+              <Truck className="h-3.5 w-3.5 text-amber-400 shrink-0" />
               সারাদেশে ক্যাশ অন ডেলিভারি
-              <span className="text-rose-300/50">•</span>
+              <span className="text-slate-600">•</span>
               <a href="tel:01614258804" className="font-semibold text-white">০১৬১৪-২৫৮৮০৪</a>
             </span>
-            <span className="hidden md:inline text-rose-200">
+            <span className="hidden md:inline text-slate-300">
               সারাদেশে ক্যাশ অন ডেলিভারি
             </span>
           </div>
@@ -82,25 +82,25 @@ export function Header() {
           <div className="hidden sm:flex items-center gap-3 font-medium">
             <a 
               href="tel:01614258804" 
-              className="flex items-center gap-1 text-white hover:text-[#F5E6B3] transition-colors"
+              className="flex items-center gap-1 text-white hover:text-amber-300 transition-colors"
             >
-              <Phone className="h-3 w-3 text-[#D4AF37]" />
+              <Phone className="h-3 w-3 text-amber-400" />
               <span className="font-semibold">০১৬১৪-২৫৮৮০৪</span>
             </a>
-            <span className="text-rose-400/40">|</span>
+            <span className="text-slate-700">|</span>
             <a 
               href="https://wa.me/8801614258804" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-emerald-300 hover:text-emerald-200 font-bold transition-colors flex items-center gap-1"
+              className="text-emerald-400 hover:text-emerald-300 font-bold transition-colors flex items-center gap-1"
             >
               <MessageCircle className="h-3 w-3 fill-emerald-400" />
               <span>WhatsApp</span>
             </a>
-            <span className="text-rose-400/40">|</span>
+            <span className="text-slate-700">|</span>
             <Link 
               href="/admin" 
-              className="text-rose-300 hover:text-white text-[11px] transition-colors"
+              className="text-slate-400 hover:text-white text-[11px] transition-colors"
             >
               অ্যাডমিন
             </Link>
@@ -108,7 +108,7 @@ export function Header() {
         </div>
       </div>
 
-      <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md shadow-sm border-b border-rose-100/80 transition-all">
+      <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md shadow-xs border-b border-slate-200/80 transition-all">
         {/* ========================================================= */}
         {/* 2. SINGLE UNIFIED MODERN NAVBAR                           */}
         {/* Logo on Left, Nav Links in Center, Actions on Right       */}
@@ -117,7 +117,7 @@ export function Header() {
           
           {/* Left: Brand Identity */}
           <Link href="/" className="flex items-center gap-2 sm:gap-2.5 min-w-0 group">
-            <div className="relative h-10 w-10 sm:h-12 sm:w-12 overflow-hidden rounded-full border border-[#D4AF37] p-0.5 bg-white shadow-sm group-hover:scale-105 transition-transform shrink-0">
+            <div className="relative h-10 w-10 sm:h-12 sm:w-12 overflow-hidden rounded-full border border-slate-200 p-0.5 bg-white shadow-xs group-hover:scale-105 transition-transform shrink-0">
               <Image
                 src="/images/logo.jpg"
                 alt="নারী নিবেদিত লোগো"
@@ -128,11 +128,11 @@ export function Header() {
               />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="text-lg sm:text-2xl font-black tracking-tight text-[#6B112B] leading-none font-serif truncate">
+              <span className="text-lg sm:text-2xl font-black tracking-tight text-slate-900 leading-none font-serif truncate">
                 নারী নিবেদিত
               </span>
-              <span className="text-[10px] font-semibold text-[#B8860B] tracking-wider mt-0.5 truncate">
-                সৌন্দর্য • রুচি • ভালোবাসা
+              <span className="text-[10px] font-semibold text-indigo-600 tracking-wider mt-0.5 truncate">
+                নারীদের জন্য
               </span>
             </div>
           </Link>
@@ -147,14 +147,14 @@ export function Header() {
                   href={link.href}
                   className={`relative px-2.5 xl:px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all flex items-center gap-1 whitespace-nowrap shrink-0 ${
                     isActive 
-                      ? "bg-[#6B112B] text-white shadow-sm" 
-                      : "text-slate-700 hover:text-[#6B112B] hover:bg-rose-50"
+                      ? "bg-indigo-600 text-white shadow-sm" 
+                      : "text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/70"
                   }`}
                 >
                   <span className="whitespace-nowrap">{link.title}</span>
                   {link.badge && (
                     <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase leading-tight whitespace-nowrap ${
-                      isActive ? "bg-[#D4AF37] text-[#4A0A1C]" : "bg-rose-100 text-[#6B112B]"
+                      isActive ? "bg-amber-400 text-slate-950" : "bg-indigo-100 text-indigo-700"
                     }`}>
                       {link.badge}
                     </span>
@@ -166,9 +166,9 @@ export function Header() {
             {/* Hot Deal Pill */}
             <Link
               href="/products"
-              className="flex items-center gap-1 px-2.5 xl:px-3 py-1.5 rounded-full text-xs font-bold text-[#6B112B] bg-rose-50 hover:bg-rose-100 border border-rose-200/80 transition-colors ml-0.5 whitespace-nowrap shrink-0"
+              className="flex items-center gap-1 px-2.5 xl:px-3 py-1.5 rounded-full text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 transition-colors ml-0.5 whitespace-nowrap shrink-0"
             >
-              <Flame className="h-3.5 w-3.5 text-rose-600 fill-rose-600 animate-pulse shrink-0" />
+              <Flame className="h-3.5 w-3.5 text-amber-500 fill-amber-500 animate-pulse shrink-0" />
               <span className="whitespace-nowrap">অফার</span>
             </Link>
           </nav>
@@ -204,7 +204,7 @@ export function Header() {
                 <button
                   type="button"
                   onClick={() => setSearchOpen(true)}
-                  className="h-9 w-9 rounded-full flex items-center justify-center text-slate-600 hover:text-[#6B112B] hover:bg-rose-50 transition-colors"
+                  className="h-9 w-9 rounded-full flex items-center justify-center text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
                   title="পণ্য খুঁজুন"
                 >
                   <Search className="h-4 w-4" />
@@ -229,7 +229,7 @@ export function Header() {
             <a
               href="tel:01614258804"
               aria-label="কল করুন"
-              className="sm:hidden h-10 w-10 rounded-full flex items-center justify-center text-[#6B112B] bg-rose-50 border border-rose-100 tap-scale"
+              className="sm:hidden h-10 w-10 rounded-full flex items-center justify-center text-indigo-600 bg-indigo-50 border border-indigo-100 tap-scale"
             >
               <Phone className="h-4 w-4" />
             </a>
@@ -247,7 +247,7 @@ export function Header() {
               </Button>
             ) : (
               <Link href="/auth/signin" className="hidden sm:inline-block">
-                <Button variant="ghost" size="sm" className="h-9 px-2.5 text-slate-700 hover:text-[#6B112B] hover:bg-rose-50 rounded-full text-xs font-semibold">
+                <Button variant="ghost" size="sm" className="h-9 px-2.5 text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-full text-xs font-semibold">
                   <User className="h-4 w-4 mr-1 text-slate-500" />
                   <span>লগইন</span>
                 </Button>
@@ -259,7 +259,7 @@ export function Header() {
               variant="ghost"
               size="icon"
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden text-slate-800 h-10 w-10 rounded-full hover:bg-rose-50 tap-scale"
+              className="lg:hidden text-slate-800 h-10 w-10 rounded-full hover:bg-slate-100 tap-scale"
               aria-label="Toggle navigation menu"
             >
               <Menu className="h-5 w-5" />
@@ -283,7 +283,7 @@ export function Header() {
             />
             <button
               type="submit"
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 px-3.5 rounded-lg bg-[#6B112B] text-white text-xs font-semibold tap-scale z-10"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 px-3.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold tap-scale z-10"
             >
               খুঁজুন
             </button>
@@ -300,14 +300,14 @@ export function Header() {
           className="lg:hidden w-[86%] max-w-sm p-0 flex flex-col gap-0 border-l-0 [&>button]:text-white [&>button]:opacity-90 [&>button]:top-5 [&>button>svg]:h-5 [&>button>svg]:w-5"
         >
           {/* Drawer brand header */}
-          <div className="bg-gradient-to-br from-[#400717] via-[#5C0D24] to-[#300511] text-white px-5 pt-6 pb-5 pr-12">
+          <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white px-5 pt-6 pb-5 pr-12">
             <div className="flex items-center gap-3">
-              <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-[#D4AF37] bg-white p-0.5 shrink-0">
+              <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-indigo-400/50 bg-white p-0.5 shrink-0">
                 <Image src="/images/logo.jpg" alt="নারী নিবেদিত" fill sizes="48px" className="object-contain rounded-full" />
               </div>
               <div className="min-w-0">
                 <SheetTitle className="text-white text-lg font-black font-serif leading-tight">নারী নিবেদিত</SheetTitle>
-                <SheetDescription className="text-[11px] text-[#F5E6B3]">সৌন্দর্য • রুচি • ভালোবাসা</SheetDescription>
+                <SheetDescription className="text-[11px] text-indigo-200">নারীদের জন্য</SheetDescription>
               </div>
             </div>
             <a
@@ -335,12 +335,12 @@ export function Header() {
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center justify-between h-12 px-3 rounded-xl text-[15px] font-semibold transition-colors tap-scale ${
-                      isActive ? "bg-rose-50 text-[#6B112B]" : "text-slate-800 active:bg-rose-50"
+                      isActive ? "bg-indigo-50 text-indigo-600" : "text-slate-800 active:bg-slate-100"
                     }`}
                   >
                     <span>{link.title}</span>
                     {link.badge ? (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-[#6B112B]">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
                         {link.badge}
                       </span>
                     ) : (
@@ -352,25 +352,25 @@ export function Header() {
               <Link
                 href="/products"
                 onClick={() => setMobileMenuOpen(false)}
-                className="mt-1 flex items-center justify-between h-12 px-3 rounded-xl bg-gradient-to-r from-rose-50 to-amber-50 text-[#6B112B] text-[15px] font-bold border border-rose-100"
+                className="mt-1 flex items-center justify-between h-12 px-3 rounded-xl bg-gradient-to-r from-amber-50 to-indigo-50 text-indigo-700 text-[15px] font-bold border border-indigo-100"
               >
                 <span className="flex items-center gap-1.5">
-                  <Flame className="h-4 w-4 text-rose-600 fill-rose-600" />
+                  <Flame className="h-4 w-4 text-amber-500 fill-amber-500" />
                   <span>হট ডিল অফার</span>
                 </span>
-                <ChevronRight className="h-4 w-4 text-[#6B112B]" />
+                <ChevronRight className="h-4 w-4 text-indigo-600" />
               </Link>
             </nav>
           </div>
 
           {/* Drawer footer: contact + account */}
-          <div className="border-t border-rose-100 p-4 space-y-3 bg-slate-50/60 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+          <div className="border-t border-slate-200 p-4 space-y-3 bg-slate-50/60 pb-[calc(1rem+env(safe-area-inset-bottom))]">
             <a 
               href="tel:01614258804" 
-              className="flex items-center gap-3 rounded-xl bg-white border border-rose-100 px-3 h-12"
+              className="flex items-center gap-3 rounded-xl bg-white border border-slate-200 px-3 h-12"
             >
-              <span className="h-8 w-8 rounded-lg bg-rose-50 flex items-center justify-center">
-                <Phone className="h-4 w-4 text-[#6B112B]" />
+              <span className="h-8 w-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                <Phone className="h-4 w-4 text-indigo-600" />
               </span>
               <span className="text-xs text-slate-500 leading-tight">
                 হটলাইন<br />
@@ -383,7 +383,7 @@ export function Header() {
                 <button
                   type="button"
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="flex items-center justify-center gap-1.5 h-10 rounded-xl border border-rose-200 text-red-600 font-bold bg-white"
+                  className="flex items-center justify-center gap-1.5 h-10 rounded-xl border border-red-200 text-red-600 font-bold bg-white"
                 >
                   <LogOut className="h-4 w-4" /> সাইন আউট
                 </button>
@@ -391,7 +391,7 @@ export function Header() {
                 <Link 
                   href="/auth/signin" 
                   onClick={() => setMobileMenuOpen(false)} 
-                  className="flex items-center justify-center gap-1.5 h-10 rounded-xl bg-[#6B112B] text-white font-bold"
+                  className="flex items-center justify-center gap-1.5 h-10 rounded-xl bg-indigo-600 text-white font-bold"
                 >
                   <User className="h-4 w-4" /> লগইন
                 </Link>

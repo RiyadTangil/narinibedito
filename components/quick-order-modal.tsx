@@ -155,14 +155,14 @@ export function QuickOrderModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent className="w-[95vw] sm:w-[92vw] md:max-w-3xl lg:max-w-4xl bg-white rounded-3xl p-4 sm:p-6 lg:p-7 max-h-[92vh] overflow-y-auto overflow-x-hidden shadow-2xl border border-rose-100">
+      <DialogContent className="w-[95vw] sm:w-[92vw] md:max-w-3xl lg:max-w-4xl bg-white rounded-3xl p-4 sm:p-6 lg:p-7 max-h-[92vh] overflow-y-auto overflow-x-hidden shadow-2xl border border-slate-200">
         {!createdOrder ? (
           <div className="space-y-5">
             {/* Modal Header */}
-            <DialogHeader className="space-y-1.5 text-left border-b border-rose-100 pb-3.5 pr-8">
+            <DialogHeader className="space-y-1.5 text-left border-b border-slate-200 pb-3.5 pr-8">
               <div className="flex flex-wrap items-center gap-2">
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#6B112B] bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
-                  <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" /> সহজ ও দ্রুত অর্ডার
+                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">
+                  <Sparkles className="h-3.5 w-3.5 text-amber-500" /> সহজ ও দ্রুত অর্ডার
                 </div>
                 <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[11px] gap-1 font-semibold">
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> ক্যাশ অন ডেলিভারি (পণ্য দেখে টাকা দিন)
@@ -185,8 +185,8 @@ export function QuickOrderModal({
               {/* ========================================================= */}
               <div className="md:col-span-5 space-y-4">
                 {/* Product Card */}
-                <div className="bg-rose-50/40 rounded-2xl border border-rose-100 p-4 space-y-3.5">
-                  <div className="relative w-full aspect-square sm:aspect-[4/3] md:aspect-square rounded-xl overflow-hidden bg-white border border-rose-100/80 shadow-sm">
+                <div className="bg-slate-50 rounded-2xl border border-slate-200 p-4 space-y-3.5">
+                  <div className="relative w-full aspect-square sm:aspect-[4/3] md:aspect-square rounded-xl overflow-hidden bg-white border border-slate-200/80 shadow-xs">
                     <Image
                       src={product.image || "/images/products/churi-alna.jpg"}
                       alt={product.name}
@@ -196,7 +196,7 @@ export function QuickOrderModal({
                       priority
                     />
                     {product.category && (
-                      <Badge className="absolute top-2.5 left-2.5 bg-[#6B112B] text-white text-[10px] font-medium border-0 shadow">
+                      <Badge className="absolute top-2.5 left-2.5 bg-slate-900/90 text-white text-[10px] font-medium border-0 shadow">
                         {product.category}
                       </Badge>
                     )}
@@ -208,12 +208,12 @@ export function QuickOrderModal({
                     </h4>
                     {product.size && (
                       <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium pt-0.5">
-                        <Package className="h-3.5 w-3.5 text-[#D4AF37]" />
+                        <Package className="h-3.5 w-3.5 text-indigo-500" />
                         <span>{product.size}</span>
                       </div>
                     )}
                     <div className="flex items-baseline gap-2 pt-1">
-                      <span className="text-xl font-black text-[#6B112B]">
+                      <span className="text-xl font-black text-slate-900">
                         ৳{product.price.toLocaleString()}
                       </span>
                       {product.originalPrice && (
@@ -228,15 +228,15 @@ export function QuickOrderModal({
                   </div>
 
                   {/* Quantity Controller */}
-                  <div className="pt-2 border-t border-rose-100 flex items-center justify-between">
+                  <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-700">
                       পরিমাণ (Quantity):
                     </span>
-                    <div className="flex items-center border border-rose-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-white shadow-xs">
                       <button
                         type="button"
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="px-2.5 py-1.5 hover:bg-rose-50 text-slate-700 transition-colors"
+                        className="px-2.5 py-1.5 hover:bg-slate-100 text-slate-700 transition-colors"
                         aria-label="Decrease quantity"
                       >
                         <Minus className="h-3.5 w-3.5" />
@@ -247,7 +247,7 @@ export function QuickOrderModal({
                       <button
                         type="button"
                         onClick={() => setQuantity(quantity + 1)}
-                        className="px-2.5 py-1.5 hover:bg-rose-50 text-slate-700 transition-colors"
+                        className="px-2.5 py-1.5 hover:bg-slate-100 text-slate-700 transition-colors"
                         aria-label="Increase quantity"
                       >
                         <Plus className="h-3.5 w-3.5" />
@@ -257,7 +257,7 @@ export function QuickOrderModal({
                 </div>
 
                 {/* Price Breakdown Summary */}
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/90 space-y-2 text-xs">
+                <div className="bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100 space-y-2 text-xs">
                   <div className="flex justify-between text-slate-600">
                     <span>পণ্যের মূল্য ({quantity}টি)</span>
                     <span className="font-bold text-slate-800">৳{subtotal.toLocaleString()}</span>
@@ -266,7 +266,7 @@ export function QuickOrderModal({
                     <span>কুরিয়ার ডেলিভারি চার্জ</span>
                     <span className="font-bold text-slate-800">৳{deliveryFee}</span>
                   </div>
-                  <div className="border-t border-slate-200 pt-2 flex justify-between items-center text-sm font-black text-[#6B112B]">
+                  <div className="border-t border-indigo-100 pt-2 flex justify-between items-center text-sm font-black text-indigo-700">
                     <span>সর্বমোট প্রদেয় মূল্য</span>
                     <span className="text-lg">৳{totalAmount.toLocaleString()}</span>
                   </div>
@@ -282,7 +282,7 @@ export function QuickOrderModal({
                     <span>পণ্য হাতে পেয়ে দেখে টাকা পরিশোধ করার সুবিধা</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-slate-600">
-                    <Truck className="h-3.5 w-3.5 text-[#6B112B] shrink-0" />
+                    <Truck className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
                     <span>সুরক্ষিত কাঠের প্যাকেজিংয়ে সারাদেশে দ্রুত কুরিয়ার</span>
                   </div>
                 </div>
@@ -298,7 +298,7 @@ export function QuickOrderModal({
                     label="আপনার পুরো নাম (উদাঃ জান্নাতুল ফেরদৌস)"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
-                    icon={<User className="h-4 w-4 text-[#6B112B]" />}
+                    icon={<User className="h-4 w-4 text-indigo-600" />}
                     required
                   />
 
@@ -308,7 +308,7 @@ export function QuickOrderModal({
                     label="মোবাইল নম্বর (১১ ডিজিট - 017XXXXXXXX)"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    icon={<Phone className="h-4 w-4 text-[#6B112B]" />}
+                    icon={<Phone className="h-4 w-4 text-indigo-600" />}
                     className="font-mono"
                     required
                   />
@@ -316,7 +316,7 @@ export function QuickOrderModal({
                   {/* Delivery Area Selector Cards */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-800 flex items-center gap-1">
-                      <Truck className="h-3.5 w-3.5 text-[#6B112B]" /> ডেলিভারি এরিয়া বেছে নিন *
+                      <Truck className="h-3.5 w-3.5 text-indigo-600" /> ডেলিভারি এরিয়া বেছে নিন *
                     </label>
                     <div className="grid grid-cols-2 gap-2.5">
                       <button
@@ -324,8 +324,8 @@ export function QuickOrderModal({
                         onClick={() => setDeliveryArea("inside_dhaka")}
                         className={`p-3 rounded-xl border text-left transition-all ${
                           deliveryArea === "inside_dhaka"
-                            ? "border-[#6B112B] bg-rose-50/80 text-[#6B112B] font-bold shadow-sm ring-1 ring-[#6B112B]"
-                            : "border-slate-200 bg-white text-slate-600 hover:border-rose-200 hover:bg-slate-50"
+                            ? "border-indigo-600 bg-indigo-50/80 text-indigo-700 font-bold shadow-xs ring-1 ring-indigo-600"
+                            : "border-slate-200 bg-white text-slate-600 hover:border-indigo-200 hover:bg-slate-50"
                         }`}
                       >
                         <div className="text-xs font-bold">ঢাকার ভেতরে</div>
@@ -339,8 +339,8 @@ export function QuickOrderModal({
                         onClick={() => setDeliveryArea("outside_dhaka")}
                         className={`p-3 rounded-xl border text-left transition-all ${
                           deliveryArea === "outside_dhaka"
-                            ? "border-[#6B112B] bg-rose-50/80 text-[#6B112B] font-bold shadow-sm ring-1 ring-[#6B112B]"
-                            : "border-slate-200 bg-white text-slate-600 hover:border-rose-200 hover:bg-slate-50"
+                            ? "border-indigo-600 bg-indigo-50/80 text-indigo-700 font-bold shadow-xs ring-1 ring-indigo-600"
+                            : "border-slate-200 bg-white text-slate-600 hover:border-indigo-200 hover:bg-slate-50"
                         }`}
                       >
                         <div className="text-xs font-bold">ঢাকার বাইরে (সারাদেশ)</div>
@@ -372,13 +372,13 @@ export function QuickOrderModal({
                     <Button
                       type="submit"
                       disabled={submitting}
-                      className="w-full bg-[#6B112B] hover:bg-[#52091E] text-white font-extrabold h-12 rounded-2xl shadow-lg shadow-rose-950/20 text-sm sm:text-base gap-2 transition-all active:scale-[0.99]"
+                      className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold h-12 rounded-2xl shadow-lg shadow-indigo-950/20 text-sm sm:text-base gap-2 transition-all active:scale-[0.99]"
                     >
                       {submitting ? (
                         <span>অর্ডার সম্পন্ন হচ্ছে...</span>
                       ) : (
                         <>
-                          <ShoppingBag className="h-4 w-4 text-[#D4AF37]" />
+                          <ShoppingBag className="h-4 w-4 text-amber-300" />
                           <span>অর্ডার কনফার্ম করুন (৳{totalAmount.toLocaleString()})</span>
                         </>
                       )}
@@ -416,28 +416,28 @@ export function QuickOrderModal({
             </div>
 
             {/* Order Confirmation Receipt Card */}
-            <div className="bg-rose-50/50 p-4 sm:p-5 rounded-2xl border border-rose-100 text-left text-xs sm:text-sm space-y-2">
-              <div className="flex justify-between items-center py-1 border-b border-rose-100/70">
+            <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 text-left text-xs sm:text-sm space-y-2">
+              <div className="flex justify-between items-center py-1 border-b border-slate-200/70">
                 <span className="text-slate-500">অর্ডারকৃত পণ্য:</span>
                 <span className="font-bold text-slate-900 truncate max-w-[220px]">{product.name}</span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-rose-100/70">
+              <div className="flex justify-between items-center py-1 border-b border-slate-200/70">
                 <span className="text-slate-500">পরিমাণ:</span>
                 <span className="font-bold text-slate-900">{createdOrder.items?.[0]?.quantity || quantity}টি</span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-rose-100/70">
+              <div className="flex justify-between items-center py-1 border-b border-slate-200/70">
                 <span className="text-slate-500">ডেলিভারি এরিয়া:</span>
                 <span className="font-medium text-slate-800">
                   {createdOrder.deliveryArea === "inside_dhaka" ? "ঢাকার ভেতরে (৳৬০)" : "ঢাকার বাইরে (৳১৩০)"}
                 </span>
               </div>
-              <div className="flex justify-between items-center py-1 border-b border-rose-100/70">
+              <div className="flex justify-between items-center py-1 border-b border-slate-200/70">
                 <span className="text-slate-500">ডেলিভারি ঠিকানা:</span>
                 <span className="font-medium text-slate-800 text-right truncate max-w-[200px]">{createdOrder.address}</span>
               </div>
               <div className="flex justify-between items-center pt-2">
                 <span className="font-bold text-slate-700">সর্বমোট প্রদেয় (ক্যাশ অন ডেলিভারি):</span>
-                <span className="font-black text-[#6B112B] text-base sm:text-lg">
+                <span className="font-black text-indigo-700 text-base sm:text-lg">
                   ৳{createdOrder.totalAmount?.toLocaleString()}
                 </span>
               </div>
@@ -462,7 +462,7 @@ export function QuickOrderModal({
               <Button
                 variant="outline"
                 onClick={handleClose}
-                className="w-full border-rose-200 text-slate-700 hover:bg-rose-50 h-10 rounded-xl text-xs font-semibold"
+                className="w-full border-slate-200 text-slate-700 hover:bg-slate-50 h-10 rounded-xl text-xs font-semibold"
               >
                 ঠিক আছে, বন্ধ করুন
               </Button>

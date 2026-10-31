@@ -36,7 +36,7 @@ export function DeleteConfirmModal({
 }: DeleteConfirmModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="w-[calc(100%-1.5rem)] sm:max-w-md max-h-[90dvh] overflow-y-auto rounded-2xl sm:rounded-3xl p-5 sm:p-6 gap-3 sm:gap-4 bg-white border border-rose-100 shadow-2xl">
+      <DialogContent className="w-[calc(100%-1.5rem)] sm:max-w-md max-h-[90dvh] overflow-y-auto rounded-2xl sm:rounded-3xl p-5 sm:p-6 gap-3 sm:gap-4 bg-white border border-slate-200 shadow-2xl">
         <DialogHeader className="space-y-2.5 sm:space-y-3 text-center sm:text-center">
           {/* Warning Icon Badge */}
           <div className="mx-auto h-12 w-12 sm:h-14 sm:w-14 rounded-2xl bg-red-50 border border-red-100 text-red-600 flex items-center justify-center shadow-inner">

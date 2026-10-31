@@ -47,9 +47,9 @@ function SignInContent() {
   // Show loading while checking session
   if (status === "loading") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF5F7] flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 flex items-center justify-center p-4 relative overflow-hidden">
         <div className="w-full max-w-md relative z-10 flex flex-col items-center space-y-4">
-          <div className="relative h-20 w-20 rounded-full overflow-hidden border-2 border-[#D4AF37] p-1 bg-white shadow-xl animate-pulse">
+          <div className="relative h-20 w-20 rounded-full overflow-hidden border-2 border-indigo-200 p-1 bg-white shadow-xl animate-pulse">
             <Image
               src="/images/logo.jpg"
               alt="নারী নিবেদিত"
@@ -59,8 +59,8 @@ function SignInContent() {
             />
           </div>
           <div className="flex flex-col items-center space-y-2">
-            <div className="w-8 h-8 border-3 border-[#6B112B] border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-[#6B112B] font-bold text-sm tracking-wide font-serif">লোড হচ্ছে...</p>
+            <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-slate-800 font-bold text-sm tracking-wide font-serif">লোড হচ্ছে...</p>
           </div>
         </div>
       </div>
@@ -99,17 +99,17 @@ function SignInContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Subtle ambient lighting */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#6B112B]/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#D4AF37]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-indigo-600/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-slate-900/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-md relative z-10">
-        <Card className="shadow-2xl border border-rose-100 bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden">
+        <Card className="shadow-2xl border border-slate-200 bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden">
           
           <CardHeader className="text-center pt-8 pb-4 space-y-3">
             {/* Brand Logo */}
-            <div className="mx-auto relative h-20 w-20 rounded-full overflow-hidden border-2 border-[#D4AF37] p-1 bg-white shadow-md">
+            <div className="mx-auto relative h-20 w-20 rounded-full overflow-hidden border-2 border-slate-200 p-1 bg-white shadow-md">
               <Image
                 src="/images/logo.jpg"
                 alt="নারী নিবেদিত"
@@ -120,10 +120,10 @@ function SignInContent() {
             </div>
 
             <div className="space-y-1">
-              <CardTitle className="text-2xl font-black text-[#6B112B] tracking-tight font-serif">
+              <CardTitle className="text-2xl font-black text-slate-900 tracking-tight font-serif">
                 নারী নিবেদিত
               </CardTitle>
-              <CardDescription className="text-xs text-[#B8860B] font-semibold">
+              <CardDescription className="text-xs text-indigo-600 font-semibold">
                 এডমিন প্যানেলে লগইন করুন
               </CardDescription>
             </div>
@@ -159,17 +159,17 @@ function SignInContent() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#6B112B] transition-colors z-10"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors z-10"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
 
               <div className="flex items-center justify-between text-xs pt-1">
-                <span className="text-slate-400">লগইন পরবর্তী পেজ: <strong className="text-[#6B112B]">/admin</strong></span>
+                <span className="text-slate-400">লগইন পরবর্তী পেজ: <strong className="text-indigo-600">/admin</strong></span>
                 <Link
                   href="/auth/forgot-password"
-                  className="font-medium text-[#6B112B] hover:underline"
+                  className="font-medium text-indigo-600 hover:underline"
                 >
                   পাসওয়ার্ড ভুলে গেছেন?
                 </Link>
@@ -177,7 +177,7 @@ function SignInContent() {
 
               <Button
                 type="submit"
-                className="w-full h-11 rounded-xl text-sm font-bold bg-[#6B112B] hover:bg-[#50091D] text-white shadow-md shadow-rose-950/20"
+                className="w-full h-11 rounded-xl text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-950/20"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -197,7 +197,7 @@ function SignInContent() {
             <div className="text-center pt-2">
               <Link
                 href="/"
-                className="text-xs text-slate-500 hover:text-[#6B112B] transition-colors font-medium"
+                className="text-xs text-slate-500 hover:text-indigo-600 transition-colors font-medium"
               >
                 ← মূল ওয়েবসাইটে ফিরে যান
               </Link>
@@ -207,7 +207,7 @@ function SignInContent() {
 
         <div className="mt-6 text-center">
           <p className="text-[11px] text-slate-400">
-            নারী নিবেদিত • সৌন্দর্য • রুচি • ভালোবাসা
+            নারী নিবেদিত • নারীদের জন্য
           </p>
         </div>
       </div>
@@ -218,10 +218,10 @@ function SignInContent() {
 // Loading fallback for the Suspense boundary
 function SignInFallback() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-rose-50">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
       <div className="flex flex-col items-center space-y-2">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#6B112B] border-t-transparent"></div>
-        <p className="text-[#6B112B] text-xs font-semibold">লোড হচ্ছে...</p>
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-indigo-600 border-t-transparent"></div>
+        <p className="text-slate-800 text-xs font-semibold">লোড হচ্ছে...</p>
       </div>
     </div>
   );

@@ -194,7 +194,7 @@ export default function AdminCategoriesPage() {
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-serif">
               ক্যাটাগরি ম্যানেজমেন্ট (Category Management)
             </h1>
-            <Badge className="bg-[#6B112B] text-white text-[10px] font-bold">
+            <Badge className="bg-indigo-600 text-white text-[10px] font-bold">
               {categories.length} টি ক্যাটাগরি
             </Badge>
           </div>
@@ -205,7 +205,7 @@ export default function AdminCategoriesPage() {
 
         <div className="flex items-center gap-2">
           <Link href="/admin/products/add">
-            <Button size="sm" className="bg-[#6B112B] hover:bg-[#50091D] text-white text-xs font-bold rounded-xl gap-1.5 shadow-sm">
+            <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl gap-1.5 shadow-sm">
               <PlusCircle className="h-3.5 w-3.5" />
               <span>নতুন পণ্য যোগ</span>
             </Button>
@@ -241,7 +241,7 @@ export default function AdminCategoriesPage() {
           <Card className="border-slate-200/90 shadow-sm rounded-2xl sticky top-24">
             <CardHeader className="pb-3 border-b border-slate-100">
               <CardTitle className="text-sm sm:text-base font-bold text-slate-900 font-serif flex items-center gap-2">
-                <PlusCircle className="h-4 w-4 text-[#6B112B]" />
+                <PlusCircle className="h-4 w-4 text-indigo-600" />
                 <span>নতুন ক্যাটাগরি তৈরি করুন</span>
               </CardTitle>
               <CardDescription className="text-xs">
@@ -292,7 +292,7 @@ export default function AdminCategoriesPage() {
                   <span className="text-[11px] font-bold text-slate-600 block">
                     কার্ড প্রিভিউ (Preview)
                   </span>
-                  <div className="relative rounded-2xl overflow-hidden min-h-[140px] flex flex-col justify-end p-4 border border-rose-200 bg-slate-900 shadow-sm">
+                  <div className="relative rounded-2xl overflow-hidden min-h-[140px] flex flex-col justify-end p-4 border border-slate-200 bg-slate-900 shadow-sm">
                     <div className="absolute inset-0">
                       <Image
                         src={formData.image || "/images/products/churi-alna.jpg"}
@@ -303,13 +303,13 @@ export default function AdminCategoriesPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                     </div>
                     <div className="relative z-10 text-center flex flex-col items-center">
-                      <span className="text-[9px] font-bold text-[#F5E6B3] bg-[#6B112B]/90 px-2 py-0.5 rounded-full mb-1">
+                      <span className="text-[9px] font-bold text-white bg-indigo-600/90 px-2 py-0.5 rounded-full mb-1">
                         {formData.badge || "ব্যাজ"}
                       </span>
                       <h4 className="text-sm font-bold text-white leading-tight">
                         {formData.title || "ক্যাটাগরির নাম"}
                       </h4>
-                      <span className="text-[10px] text-rose-200/80">
+                      <span className="text-[10px] text-slate-300">
                         {formData.subtitle || "সাব-টাইটেল"}
                       </span>
                     </div>
@@ -319,7 +319,7 @@ export default function AdminCategoriesPage() {
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl h-11 text-xs gap-2 shadow-sm"
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl h-11 text-xs gap-2 shadow-sm"
                 >
                   {submitting ? (
                     <>
@@ -328,7 +328,7 @@ export default function AdminCategoriesPage() {
                     </>
                   ) : (
                     <>
-                      <Save className="h-4 w-4 text-[#F5E6B3]" />
+                      <Save className="h-4 w-4 text-indigo-100" />
                       <span>ক্যাটাগরি যুক্ত করুন</span>
                     </>
                   )}
@@ -363,11 +363,11 @@ export default function AdminCategoriesPage() {
                   className="bg-white rounded-2xl border border-slate-200/90 p-3.5 sm:p-4 flex items-center justify-between gap-4"
                 >
                   <div className="flex items-center gap-3.5 flex-1">
-                    <Skeleton className="h-14 w-14 rounded-xl bg-rose-100/60 shrink-0" />
+                    <Skeleton className="h-14 w-14 rounded-xl bg-slate-200 shrink-0" />
                     <div className="space-y-2 flex-1">
                       <Skeleton className="h-4 w-40 bg-slate-200" />
                       <Skeleton className="h-3 w-32 bg-slate-100" />
-                      <Skeleton className="h-3 w-20 bg-amber-100/60" />
+                      <Skeleton className="h-3 w-20 bg-slate-100" />
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
@@ -406,7 +406,7 @@ export default function AdminCategoriesPage() {
                           {cat.title}
                         </h4>
                         {cat.badge && (
-                          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-[#6B112B] border border-rose-200 shrink-0">
+                          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0">
                             {cat.badge}
                           </span>
                         )}
@@ -414,7 +414,7 @@ export default function AdminCategoriesPage() {
                       <span className="text-[11px] sm:text-xs text-slate-500 truncate">
                         {cat.subtitle} • <span className="font-mono text-[10px] sm:text-[11px] text-slate-400">/{cat.id}</span>
                       </span>
-                      <span className="text-[10px] sm:text-[11px] text-[#B8860B] font-bold mt-0.5">
+                      <span className="text-[10px] sm:text-[11px] text-indigo-600 font-bold mt-0.5">
                         {cat.count || 0}টি পণ্য লাইভ
                       </span>
                     </div>
@@ -434,7 +434,7 @@ export default function AdminCategoriesPage() {
                     </button>
 
                     <Link href={`/products?category=${cat.id}`} target="_blank">
-                      <Button size="icon" variant="ghost" className="h-9 w-9 text-slate-500 hover:text-[#6B112B]" title="স্টোরে প্রিভিউ দেখুন">
+                      <Button size="icon" variant="ghost" className="h-9 w-9 text-slate-500 hover:text-indigo-600" title="স্টোরে প্রিভিউ দেখুন">
                         <Eye className="h-4 w-4" />
                       </Button>
                     </Link>

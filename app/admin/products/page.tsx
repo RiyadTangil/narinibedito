@@ -121,7 +121,7 @@ export default function AdminProductsPage() {
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-serif">
               সকল পণ্য ক্যাটালগ (Products Catalog)
             </h1>
-            <Badge className="bg-[#6B112B] text-white text-[10px] font-bold">
+            <Badge className="bg-indigo-600 text-white text-[10px] font-bold">
               {filteredProducts.length} টি পণ্য
             </Badge>
           </div>
@@ -132,15 +132,15 @@ export default function AdminProductsPage() {
 
         <div className="flex items-center gap-2.5">
           <Link href="/admin/categories">
-            <Button size="sm" variant="outline" className="border-rose-200 text-[#6B112B] hover:bg-rose-50 text-xs font-bold rounded-xl gap-1.5">
+            <Button size="sm" variant="outline" className="border-slate-200 text-indigo-600 hover:bg-indigo-50 text-xs font-bold rounded-xl gap-1.5">
               <Layers className="h-3.5 w-3.5" />
               <span>ক্যাটাগরি</span>
             </Button>
           </Link>
 
           <Link href="/admin/products/add">
-            <Button size="sm" className="bg-[#6B112B] hover:bg-[#50091D] text-white text-xs font-bold rounded-xl gap-1.5 shadow-sm shadow-rose-950/20">
-              <PlusCircle className="h-3.5 w-3.5 text-[#F5E6B3]" />
+            <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl gap-1.5 shadow-sm shadow-indigo-950/20">
+              <PlusCircle className="h-3.5 w-3.5 text-indigo-100" />
               <span>নতুন পণ্য যোগ করুন</span>
             </Button>
           </Link>
@@ -189,7 +189,7 @@ export default function AdminProductsPage() {
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={`prod-admin-skel-${i}`} className="flex items-center justify-between gap-3 p-2.5 border-b border-slate-100 last:border-0">
                 <div className="flex items-center gap-3 flex-1">
-                  <Skeleton className="h-14 w-14 rounded-xl bg-rose-100/60 shrink-0" />
+                  <Skeleton className="h-14 w-14 rounded-xl bg-slate-200 shrink-0" />
                   <div className="space-y-1.5 flex-1">
                     <Skeleton className="h-4 w-3/4 bg-slate-200" />
                     <Skeleton className="h-3 w-1/3 bg-slate-100" />
@@ -230,7 +230,7 @@ export default function AdminProductsPage() {
                         {p.name}
                       </h4>
                       <div className="flex items-center gap-2 text-xs">
-                        <span className="font-black text-[#6B112B]">৳{p.price?.toLocaleString()}</span>
+                        <span className="font-black text-slate-900">৳{p.price?.toLocaleString()}</span>
                         {p.originalPrice && (
                           <span className="text-[10px] text-slate-400 line-through">
                             ৳{p.originalPrice.toLocaleString()}
@@ -248,12 +248,12 @@ export default function AdminProductsPage() {
 
                   <div className="flex flex-col sm:flex-row items-center gap-1 shrink-0">
                     <Link href={`/products/${p.id}`} target="_blank">
-                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl text-slate-500 hover:text-[#6B112B] bg-slate-50">
+                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl text-slate-500 hover:text-indigo-600 bg-slate-50">
                         <Eye className="h-4 w-4" />
                       </Button>
                     </Link>
                     <Link href={`/admin/products/add?id=${p._id || p.id}`}>
-                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl text-slate-500 hover:text-blue-600 bg-slate-50">
+                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl text-slate-500 hover:text-indigo-600 bg-slate-50">
                         <Edit className="h-4 w-4" />
                       </Button>
                     </Link>
@@ -307,7 +307,7 @@ export default function AdminProductsPage() {
                                 SKU: {p.sku}
                               </span>
                               {p.badge && (
-                                <span className="text-[9px] font-bold px-1.5 py-0 rounded bg-rose-50 text-[#6B112B] border border-rose-200">
+                                <span className="text-[9px] font-bold px-1.5 py-0 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
                                   {p.badge}
                                 </span>
                               )}
@@ -331,7 +331,7 @@ export default function AdminProductsPage() {
                       {/* Price */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <div className="flex flex-col">
-                          <span className="font-black text-[#6B112B] text-sm">
+                          <span className="font-black text-slate-900 text-sm">
                             ৳{p.price?.toLocaleString()}
                           </span>
                           {p.originalPrice && (
@@ -359,13 +359,13 @@ export default function AdminProductsPage() {
                       <td className="py-3.5 px-4 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-1">
                           <Link href={`/products/${p.id}`} target="_blank">
-                            <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-[#6B112B]" title="ওয়েবসাইটে প্রিভিউ দেখুন">
+                            <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-indigo-600" title="ওয়েবসাইটে প্রিভিউ দেখুন">
                               <Eye className="h-4 w-4" />
                             </Button>
                           </Link>
 
                           <Link href={`/admin/products/add?id=${p._id || p.id}`}>
-                            <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-blue-600" title="এডিট করুন">
+                            <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-indigo-600" title="এডিট করুন">
                               <Edit className="h-4 w-4" />
                             </Button>
                           </Link>

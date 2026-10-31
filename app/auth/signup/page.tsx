@@ -77,23 +77,23 @@ export default function SignUpPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 flex items-center justify-center p-4 relative overflow-hidden">
         <div className="w-full max-w-md relative z-10">
-          <Card className="shadow-2xl border border-rose-100 bg-white/95 backdrop-blur-md rounded-3xl">
+          <Card className="shadow-2xl border border-slate-200 bg-white/95 backdrop-blur-md rounded-3xl">
             <CardContent className="pt-8 px-6 sm:px-8 pb-8 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-rose-50 rounded-2xl mb-6 shadow-sm">
-                <Mail className="h-10 w-10 text-[#6B112B]" />
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-indigo-50 rounded-2xl mb-6 shadow-sm">
+                <Mail className="h-10 w-10 text-indigo-600" />
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3 font-serif">ইমেইল ভেরিফাই করুন</h1>
               <p className="text-slate-600 mb-4 text-sm leading-relaxed">
                 আপনার একাউন্ট সফলভাবে তৈরি হয়েছে। ভেরিফিকেশন লিংক পাঠানো হয়েছে:
               </p>
-              <div className="bg-rose-50/70 border border-rose-100 rounded-xl p-3 mb-6">
-                <span className="text-[#6B112B] font-semibold break-all text-sm">{formData.email}</span>
+              <div className="bg-indigo-50/70 border border-indigo-100 rounded-xl p-3 mb-6">
+                <span className="text-indigo-700 font-semibold break-all text-sm">{formData.email}</span>
               </div>
               <Button
                 onClick={() => router.push("/auth/signin")}
-                className="w-full h-12 bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl"
+                className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl"
               >
                 <ArrowRight className="mr-2 h-5 w-5" />
                 লগইন পেজে যান
@@ -106,12 +106,12 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FFF5F7] via-white to-[#FFF9FA] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 flex items-center justify-center p-4 relative overflow-hidden">
       <div className="w-full max-w-md relative z-10 my-6">
-        <Card className="shadow-2xl border border-rose-100 bg-white/95 backdrop-blur-md rounded-3xl">
+        <Card className="shadow-2xl border border-slate-200 bg-white/95 backdrop-blur-md rounded-3xl">
           <CardHeader className="pb-2 pt-7 text-center">
             <div 
-              className="mx-auto relative w-20 h-20 mb-2 cursor-pointer rounded-full overflow-hidden border-2 border-[#D4AF37] p-1 bg-white shadow-md"
+              className="mx-auto relative w-20 h-20 mb-2 cursor-pointer rounded-full overflow-hidden border-2 border-slate-200 p-1 bg-white shadow-md"
               onClick={() => setLogoClickCount(prev => prev + 1)}
             >
               <Image
@@ -122,7 +122,7 @@ export default function SignUpPage() {
                 priority
               />
             </div>
-            <h2 className="text-xl font-black text-[#6B112B] font-serif">নতুন একাউন্ট তৈরি করুন</h2>
+            <h2 className="text-xl font-black text-slate-900 font-serif">নতুন একাউন্ট তৈরি করুন</h2>
           </CardHeader>
           <CardContent className="space-y-4 px-5 sm:px-8 pb-8">
             <form onSubmit={handleSubmit} className="space-y-3.5">
@@ -182,7 +182,7 @@ export default function SignUpPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#6B112B] z-10"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 z-10"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -201,7 +201,7 @@ export default function SignUpPage() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#6B112B] z-10"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 z-10"
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -211,7 +211,7 @@ export default function SignUpPage() {
               {logoClickCount >= 10 && (
                 <Button
                   type="submit"
-                  className="w-full h-11 rounded-xl bg-[#6B112B] hover:bg-[#50091D] text-white font-bold text-sm"
+                  className="w-full h-11 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm"
                   disabled={isLoading}
                 >
                   {isLoading ? "প্রসেসিং..." : "রেজিস্ট্রেশন সম্পন্ন করুন"}
@@ -221,7 +221,7 @@ export default function SignUpPage() {
               <div className="text-center pt-2">
                 <p className="text-xs text-slate-600">
                   ইতিমধ্যে একাউন্ট আছে?{" "}
-                  <Link href="/auth/signin" className="font-bold text-[#6B112B] hover:underline">
+                  <Link href="/auth/signin" className="font-bold text-indigo-600 hover:underline">
                     লগইন করুন
                   </Link>
                 </p>

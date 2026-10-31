@@ -218,13 +218,13 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
   return (
     <section id="reviews-section" className="space-y-8 pt-4">
       {/* Header and Summary Panel */}
-      <div className="bg-gradient-to-br from-rose-50/70 via-white to-amber-50/40 p-6 sm:p-8 rounded-3xl border border-rose-100 shadow-sm">
+      <div className="bg-gradient-to-br from-indigo-50/60 via-white to-slate-50 p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           
           {/* Left: Overall Rating & Social Proof */}
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#6B112B] bg-rose-100/70 px-3 py-1 rounded-full">
-              <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" /> গ্রাহকের বাস্তব অভিজ্ঞতা
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 bg-indigo-100/70 px-3 py-1 rounded-full">
+              <Sparkles className="h-3.5 w-3.5 text-amber-500" /> গ্রাহকের বাস্তব অভিজ্ঞতা
             </div>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-serif">
               গ্রাহক রিভিউ ও মতামত ({totalReviews})
@@ -234,7 +234,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
             </p>
 
             <div className="flex items-center gap-4 pt-1">
-              <div className="text-4xl sm:text-5xl font-black text-[#6B112B] tracking-tight">
+              <div className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">
                 {avgRating}
               </div>
               <div className="space-y-1">
@@ -291,17 +291,17 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
               <DialogTrigger asChild>
                 <Button
                   size="lg"
-                  className="bg-[#6B112B] hover:bg-[#52091E] text-white font-bold rounded-2xl shadow-lg shadow-rose-950/15 gap-2 px-6 h-12"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-950/15 gap-2 px-6 h-12"
                 >
-                  <MessageSquarePlus className="h-5 w-5 text-[#D4AF37]" />
+                  <MessageSquarePlus className="h-5 w-5 text-amber-300" />
                   <span>মতামত বা রিভিউ দিন</span>
                 </Button>
               </DialogTrigger>
 
               <DialogContent className="sm:max-w-lg bg-white rounded-3xl p-6 sm:p-8">
                 <DialogHeader className="space-y-2 text-left">
-                  <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#6B112B] bg-rose-50 px-3 py-1 rounded-full border border-rose-200 w-fit">
-                    <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" /> নারী নিবেদিত কাস্টমার ফিডব্যাক
+                  <div className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200 w-fit">
+                    <Sparkles className="h-3.5 w-3.5 text-amber-500" /> নারী নিবেদিত কাস্টমার ফিডব্যাক
                   </div>
                   <DialogTitle className="text-xl font-bold text-slate-900 font-serif">
                     আপনার অভিজ্ঞতা শেয়ার করুন
@@ -313,7 +313,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
 
                 <form onSubmit={handleSubmitReview} className="space-y-4 pt-2">
                   {/* Star rating selector */}
-                  <div className="space-y-1.5 bg-rose-50/50 p-4 rounded-2xl border border-rose-100 text-center">
+                  <div className="space-y-1.5 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center">
                     <label className="text-xs font-bold text-slate-700 block">
                       আপনার রেটিং বেছে নিন
                     </label>
@@ -330,14 +330,14 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
                           <Star
                             className={`h-7 w-7 ${
                               (hoverRating || formRating) >= star
-                                ? "fill-amber-500 text-amber-500 drop-shadow-sm"
+                                ? "fill-amber-500 text-amber-500 drop-shadow-xs"
                                 : "text-slate-300"
                             }`}
                           />
                         </button>
                       ))}
                     </div>
-                    <span className="text-xs font-semibold text-[#6B112B] block pt-1">
+                    <span className="text-xs font-semibold text-indigo-700 block pt-1">
                       {RATING_LABELS[hoverRating || formRating]}
                     </span>
                   </div>
@@ -348,14 +348,14 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
                       label="আপনার নাম"
                       value={formName}
                       onChange={(e) => setFormName(e.target.value)}
-                      icon={<User className="h-4 w-4 text-[#6B112B]" />}
+                      icon={<User className="h-4 w-4 text-indigo-600" />}
                       required
                     />
                     <FloatingInput
                       label="আপনার এলাকা / জেলা"
                       value={formLocation}
                       onChange={(e) => setFormLocation(e.target.value)}
-                      icon={<MapPin className="h-4 w-4 text-[#6B112B]" />}
+                      icon={<MapPin className="h-4 w-4 text-indigo-600" />}
                     />
                   </div>
 
@@ -365,7 +365,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
                     label="মোবাইল / হোয়াটসঅ্যাপ নম্বর (ঐচ্ছিক)"
                     value={formPhone}
                     onChange={(e) => setFormPhone(e.target.value)}
-                    icon={<Phone className="h-4 w-4 text-[#6B112B]" />}
+                    icon={<Phone className="h-4 w-4 text-indigo-600" />}
                   />
 
                   {/* Review / Comment Text */}
@@ -381,7 +381,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
                   <Button
                     type="submit"
                     disabled={submitting}
-                    className="w-full bg-[#6B112B] hover:bg-[#52091E] text-white font-bold h-11 rounded-xl shadow-md gap-2"
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-11 rounded-xl shadow-md gap-2"
                   >
                     {submitting ? (
                       <span>জমা দেওয়া হচ্ছে...</span>
@@ -414,8 +414,8 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
             onClick={() => setFilterRating(null)}
             className={`px-3.5 py-1.5 rounded-full font-bold transition-all shrink-0 ${
               filterRating === null
-                ? "bg-[#6B112B] text-white shadow-sm"
-                : "bg-white text-slate-600 border border-slate-200 hover:border-rose-200"
+                ? "bg-indigo-600 text-white shadow-xs"
+                : "bg-white text-slate-600 border border-slate-200 hover:border-indigo-200"
             }`}
           >
             সব রিভিউ ({totalReviews})
@@ -425,7 +425,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
             onClick={() => setFilterRating(5)}
             className={`px-3.5 py-1.5 rounded-full font-bold transition-all shrink-0 flex items-center gap-1 ${
               filterRating === 5
-                ? "bg-amber-500 text-white shadow-sm"
+                ? "bg-amber-500 text-white shadow-xs"
                 : "bg-white text-slate-600 border border-slate-200 hover:border-amber-200"
             }`}
           >
@@ -437,7 +437,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
               onClick={() => setFilterRating(4)}
               className={`px-3.5 py-1.5 rounded-full font-bold transition-all shrink-0 flex items-center gap-1 ${
                 filterRating === 4
-                  ? "bg-amber-500 text-white shadow-sm"
+                  ? "bg-amber-500 text-white shadow-xs"
                   : "bg-white text-slate-600 border border-slate-200 hover:border-amber-200"
               }`}
             >
@@ -459,7 +459,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
                 variant="outline"
                 onClick={() => carouselApi?.scrollPrev()}
                 disabled={!canScrollPrev}
-                className="h-8 w-8 rounded-xl border-rose-200 text-[#6B112B] hover:bg-rose-50 disabled:opacity-30 transition-all shadow-sm"
+                className="h-8 w-8 rounded-xl border-slate-200 text-indigo-600 hover:bg-indigo-50 disabled:opacity-30 transition-all shadow-xs"
                 title="পূর্ববর্তী রিভিউ"
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -470,7 +470,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
                 variant="outline"
                 onClick={() => carouselApi?.scrollNext()}
                 disabled={!canScrollNext}
-                className="h-8 w-8 rounded-xl border-rose-200 text-[#6B112B] hover:bg-rose-50 disabled:opacity-30 transition-all shadow-sm"
+                className="h-8 w-8 rounded-xl border-slate-200 text-indigo-600 hover:bg-indigo-50 disabled:opacity-30 transition-all shadow-xs"
                 title="পরবর্তী রিভিউ"
               >
                 <ChevronRight className="h-4 w-4" />
@@ -484,25 +484,25 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="p-5 rounded-3xl bg-white border border-rose-100 space-y-3">
+            <div key={i} className="p-5 rounded-3xl bg-white border border-slate-200 space-y-3">
               <div className="flex items-center gap-3">
-                <Skeleton className="h-10 w-10 rounded-2xl bg-rose-100" />
+                <Skeleton className="h-10 w-10 rounded-2xl bg-indigo-100" />
                 <div className="space-y-1.5 flex-1">
                   <Skeleton className="h-4 w-32 bg-slate-200" />
                   <Skeleton className="h-3 w-20 bg-slate-100" />
                 </div>
               </div>
-              <Skeleton className="h-16 w-full rounded-2xl bg-rose-50/70" />
+              <Skeleton className="h-16 w-full rounded-2xl bg-slate-100" />
               <div className="flex justify-between pt-2">
                 <Skeleton className="h-3 w-24 bg-slate-100" />
-                <Skeleton className="h-5 w-20 rounded-full bg-rose-100/60" />
+                <Skeleton className="h-5 w-20 rounded-full bg-slate-200/60" />
               </div>
             </div>
           ))}
         </div>
       ) : filteredReviews.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-3xl border border-rose-100 p-8 space-y-3">
-          <div className="h-12 w-12 rounded-full bg-rose-100 text-[#6B112B] flex items-center justify-center mx-auto">
+        <div className="text-center py-12 bg-white rounded-3xl border border-slate-200 p-8 space-y-3">
+          <div className="h-12 w-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
             <MessageSquarePlus className="h-6 w-6" />
           </div>
           <h4 className="text-base font-bold text-slate-800">এখনো কোনো মতামত পাওয়া যায়নি</h4>
@@ -512,7 +512,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
           <Button
             onClick={() => setIsDialogOpen(true)}
             variant="outline"
-            className="border-[#6B112B] text-[#6B112B] hover:bg-rose-50 rounded-xl text-xs font-bold"
+            className="border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded-xl text-xs font-bold"
           >
             প্রথম রিভিউটি লিখুন
           </Button>
@@ -537,12 +537,12 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
                     key={rev._id || index}
                     className="pl-3 sm:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
                   >
-                    <div className="h-full bg-white p-5 sm:p-6 rounded-3xl border border-rose-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+                    <div className="h-full bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4">
                       <div className="space-y-3">
                         {/* Top Bar: Customer profile & Rating */}
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-[#6B112B] to-[#9E1B42] text-white flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
+                            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
                               {initials}
                             </div>
                             <div className="min-w-0">
@@ -573,13 +573,13 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
                         </div>
 
                         {/* Comment */}
-                        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic bg-rose-50/25 p-3.5 rounded-2xl border border-rose-50 min-h-[72px]">
+                        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic bg-slate-50 p-3.5 rounded-2xl border border-slate-100 min-h-[72px]">
                           "{rev.comment}"
                         </p>
                       </div>
 
                       {/* Footer: Product Tag & Helpful Like */}
-                      <div className="pt-2 border-t border-rose-50 flex items-center justify-between text-xs text-slate-400 gap-2">
+                      <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 gap-2">
                         <span className="truncate text-[11px] text-slate-500 font-medium">
                           {rev.productTitle || productTitle || "নারী নিবেদিত ক্রাফট"}
                         </span>
@@ -590,7 +590,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
                           className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] transition-colors shrink-0 ${
                             isLiked
                               ? "text-emerald-700 bg-emerald-50 font-bold"
-                              : "text-slate-500 hover:text-[#6B112B] hover:bg-rose-50"
+                              : "text-slate-500 hover:text-indigo-600 hover:bg-indigo-50"
                           }`}
                         >
                           <ThumbsUp className={`h-3 w-3 ${isLiked ? "fill-emerald-600" : ""}`} />
@@ -607,7 +607,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
             <button
               type="button"
               onClick={() => carouselApi?.scrollPrev()}
-              className="absolute left-0 sm:-left-3 lg:-left-5 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white border-2 border-rose-200 text-[#6B112B] hover:bg-[#6B112B] hover:text-white hover:border-[#6B112B] shadow-xl z-30 transition-all duration-200 flex items-center justify-center group active:scale-95 focus:outline-none"
+              className="absolute left-0 sm:-left-3 lg:-left-5 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white border-2 border-slate-200 text-indigo-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 shadow-xl z-30 transition-all duration-200 flex items-center justify-center group active:scale-95 focus:outline-none"
               title="পূর্ববর্তী রিভিউ"
               aria-label="Previous review"
             >
@@ -617,7 +617,7 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
             <button
               type="button"
               onClick={() => carouselApi?.scrollNext()}
-              className="absolute right-0 sm:-right-3 lg:-right-5 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white border-2 border-rose-200 text-[#6B112B] hover:bg-[#6B112B] hover:text-white hover:border-[#6B112B] shadow-xl z-30 transition-all duration-200 flex items-center justify-center group active:scale-95 focus:outline-none"
+              className="absolute right-0 sm:-right-3 lg:-right-5 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white border-2 border-slate-200 text-indigo-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 shadow-xl z-30 transition-all duration-200 flex items-center justify-center group active:scale-95 focus:outline-none"
               title="পরবর্তী রিভিউ"
               aria-label="Next review"
             >
@@ -635,8 +635,8 @@ export function ReviewsSection({ productId, productTitle }: ReviewsSectionProps)
                   onClick={() => carouselApi?.scrollTo(i)}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     currentSlide === i
-                      ? "w-7 bg-[#6B112B]"
-                      : "w-2 bg-rose-200 hover:bg-rose-300"
+                      ? "w-7 bg-indigo-600"
+                      : "w-2 bg-slate-300 hover:bg-slate-400"
                   }`}
                   aria-label={`Go to slide ${i + 1}`}
                 />

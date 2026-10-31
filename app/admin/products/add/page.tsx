@@ -251,7 +251,7 @@ function ProductFormContent() {
             <Skeleton className="h-7 w-64 bg-slate-200 rounded-xl" />
             <Skeleton className="h-4 w-48 bg-slate-100 rounded-md" />
           </div>
-          <Skeleton className="h-10 w-36 rounded-xl bg-rose-200/70" />
+          <Skeleton className="h-10 w-36 rounded-xl bg-slate-200" />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-7 space-y-6">
@@ -273,7 +273,7 @@ function ProductFormContent() {
             </div>
           </div>
           <div className="lg:col-span-5">
-            <Skeleton className="h-96 w-full rounded-3xl bg-rose-100/50" />
+            <Skeleton className="h-96 w-full rounded-3xl bg-slate-200/70" />
           </div>
         </div>
       </div>
@@ -287,7 +287,7 @@ function ProductFormContent() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Link href="/admin/products">
-            <Button variant="outline" size="icon" className="h-9 w-9 rounded-xl border-slate-200 hover:bg-rose-50 hover:text-[#6B112B]">
+            <Button variant="outline" size="icon" className="h-9 w-9 rounded-xl border-slate-200 hover:bg-indigo-50 hover:text-indigo-600">
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
@@ -296,7 +296,7 @@ function ProductFormContent() {
               <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-serif">
                 {isEditing ? "পণ্য সম্পাদনা করুন (Edit Product)" : "নতুন পণ্য যুক্ত করুন"}
               </h1>
-              <Badge className="bg-[#6B112B] text-white text-[10px] font-bold">
+              <Badge className="bg-indigo-600 text-white text-[10px] font-bold">
                 {isEditing ? "EDIT MODE" : "PRO FORM"}
               </Badge>
             </div>
@@ -318,12 +318,12 @@ function ProductFormContent() {
             size="sm"
             onClick={handleSubmit}
             disabled={submitting}
-            className="bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-xl text-xs gap-1.5 shadow-sm shadow-rose-950/20 disabled:opacity-60"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs gap-1.5 shadow-sm shadow-indigo-950/20 disabled:opacity-60"
           >
             {submitting ? (
-              <Loader2 className="h-4 w-4 animate-spin text-[#F5E6B3]" />
+              <Loader2 className="h-4 w-4 animate-spin text-indigo-100" />
             ) : (
-              <Save className="h-4 w-4 text-[#F5E6B3]" />
+              <Save className="h-4 w-4 text-indigo-100" />
             )}
             <span>
               {submitting 
@@ -370,7 +370,7 @@ function ProductFormContent() {
           <Card className="border-slate-200/90 shadow-sm rounded-2xl">
             <CardHeader className="pb-3 border-b border-slate-100">
               <CardTitle className="text-sm sm:text-base font-bold text-slate-900 font-serif flex items-center gap-2">
-                <Package className="h-4 w-4 text-[#6B112B]" />
+                <Package className="h-4 w-4 text-indigo-600" />
                 <span>মৌলিক তথ্য (Basic Information)</span>
               </CardTitle>
               <CardDescription className="text-xs">
@@ -426,8 +426,8 @@ function ProductFormContent() {
                         onClick={() => setFormData({ ...formData, badge: b })}
                         className={`text-[11px] font-semibold px-2.5 py-1 rounded-full transition-all border ${
                           formData.badge === b
-                            ? "bg-[#6B112B] text-white border-[#6B112B] shadow-xs"
-                            : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-rose-50"
+                            ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+                            : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-indigo-50"
                         }`}
                       >
                         {b}
@@ -476,7 +476,7 @@ function ProductFormContent() {
           <Card className="border-slate-200/90 shadow-sm rounded-2xl">
             <CardHeader className="pb-3 border-b border-slate-100">
               <CardTitle className="text-sm sm:text-base font-bold text-slate-900 font-serif flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-[#6B112B]" />
+                <DollarSign className="h-4 w-4 text-indigo-600" />
                 <span>মূল্য ও স্টক পরিমাণ (Price & Inventory)</span>
               </CardTitle>
             </CardHeader>
@@ -488,7 +488,7 @@ function ProductFormContent() {
                   label="বিক্রয় মূল্য (৳)"
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                  className="font-bold text-[#6B112B]"
+                  className="font-bold text-slate-900"
                   required
                 />
 
@@ -514,7 +514,7 @@ function ProductFormContent() {
           <Card className="border-slate-200/90 shadow-sm rounded-2xl">
             <CardHeader className="pb-3 border-b border-slate-100">
               <CardTitle className="text-sm sm:text-base font-bold text-slate-900 font-serif flex items-center gap-2">
-                <Layers className="h-4 w-4 text-[#6B112B]" />
+                <Layers className="h-4 w-4 text-indigo-600" />
                 <span>স্পেসিফিকেশন ও বিবরণ (Specifications)</span>
               </CardTitle>
             </CardHeader>
@@ -560,7 +560,7 @@ function ProductFormContent() {
           <Card className="border-slate-200/90 shadow-sm rounded-2xl">
             <CardHeader className="pb-3 border-b border-slate-100">
               <CardTitle className="text-sm sm:text-base font-bold text-slate-900 font-serif flex items-center gap-2">
-                <Upload className="h-4 w-4 text-[#6B112B]" />
+                <Upload className="h-4 w-4 text-indigo-600" />
                 <span>পণ্যের ছবি ও গ্যালারি (Product Images)</span>
               </CardTitle>
             </CardHeader>
@@ -594,7 +594,7 @@ function ProductFormContent() {
                     onClick={addImageUrl}
                     variant="outline"
                     size="sm"
-                    className="h-11 sm:h-12 px-4 rounded-xl border-slate-200 text-xs font-bold text-[#6B112B] shrink-0"
+                    className="h-11 sm:h-12 px-4 rounded-xl border-slate-200 text-xs font-bold text-indigo-600 shrink-0"
                   >
                     <Plus className="h-3.5 w-3.5 mr-1" /> যোগ করুন
                   </Button>
@@ -602,14 +602,14 @@ function ProductFormContent() {
 
                 <div className="grid grid-cols-4 gap-2 pt-2">
                   {/* Primary Thumb */}
-                  <div className="relative h-20 rounded-xl overflow-hidden border-2 border-[#6B112B] bg-slate-100 group">
+                  <div className="relative h-20 rounded-xl overflow-hidden border-2 border-indigo-600 bg-slate-100 group">
                     <Image
                       src={formData.image || "/images/products/churi-alna.jpg"}
                       alt="Primary"
                       fill
                       className="object-cover"
                     />
-                    <span className="absolute bottom-1 left-1 bg-[#6B112B] text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                    <span className="absolute bottom-1 left-1 bg-indigo-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
                       মেইন
                     </span>
                   </div>
@@ -647,7 +647,7 @@ function ProductFormContent() {
             
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Eye className="h-4 w-4 text-[#6B112B]" />
+                <Eye className="h-4 w-4 text-indigo-600" />
                 <span>লাইভ প্রিভিউ (Storefront Preview)</span>
               </span>
               <span className="text-[11px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
@@ -656,7 +656,7 @@ function ProductFormContent() {
             </div>
 
             {/* The Live Rendered Product Card */}
-            <div className="group rounded-3xl border border-rose-200 bg-white overflow-hidden shadow-xl flex flex-col justify-between max-w-sm mx-auto">
+            <div className="group rounded-3xl border border-slate-200 bg-white overflow-hidden shadow-xl flex flex-col justify-between max-w-sm mx-auto">
               {/* Product Visual Container */}
               <div className="relative h-64 w-full overflow-hidden bg-slate-100">
                 <Image
@@ -669,7 +669,7 @@ function ProductFormContent() {
 
                 {/* Badge */}
                 {formData.badge && (
-                  <Badge className="absolute top-3.5 left-3.5 bg-[#6B112B] text-white font-medium text-xs shadow-md border-0">
+                  <Badge className="absolute top-3.5 left-3.5 bg-indigo-600 text-white font-medium text-xs shadow-md border-0">
                     {formData.badge}
                   </Badge>
                 )}
@@ -683,7 +683,7 @@ function ProductFormContent() {
 
                 {/* Size / Dimensions Tag */}
                 {formData.size && (
-                  <div className="absolute bottom-3.5 left-3.5 bg-black/75 text-[#F5E6B3] text-[11px] px-2.5 py-1 rounded-md backdrop-blur-sm font-medium border border-white/10">
+                  <div className="absolute bottom-3.5 left-3.5 bg-slate-900/80 text-white text-[11px] px-2.5 py-1 rounded-md backdrop-blur-sm font-medium border border-white/10">
                     {formData.size}
                   </div>
                 )}
@@ -693,7 +693,7 @@ function ProductFormContent() {
               <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-[#6B112B] font-bold tracking-wide">
+                    <span className="text-indigo-600 font-bold tracking-wide">
                       {currentCategory}
                     </span>
                     <div className="flex items-center gap-1 text-amber-500 font-bold">
@@ -718,7 +718,7 @@ function ProductFormContent() {
                 <div className="pt-3 border-t border-slate-100 space-y-3">
                   <div className="flex items-baseline justify-between">
                     <div>
-                      <span className="text-2xl font-black text-[#6B112B]">
+                      <span className="text-2xl font-black text-slate-900">
                         ৳{parseFloat(formData.price || "0").toLocaleString()}
                       </span>
                       {parseFloat(formData.originalPrice || "0") > 0 && (
@@ -737,12 +737,12 @@ function ProductFormContent() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 pt-1">
-                    <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs gap-1.5 rounded-xl h-10 shadow-sm pointer-events-none">
+                    <Button size="sm" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs gap-1.5 rounded-xl h-10 shadow-sm pointer-events-none">
                       <MessageCircle className="h-4 w-4 fill-white" />
                       <span>অর্ডার করুন</span>
                     </Button>
 
-                    <Button size="sm" variant="outline" className="w-full border-rose-200 text-[#6B112B] font-semibold text-xs rounded-xl h-10 pointer-events-none">
+                    <Button size="sm" variant="outline" className="w-full border-slate-200 text-slate-700 font-semibold text-xs rounded-xl h-10 pointer-events-none">
                       <Eye className="mr-1.5 h-3.5 w-3.5" /> বিস্তারিত
                     </Button>
                   </div>
@@ -771,12 +771,12 @@ function ProductFormContent() {
                 size="lg"
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="w-full bg-[#6B112B] hover:bg-[#50091D] text-white font-bold rounded-2xl h-12 text-sm gap-2 shadow-lg shadow-rose-950/20 disabled:opacity-60"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl h-12 text-sm gap-2 shadow-lg shadow-indigo-950/20 disabled:opacity-60"
               >
                 {submitting ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-[#F5E6B3]" />
+                  <Loader2 className="h-4 w-4 animate-spin text-indigo-100" />
                 ) : (
-                  <Save className="h-4 w-4 text-[#F5E6B3]" />
+                  <Save className="h-4 w-4 text-indigo-100" />
                 )}
                 <span>
                   {submitting 

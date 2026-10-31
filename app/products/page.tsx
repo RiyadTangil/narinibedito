@@ -106,16 +106,16 @@ function ProductsCatalogContent() {
   const chipClass = (active: boolean) =>
     `shrink-0 whitespace-nowrap h-10 sm:h-auto px-4 py-2 rounded-full sm:rounded-xl text-xs font-bold transition-all border tap-scale ${
       active
-        ? "bg-[#6B112B] text-white border-[#6B112B] shadow-sm"
-        : "bg-white text-slate-700 border-slate-200 hover:border-rose-300 hover:bg-rose-50/50"
+        ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+        : "bg-white text-slate-700 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50"
     }`;
 
   return (
     <div className="container mx-auto px-4 py-5 sm:py-10 space-y-4 sm:space-y-8 overflow-x-hidden">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-rose-100 pb-4 sm:pb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-slate-200 pb-4 sm:pb-6">
         <div className="min-w-0">
-          <span className="text-[11px] sm:text-xs font-bold text-[#6B112B] tracking-wider uppercase">নারী নিবেদিত শপ</span>
+          <span className="text-[11px] sm:text-xs font-bold text-indigo-600 tracking-wider uppercase">নারী নিবেদিত শপ</span>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-serif mt-0.5 sm:mt-1">
             সকল পণ্য সম্ভার
           </h1>
@@ -157,7 +157,7 @@ function ProductsCatalogContent() {
               rel="noopener noreferrer"
               className="shrink-0"
             >
-              <Button size="sm" className="h-11 sm:h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs gap-1.5 px-3.5 shadow-sm tap-scale">
+              <Button size="sm" className="h-11 sm:h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs gap-1.5 px-3.5 shadow-xs tap-scale">
                 <MessageCircle className="h-4 w-4 fill-white" />
                 <span className="hidden xs:inline">WhatsApp</span>
               </Button>
@@ -170,7 +170,7 @@ function ProductsCatalogContent() {
       <div className="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 pb-1 sm:mx-0 sm:px-0 sm:pb-2">
         {loading ? (
           Array.from({ length: 6 }).map((_, idx) => (
-            <Skeleton key={`cat-chip-skel-${idx}`} className="h-10 w-28 rounded-full shrink-0 bg-rose-100/60" />
+            <Skeleton key={`cat-chip-skel-${idx}`} className="h-10 w-28 rounded-full shrink-0 bg-slate-200/70" />
           ))
         ) : (
           <>
@@ -206,23 +206,23 @@ function ProductsCatalogContent() {
           {Array.from({ length: 8 }).map((_, idx) => (
             <div
               key={`shop-skel-${idx}`}
-              className="rounded-2xl sm:rounded-[28px] border border-rose-100 bg-white p-2 sm:p-3.5 shadow-xs space-y-3"
+              className="rounded-2xl sm:rounded-[28px] border border-slate-200 bg-white p-2 sm:p-3.5 shadow-xs space-y-3"
             >
-              <Skeleton className="aspect-square sm:aspect-[4/5] w-full rounded-xl sm:rounded-2xl bg-rose-100/50" />
+              <Skeleton className="aspect-square sm:aspect-[4/5] w-full rounded-xl sm:rounded-2xl bg-slate-200/60" />
               <div className="space-y-2 px-1">
                 <div className="hidden sm:flex items-center justify-between gap-2">
-                  <Skeleton className="h-4 w-20 rounded-full bg-rose-100/60" />
+                  <Skeleton className="h-4 w-20 rounded-full bg-indigo-100/70" />
                   <Skeleton className="h-4 w-12 rounded-full bg-amber-100/60" />
                 </div>
                 <Skeleton className="h-4 w-full rounded-md bg-slate-200/70" />
                 <Skeleton className="h-4 w-2/3 rounded-md bg-slate-100" />
-                <div className="pt-2 border-t border-rose-50 space-y-2">
+                <div className="pt-2 border-t border-slate-100 space-y-2">
                   <div className="flex items-center justify-between">
-                    <Skeleton className="h-6 w-20 rounded-md bg-rose-100/80" />
+                    <Skeleton className="h-6 w-20 rounded-md bg-slate-200/80" />
                     <Skeleton className="h-4 w-12 rounded-full bg-emerald-100/60 hidden sm:block" />
                   </div>
                   <div className="flex gap-1.5">
-                    <Skeleton className="h-9 flex-1 rounded-xl bg-rose-200/60" />
+                    <Skeleton className="h-9 flex-1 rounded-xl bg-indigo-100/70" />
                     <Skeleton className="h-9 w-9 sm:flex-1 rounded-xl bg-emerald-100/60" />
                   </div>
                 </div>
@@ -232,7 +232,7 @@ function ProductsCatalogContent() {
         </div>
       ) : sortedProducts.length === 0 ? (
         <div className="py-16 sm:py-20 text-center max-w-sm mx-auto space-y-4">
-          <div className="h-14 w-14 rounded-2xl bg-rose-50 border border-rose-200 text-[#6B112B] mx-auto flex items-center justify-center">
+          <div className="h-14 w-14 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-600 mx-auto flex items-center justify-center">
             <Package className="h-7 w-7" />
           </div>
           <div>
@@ -248,7 +248,7 @@ function ProductsCatalogContent() {
               setActiveCategory("all");
               setSearchQuery("");
             }}
-            className="h-10 rounded-xl border-rose-200 text-[#6B112B] text-xs"
+            className="h-10 rounded-xl border-indigo-200 text-indigo-600 text-xs"
           >
             সব পণ্য দেখুন
           </Button>
@@ -275,10 +275,10 @@ function ProductsCatalogContent() {
             return (
               <div
                 key={prodId}
-                className="group relative min-w-0 rounded-2xl sm:rounded-[28px] border border-rose-100/90 bg-white p-2 sm:p-3.5 shadow-[0_4px_20px_-4px_rgba(107,17,43,0.06)] lg:hover:shadow-[0_20px_40px_-12px_rgba(107,17,43,0.18)] lg:hover:border-rose-300 transition-all duration-500 flex flex-col justify-between lg:hover:-translate-y-1.5"
+                className="group relative min-w-0 rounded-2xl sm:rounded-[28px] border border-slate-200/90 bg-white p-2 sm:p-3.5 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] lg:hover:shadow-[0_20px_40px_-12px_rgba(79,70,229,0.16)] lg:hover:border-indigo-300 transition-all duration-500 flex flex-col justify-between lg:hover:-translate-y-1.5"
               >
                 {/* Inset Rounded Image Container */}
-                <div className="relative aspect-square sm:aspect-[4/5] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-b from-stone-50 via-rose-50/20 to-stone-100">
+                <div className="relative aspect-square sm:aspect-[4/5] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-b from-slate-50 via-indigo-50/15 to-slate-100">
                   <Link href={`/products/${prodId}`} aria-label={product.name} className="absolute inset-0 z-0">
                     <Image
                       src={product.image || "/images/products/churi-alna.jpg"}
@@ -293,8 +293,8 @@ function ProductsCatalogContent() {
                   {/* Top Left: Boutique Badge */}
                   {product.badge && (
                     <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3 z-10 max-w-[70%] pointer-events-none">
-                      <span className="inline-flex items-center gap-1 bg-[#6B112B]/90 backdrop-blur-md text-[#F5E6B3] border border-[#D4AF37]/40 text-[9px] sm:text-[10px] font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full shadow-md truncate max-w-full">
-                        <Sparkles className="h-2.5 w-2.5 text-[#D4AF37] shrink-0" />
+                      <span className="inline-flex items-center gap-1 bg-slate-900/90 backdrop-blur-md text-white border border-white/20 text-[9px] sm:text-[10px] font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full shadow-md truncate max-w-full">
+                        <Sparkles className="h-2.5 w-2.5 text-amber-400 shrink-0" />
                         <span className="truncate">{product.badge}</span>
                       </span>
                     </div>
@@ -304,15 +304,15 @@ function ProductsCatalogContent() {
                   <button
                     type="button"
                     aria-label="Wishlist"
-                    className="absolute top-1.5 right-1.5 sm:top-3 sm:right-3 z-10 h-8 w-8 rounded-full bg-white/90 backdrop-blur-sm text-slate-500 hover:text-rose-600 hover:bg-white shadow-sm flex items-center justify-center transition-all lg:opacity-0 lg:group-hover:opacity-100 lg:translate-y-1 lg:group-hover:translate-y-0"
+                    className="absolute top-1.5 right-1.5 sm:top-3 sm:right-3 z-10 h-8 w-8 rounded-full bg-white/90 backdrop-blur-sm text-slate-500 hover:text-indigo-600 hover:bg-white shadow-sm flex items-center justify-center transition-all lg:opacity-0 lg:group-hover:opacity-100 lg:translate-y-1 lg:group-hover:translate-y-0"
                   >
-                    <Heart className="h-4 w-4 fill-transparent hover:fill-rose-600 transition-colors" />
+                    <Heart className="h-4 w-4 fill-transparent hover:fill-indigo-600 transition-colors" />
                   </button>
 
                   {/* Bottom Left: Size / Specs */}
                   {product.size && (
                     <div className="absolute bottom-1.5 left-1.5 sm:bottom-3 sm:left-3 z-10 max-w-[85%] pointer-events-none">
-                      <div className="bg-black/70 backdrop-blur-md text-[#FBEBB5] text-[10px] sm:text-[11px] font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg border border-white/15 shadow-sm truncate">
+                      <div className="bg-black/70 backdrop-blur-md text-amber-200 text-[10px] sm:text-[11px] font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg border border-white/15 shadow-sm truncate">
                         {product.size}
                       </div>
                     </div>
@@ -321,7 +321,7 @@ function ProductsCatalogContent() {
                   {/* Hover Quick Action (desktop only) */}
                   <Link
                     href={`/products/${prodId}`}
-                    className="absolute inset-x-3 bottom-3 z-20 hidden lg:group-hover:flex items-center justify-center gap-1.5 bg-white/95 backdrop-blur-md text-[#6B112B] font-bold text-xs py-2 rounded-xl shadow-lg border border-rose-200/80 transition-all duration-300"
+                    className="absolute inset-x-3 bottom-3 z-20 hidden lg:group-hover:flex items-center justify-center gap-1.5 bg-white/95 backdrop-blur-md text-indigo-600 font-bold text-xs py-2 rounded-xl shadow-lg border border-indigo-100 transition-all duration-300"
                   >
                     <Eye className="h-3.5 w-3.5" /> বিস্তারিত দেখুন
                   </Link>
@@ -331,7 +331,7 @@ function ProductsCatalogContent() {
                 <div className="pt-2 sm:pt-3.5 pb-0 sm:pb-1 px-0.5 sm:px-1 flex-1 flex flex-col justify-between gap-2 sm:gap-3.5 min-w-0">
                   <div className="space-y-1 sm:space-y-2 min-w-0">
                     <div className="hidden sm:flex items-center justify-between text-xs gap-2">
-                      <span className="text-[11px] font-bold text-[#6B112B] bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200/60 tracking-wide line-clamp-1">
+                      <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60 tracking-wide line-clamp-1">
                         {product.category}
                       </span>
                       <div className="flex items-center gap-1 text-[11px] font-bold text-amber-500 bg-amber-50/80 px-2 py-0.5 rounded-full border border-amber-200/50 shrink-0">
@@ -342,7 +342,7 @@ function ProductsCatalogContent() {
                     </div>
 
                     <Link href={`/products/${prodId}`} className="block group/title">
-                      <h3 className="font-bold text-sm sm:text-base text-slate-900 group-hover/title:text-[#6B112B] transition-colors line-clamp-2 leading-snug font-serif">
+                      <h3 className="font-bold text-sm sm:text-base text-slate-900 group-hover/title:text-indigo-600 transition-colors line-clamp-2 leading-snug font-serif">
                         {product.name}
                       </h3>
                     </Link>
@@ -362,10 +362,10 @@ function ProductsCatalogContent() {
                   </div>
 
                   {/* Price and Actions */}
-                  <div className="pt-2 sm:pt-2.5 border-t border-rose-100/80 space-y-2 sm:space-y-3">
+                  <div className="pt-2 sm:pt-2.5 border-t border-slate-100 space-y-2 sm:space-y-3">
                     <div className="flex items-baseline justify-between gap-1">
                       <div className="flex items-baseline gap-1.5 sm:gap-2 min-w-0 flex-wrap">
-                        <span className="text-base sm:text-2xl font-black text-[#6B112B] tracking-tight">
+                        <span className="text-base sm:text-2xl font-black text-slate-900 tracking-tight">
                           ৳{product.price?.toLocaleString()}
                         </span>
                         {product.originalPrice && (
@@ -385,9 +385,9 @@ function ProductsCatalogContent() {
                       <Button
                         size="sm"
                         onClick={() => setOrderModalProduct(quickOrderData)}
-                        className="flex-1 min-w-0 h-9 bg-[#6B112B] hover:bg-[#50091D] text-white font-bold text-xs gap-1 rounded-xl shadow-sm active:scale-95 border-0 px-2"
+                        className="flex-1 min-w-0 h-9 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs gap-1 rounded-xl shadow-xs active:scale-95 border-0 px-2"
                       >
-                        <ShoppingBag className="h-3.5 w-3.5 text-[#D4AF37] shrink-0" />
+                        <ShoppingBag className="h-3.5 w-3.5 text-amber-300 shrink-0" />
                         <span className="truncate">অর্ডার</span>
                       </Button>
                       <a
@@ -411,7 +411,7 @@ function ProductsCatalogContent() {
                         <Button 
                           size="sm" 
                           variant="outline"
-                          className="w-full border-emerald-300 hover:border-emerald-600 bg-emerald-50/60 hover:bg-emerald-100 text-emerald-800 font-bold text-xs gap-1.5 rounded-xl h-10 shadow-sm transition-all"
+                          className="w-full border-emerald-300 hover:border-emerald-600 bg-emerald-50/60 hover:bg-emerald-100 text-emerald-800 font-bold text-xs gap-1.5 rounded-xl h-10 shadow-xs transition-all"
                         >
                           <MessageCircle className="h-4 w-4 fill-emerald-600 text-emerald-600" />
                           <span>তথ্য জানুন</span>
@@ -421,9 +421,9 @@ function ProductsCatalogContent() {
                       <Button 
                         size="sm" 
                         onClick={() => setOrderModalProduct(quickOrderData)}
-                        className="w-full bg-[#6B112B] hover:bg-[#52091E] text-white font-bold text-xs gap-1.5 rounded-xl h-10 shadow-sm hover:shadow-md transition-all active:scale-95 border-0"
+                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs gap-1.5 rounded-xl h-10 shadow-xs hover:shadow-md transition-all active:scale-95 border-0"
                       >
-                        <ShoppingBag className="h-3.5 w-3.5 text-[#D4AF37]" />
+                        <ShoppingBag className="h-3.5 w-3.5 text-amber-300" />
                         <span>অর্ডার করুন</span>
                       </Button>
                     </div>
@@ -451,12 +451,12 @@ export default function ProductsPage() {
       fallback={
         <div className="container mx-auto px-4 py-8 space-y-6">
           <div className="space-y-2">
-            <Skeleton className="h-4 w-28 bg-rose-100" />
+            <Skeleton className="h-4 w-28 bg-slate-200" />
             <Skeleton className="h-8 w-56 bg-slate-200" />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Array.from({ length: 8 }).map((_, i) => (
-              <Skeleton key={i} className="aspect-square rounded-2xl bg-rose-100/50" />
+              <Skeleton key={i} className="aspect-square rounded-2xl bg-slate-200/60" />
             ))}
           </div>
         </div>

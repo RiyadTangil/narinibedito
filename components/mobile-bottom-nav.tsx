@@ -31,11 +31,11 @@ export function MobileBottomNav() {
         key={item.title}
         href={item.href}
         className={`relative flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tap-scale ${
-          item.active ? "text-[#6B112B]" : "text-slate-500"
+          item.active ? "text-indigo-600" : "text-slate-500"
         }`}
       >
         {item.active && (
-          <span className="absolute top-0 h-0.5 w-8 rounded-full bg-[#6B112B]" />
+          <span className="absolute top-0 h-0.5 w-8 rounded-full bg-indigo-600" />
         )}
         <Icon className={`h-5 w-5 ${item.active ? "stroke-[2.4]" : ""}`} />
         <span>{item.title}</span>
@@ -46,7 +46,7 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label="মোবাইল ন্যাভিগেশন"
-      className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-rose-100 shadow-[0_-6px_20px_-8px_rgba(107,17,43,0.18)] pb-safe"
+      className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-6px_20px_-8px_rgba(15,23,42,0.12)] pb-safe"
     >
       <div className="grid grid-cols-5 h-16 items-stretch">
         {items.slice(0, 2).map(renderItem)}
