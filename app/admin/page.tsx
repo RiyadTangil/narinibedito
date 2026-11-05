@@ -400,7 +400,11 @@ export default function AdminDashboardPage() {
                           <div className="flex items-center gap-2 text-[11px]">
                             <span className="font-black text-slate-900">৳{item.price?.toLocaleString()}</span>
                             <span className="text-slate-400">•</span>
-                            <span className="text-emerald-700 font-semibold">{item.stock} পিস</span>
+                            {item.inStock && item.stock > 0 ? (
+                              <span className="text-emerald-700 font-semibold">{item.stock} পিস</span>
+                            ) : (
+                              <span className="text-rose-600 font-bold">স্টক শেষ</span>
+                            )}
                           </div>
                           <span className="text-[10px] text-slate-400 font-mono block truncate">
                             {item.category}
@@ -480,11 +484,13 @@ export default function AdminDashboardPage() {
 
                           <td className="py-3 px-4 whitespace-nowrap">
                             <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                              item.status === "Active" 
+                              item.inStock && item.stock > 0 
                                 ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                : "bg-amber-50 text-amber-700 border border-amber-200"
+                                : "bg-rose-50 text-rose-700 border border-rose-200"
                             }`}>
-                              {item.stock} পিস ({item.status === "Active" ? "ইন-স্টক" : "সীমিত"})
+                              {item.inStock && item.stock > 0
+                                ? `${item.stock} পিস (ইন-স্টক)`
+                                : "স্টক শেষ (Out of Stock)"}
                             </span>
                           </td>
 

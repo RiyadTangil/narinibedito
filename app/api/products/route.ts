@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import mongoose from "mongoose";
 import connectMongoose from "@/lib/mongoose";
 import { Product } from "@/models/product";
 import { ok, fail, badRequest, notFound } from "@/utils/api-response";
@@ -116,7 +117,9 @@ export async function POST(req: NextRequest) {
       finalSku = `${finalSku}-${Math.floor(10 + Math.random() * 90)}`;
     }
 
-    const numStock = typeof stock === "number" ? stock : Number(stock) || 20;
+    const parsedStock = stock !== undefined ? parseInt(String(stock), 10) : 20;
+    const numStock = isNaN(parsedStock) ? 0 : Math.max(0, parsedStock);
+    const finalInStock = body.inStock !== undefined ? (Boolean(body.inStock) && numStock > 0) : numStock > 0;
     const numPrice = Number(price);
     const numOriginalPrice = originalPrice ? Number(originalPrice) : undefined;
 
@@ -138,7 +141,7 @@ export async function POST(req: NextRequest) {
       image: image.trim(),
       secondaryImages: Array.isArray(secondaryImages) ? secondaryImages : [],
       stock: numStock,
-      inStock: numStock > 0,
+      inStock: finalInStock,
       status: 1,
       whatsappMsg: `আমি '${name.trim()} (${numPrice} টাকা)' অর্ডার করতে চাই।`,
     });
@@ -156,13 +159,29 @@ export async function PATCH(req: NextRequest) {
     const body = await req.json();
     const { _id, id, sku, ...updates } = body;
 
-    const query: Record<string, any> = {};
-    if (_id) query._id = _id;
-    else if (id) query.$or = [{ _id: id }, { sku: id }];
-    else if (sku) query.sku = sku;
-    else return badRequest("পণ্যের আইডি বা এসকেইউ আবশ্যক");
+    const targetId = _id || id;
+    let product = null;
 
-    const product = await Product.findOne(query);
+    if (targetId && mongoose.isValidObjectId(targetId)) {
+      product = await Product.findById(targetId);
+    }
+
+    if (!product && (targetId || sku)) {
+      const searchKey = targetId || sku;
+      product = await Product.findOne({ sku: searchKey });
+    }
+
+    if (!product && targetId) {
+      // Support legacy indexed routes / numeric IDs
+      const numIdx = parseInt(String(targetId), 10);
+      if (!isNaN(numIdx) && numIdx >= 1) {
+        const all = await Product.find().sort({ createdAt: 1 });
+        if (numIdx <= all.length) {
+          product = all[numIdx - 1];
+        }
+      }
+    }
+
     if (!product) {
       return notFound("পণ্যটি খুঁজে পাওয়া যায়নি");
     }
@@ -172,28 +191,62 @@ export async function PATCH(req: NextRequest) {
     if (updates.categorySlug !== undefined) product.categorySlug = updates.categorySlug.trim();
     if (updates.price !== undefined) product.price = Number(updates.price);
     if (updates.originalPrice !== undefined) product.originalPrice = updates.originalPrice ? Number(updates.originalPrice) : undefined;
-    if (updates.discount !== undefined) product.discount = updates.discount.trim();
-    if (updates.badge !== undefined) product.badge = updates.badge.trim();
-    if (updates.highlight !== undefined) product.highlight = updates.highlight.trim();
-    if (updates.description !== undefined) product.description = updates.description.trim();
-    if (updates.size !== undefined) product.size = updates.size.trim();
-    if (updates.sku !== undefined) product.sku = updates.sku.trim();
-    if (updates.material !== undefined) product.material = updates.material.trim();
+    if (updates.discount !== undefined) product.discount = updates.discount?.trim() || "";
+    if (updates.badge !== undefined) product.badge = updates.badge?.trim() || "";
+    if (updates.highlight !== undefined) product.highlight = updates.highlight?.trim() || "";
+    if (updates.description !== undefined) product.description = updates.description?.trim() || "";
+    if (updates.size !== undefined) product.size = updates.size?.trim() || "";
+    if (updates.material !== undefined) product.material = updates.material?.trim() || "";
     if (updates.image !== undefined) product.image = updates.image.trim();
     if (updates.secondaryImages !== undefined) {
       product.secondaryImages = Array.isArray(updates.secondaryImages) ? updates.secondaryImages : [];
     }
+
+    if (updates.sku !== undefined && updates.sku.trim() && updates.sku.trim() !== product.sku) {
+      const existing = await Product.findOne({ sku: updates.sku.trim(), _id: { $ne: product._id } });
+      if (existing) {
+        return badRequest("এই SKU কোডটি অন্য একটি পণ্যে ইতিমধ্যে ব্যবহৃত হয়েছে");
+      }
+      product.sku = updates.sku.trim();
+    }
+
+    // Accurate stock & inStock handling
     if (updates.stock !== undefined) {
-      product.stock = Number(updates.stock);
+      const parsed = parseInt(String(updates.stock), 10);
+      product.stock = isNaN(parsed) ? 0 : Math.max(0, parsed);
+    }
+
+    if (updates.inStock !== undefined) {
+      product.inStock = Boolean(updates.inStock);
+    } else if (updates.stock !== undefined) {
       product.inStock = product.stock > 0;
     }
+
+    // Mandatory business rule: if stock is 0 or less, product is out of stock
+    if (product.stock <= 0) {
+      product.inStock = false;
+    }
+
     if (updates.status !== undefined) {
       product.status = updates.status === 1 || updates.status === true ? 1 : 0;
     }
 
+    if (updates.whatsappMsg !== undefined) {
+      product.whatsappMsg = updates.whatsappMsg;
+    } else if (product.name && product.price) {
+      product.whatsappMsg = `আমি '${product.name} (${product.price} টাকা)' অর্ডার করতে চাই।`;
+    }
+
     await product.save();
 
-    return ok(product, 200, "পণ্য সফলভাবে আপডেট করা হয়েছে");
+    const pAny = product as any;
+    const formatted = {
+      ...product.toObject(),
+      id: pAny._id.toString(),
+      _id: pAny._id.toString(),
+    };
+
+    return ok(formatted, 200, "পণ্য সফলভাবে আপডেট করা হয়েছে");
   } catch (error: any) {
     console.error("PATCH /api/products error:", error);
     return fail(error, 500);

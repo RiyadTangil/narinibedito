@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FloatingInput } from "@/components/ui/floating-input";
+import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { DeleteConfirmModal } from "@/components/admin/delete-confirm-modal";
 import { toast } from "sonner";
 
@@ -35,8 +36,9 @@ export default function AdminCategoriesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState<any | null>(null);
+  const [editingCategory, setEditingCategory] = useState<any | null>(null);
   
-  // New Category Form State
+  // New / Edit Category Form State
   const [formData, setFormData] = useState({
     title: "",
     subtitle: "",
@@ -46,6 +48,31 @@ export default function AdminCategoriesPage() {
     order: "1",
   });
 
+  const startEditCategory = (cat: any) => {
+    setEditingCategory(cat);
+    setFormData({
+      title: cat.title || "",
+      subtitle: cat.subtitle || "",
+      id: cat.id || "",
+      badge: cat.badge || "",
+      image: cat.image || "/images/products/churi-alna.jpg",
+      order: (cat.order || 1).toString(),
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const cancelEdit = () => {
+    setEditingCategory(null);
+    setFormData({
+      title: "",
+      subtitle: "",
+      id: "",
+      badge: "নতুন",
+      image: "/images/products/churi-alna.jpg",
+      order: (categories.length + 1).toString(),
+    });
+  };
+
   const fetchCategories = async () => {
     try {
       setLoading(true);
@@ -53,10 +80,12 @@ export default function AdminCategoriesPage() {
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
         setCategories(json.data);
-        setFormData((prev) => ({
-          ...prev,
-          order: (json.data.length + 1).toString(),
-        }));
+        if (!editingCategory) {
+          setFormData((prev) => ({
+            ...prev,
+            order: (json.data.length + 1).toString(),
+          }));
+        }
       }
     } catch (err) {
       console.error("Failed to load categories:", err);
@@ -79,23 +108,48 @@ export default function AdminCategoriesPage() {
 
     try {
       setSubmitting(true);
-      const res = await fetch("/api/categories", {
-        method: "POST",
+      const isEditing = !!editingCategory;
+      const url = "/api/categories";
+      const method = isEditing ? "PATCH" : "POST";
+
+      const payload: any = {
+        title: formData.title.trim(),
+        subtitle: formData.subtitle.trim() || "Exclusive Collection",
+        badge: formData.badge.trim() || "নতুন",
+        image: formData.image.trim() || "/images/products/churi-alna.jpg",
+        order: parseInt(formData.order) || categories.length + 1,
+      };
+
+      if (isEditing) {
+        payload._id = editingCategory._id;
+        payload.id = editingCategory.id;
+      } else {
+        payload.id = formData.id.trim() || undefined;
+      }
+
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: formData.title.trim(),
-          subtitle: formData.subtitle.trim() || "Exclusive Collection",
-          id: formData.id.trim() || undefined,
-          badge: formData.badge.trim() || "নতুন",
-          image: formData.image.trim() || "/images/products/churi-alna.jpg",
-          order: parseInt(formData.order) || categories.length + 1,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const json = await res.json();
       if (json.success && json.data) {
-        setCategories((prev) => [...prev, json.data]);
-        toast.success("নতুন ক্যাটাগরি ডাটাবেসে সফলভাবে যুক্ত হয়েছে!");
+        if (isEditing) {
+          setCategories((prev) =>
+            prev.map((c) =>
+              (c._id && c._id === editingCategory._id) || c.id === editingCategory.id
+                ? json.data
+                : c
+            )
+          );
+          toast.success("ক্যাটাগরি সফলভাবে আপডেট করা হয়েছে!");
+          setEditingCategory(null);
+        } else {
+          setCategories((prev) => [...prev, json.data]);
+          toast.success("নতুন ক্যাটাগরি ডাটাবেসে সফলভাবে যুক্ত হয়েছে!");
+        }
+
         setFormData({
           title: "",
           subtitle: "",
@@ -107,7 +161,7 @@ export default function AdminCategoriesPage() {
         setSubmitted(true);
         setTimeout(() => setSubmitted(false), 4000);
       } else {
-        toast.error(json.message || "ক্যাটাগরি যুক্ত করা সম্ভব হয়নি");
+        toast.error(json.message || "ক্যাটাগরি সেভ করা সম্ভব হয়নি");
       }
     } catch (err) {
       toast.error("সার্ভার ত্রুটি ঘটেছে");
@@ -240,12 +294,36 @@ export default function AdminCategoriesPage() {
         <div className="lg:col-span-5 space-y-6">
           <Card className="border-slate-200/90 shadow-sm rounded-2xl sticky top-24">
             <CardHeader className="pb-3 border-b border-slate-100">
-              <CardTitle className="text-sm sm:text-base font-bold text-slate-900 font-serif flex items-center gap-2">
-                <PlusCircle className="h-4 w-4 text-indigo-600" />
-                <span>নতুন ক্যাটাগরি তৈরি করুন</span>
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm sm:text-base font-bold text-slate-900 font-serif flex items-center gap-2">
+                  {editingCategory ? (
+                    <>
+                      <Edit className="h-4 w-4 text-indigo-600" />
+                      <span>ক্যাটাগরি সম্পাদনা করুন</span>
+                    </>
+                  ) : (
+                    <>
+                      <PlusCircle className="h-4 w-4 text-indigo-600" />
+                      <span>নতুন ক্যাটাগরি তৈরি করুন</span>
+                    </>
+                  )}
+                </CardTitle>
+                {editingCategory && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={cancelEdit}
+                    className="h-7 px-2 text-[11px] text-slate-500 hover:text-slate-800"
+                  >
+                    বাতিল
+                  </Button>
+                )}
+              </div>
               <CardDescription className="text-xs">
-                নাম, স্লাগ এবং কাভার ছবির লিঙ্ক দিয়ে ক্যাটাগরি যুক্ত করুন
+                {editingCategory
+                  ? "নাম, তথ্য ও কাভার ছবি পরিবর্তন করে আপডেট করুন"
+                  : "নাম, স্লাগ এবং কাভার ছবি আপলোড করে নতুন ক্যাটাগরি যুক্ত করুন"}
               </CardDescription>
             </CardHeader>
 
@@ -271,6 +349,7 @@ export default function AdminCategoriesPage() {
                     value={formData.id}
                     onChange={(e) => setFormData({ ...formData, id: e.target.value })}
                     className="font-mono lowercase"
+                    disabled={!!editingCategory}
                   />
 
                   <FloatingInput
@@ -280,11 +359,13 @@ export default function AdminCategoriesPage() {
                   />
                 </div>
 
-                <FloatingInput
-                  label="কাভার ছবির লিঙ্ক (Image URL)"
+                {/* Upload from Device or URL */}
+                <ImageUploadInput
+                  label="কাভার ছবি (Cover Image)"
                   value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  className="font-mono"
+                  onChange={(url) => setFormData({ ...formData, image: url })}
+                  required
+                  aspectRatio="banner"
                 />
 
                 {/* Real-time Category Card Preview */}
@@ -299,6 +380,7 @@ export default function AdminCategoriesPage() {
                         alt="Preview"
                         fill
                         className="object-cover"
+                        unoptimized
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                     </div>
@@ -329,7 +411,7 @@ export default function AdminCategoriesPage() {
                   ) : (
                     <>
                       <Save className="h-4 w-4 text-indigo-100" />
-                      <span>ক্যাটাগরি যুক্ত করুন</span>
+                      <span>{editingCategory ? "আপডেট সংরক্ষণ করুন" : "ক্যাটাগরি যুক্ত করুন"}</span>
                     </>
                   )}
                 </Button>
@@ -438,6 +520,20 @@ export default function AdminCategoriesPage() {
                         <Eye className="h-4 w-4" />
                       </Button>
                     </Link>
+
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => startEditCategory(cat)}
+                      className={`h-9 w-9 transition-colors ${
+                        editingCategory?._id === cat._id || editingCategory?.id === cat.id
+                          ? "text-indigo-600 bg-indigo-50"
+                          : "text-slate-500 hover:text-indigo-600 hover:bg-slate-100"
+                      }`}
+                      title="সম্পাদনা করুন"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
 
                     <Button
                       size="icon"

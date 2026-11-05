@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { 
   ArrowLeft, 
   Upload, 
+  UploadCloud, 
   Package, 
   DollarSign, 
   Layers, 
@@ -31,6 +32,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FloatingInput, FloatingTextarea, FloatingSelect } from "@/components/ui/floating-input";
+import { ImageUploadInput } from "@/components/admin/image-upload-input";
 import { toast } from "sonner";
 
 const BADGE_OPTIONS = [
@@ -49,6 +51,7 @@ function ProductFormContent() {
   const isEditing = Boolean(editId);
 
   const [categoriesList, setCategoriesList] = useState<any[]>([]);
+  const [actualDbId, setActualDbId] = useState<string>("");
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingProduct, setLoadingProduct] = useState(Boolean(editId));
   const [submitting, setSubmitting] = useState(false);
@@ -76,6 +79,8 @@ function ProductFormContent() {
   });
 
   const [newImageUrl, setNewImageUrl] = useState("");
+  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   // 1. Fetch Categories
   useEffect(() => {
@@ -113,6 +118,9 @@ function ProductFormContent() {
         if (!isMounted) return;
         if (json.success && json.data) {
           const p = json.data;
+          setActualDbId(p._id || p.id || "");
+          const numStock = p.stock !== undefined ? p.stock : 25;
+          const isCurrentlyInStock = p.inStock !== undefined ? Boolean(p.inStock) : Number(numStock) > 0;
           setFormData({
             name: p.name || "",
             sku: p.sku || "",
@@ -123,8 +131,8 @@ function ProductFormContent() {
             size: p.size || "",
             capacity: p.capacity || "",
             material: p.material || "",
-            stock: p.stock !== undefined ? p.stock.toString() : "25",
-            inStock: p.inStock ?? (p.stock > 0),
+            stock: numStock.toString(),
+            inStock: isCurrentlyInStock && Number(numStock) > 0,
             highlight: p.highlight || "",
             description: p.description || "",
             image: p.image || "/images/products/churi-alna.jpg",
@@ -177,6 +185,10 @@ function ProductFormContent() {
       const url = "/api/products";
       const method = isEditing ? "PATCH" : "POST";
 
+      const parsedStock = parseInt(formData.stock, 10);
+      const finalStock = isNaN(parsedStock) ? 0 : Math.max(0, parsedStock);
+      const finalInStock = finalStock > 0 ? Boolean(formData.inStock) : false;
+
       const payload: Record<string, any> = {
         name: formData.name.trim(),
         sku: formData.sku.trim() || undefined,
@@ -190,16 +202,16 @@ function ProductFormContent() {
         description: formData.description,
         size: formData.size,
         material: formData.material,
-        stock: parseInt(formData.stock, 10) || 10,
-        inStock: formData.inStock,
+        stock: finalStock,
+        inStock: finalInStock,
         image: formData.image.trim(),
         secondaryImages: formData.secondaryImages,
         status: 1,
       };
 
       if (isEditing) {
-        payload._id = editId;
-        payload.id = editId;
+        payload._id = actualDbId || editId;
+        payload.id = actualDbId || editId;
       }
 
       const res = await fetch(url, {
@@ -241,6 +253,63 @@ function ProductFormContent() {
       ...formData,
       secondaryImages: formData.secondaryImages.filter((_, idx) => idx !== index)
     });
+  };
+
+  const handleGalleryFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const validFiles: File[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      if (f.type.startsWith("image/")) {
+        validFiles.push(f);
+      }
+    }
+
+    if (validFiles.length === 0) {
+      toast.error("শুধুমাত্র ছবি ফাইল নির্বাচন করুন");
+      return;
+    }
+
+    try {
+      setUploadingGallery(true);
+      const fd = new FormData();
+      validFiles.forEach((f) => fd.append("file", f));
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: fd,
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.message || "গ্যালারি ছবি আপলোড ব্যর্থ হয়েছে");
+      }
+
+      const uploadedUrls: string[] = [];
+      if (Array.isArray(json.data)) {
+        json.data.forEach((item: any) => {
+          if (item.url) uploadedUrls.push(item.url);
+        });
+      } else if (json.data?.url) {
+        uploadedUrls.push(json.data.url);
+      }
+
+      if (uploadedUrls.length > 0) {
+        setFormData((prev) => ({
+          ...prev,
+          secondaryImages: [...prev.secondaryImages, ...uploadedUrls],
+        }));
+        toast.success(`${uploadedUrls.length}টি ছবি গ্যালারিতে যোগ করা হয়েছে`);
+      }
+    } catch (err: any) {
+      console.error("Gallery upload error:", err);
+      toast.error(err.message || "গ্যালারি ছবি আপলোডে সমস্যা হয়েছে");
+    } finally {
+      setUploadingGallery(false);
+      if (galleryInputRef.current) galleryInputRef.current.value = "";
+    }
   };
 
   if (loadingProduct) {
@@ -443,9 +512,15 @@ function ProductFormContent() {
                   <div className="flex items-center gap-3 pt-1.5">
                     <button
                       type="button"
-                      onClick={() => setFormData({ ...formData, inStock: true })}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          inStock: true,
+                          stock: prev.stock === "0" || !prev.stock ? "10" : prev.stock,
+                        }))
+                      }
                       className={`text-xs px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 border transition-all ${
-                        formData.inStock 
+                        formData.inStock && Number(formData.stock) > 0
                           ? "bg-emerald-50 text-emerald-800 border-emerald-300 shadow-xs" 
                           : "bg-slate-50 text-slate-500 border-slate-200"
                       }`}
@@ -455,9 +530,15 @@ function ProductFormContent() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setFormData({ ...formData, inStock: false })}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          inStock: false,
+                          stock: "0",
+                        }))
+                      }
                       className={`text-xs px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 border transition-all ${
-                        !formData.inStock 
+                        !formData.inStock || Number(formData.stock) <= 0
                           ? "bg-red-50 text-red-800 border-red-300 shadow-xs" 
                           : "bg-slate-50 text-slate-500 border-slate-200"
                       }`}
@@ -503,7 +584,15 @@ function ProductFormContent() {
                   type="number"
                   label="মজুদ স্টক সংখ্যা"
                   value={formData.stock}
-                  onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const num = parseInt(val, 10);
+                    setFormData((prev) => ({
+                      ...prev,
+                      stock: val,
+                      inStock: !isNaN(num) && num > 0 ? (val === "0" ? false : prev.inStock) : false,
+                    }));
+                  }}
                 />
               </div>
 
@@ -564,43 +653,81 @@ function ProductFormContent() {
                 <span>পণ্যের ছবি ও গ্যালারি (Product Images)</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 pt-4">
+            <CardContent className="space-y-5 pt-4">
               
-              <FloatingInput
-                label="প্রধান ছবির লিংক (Primary Image URL)"
+              {/* Primary Image Upload from Device or URL */}
+              <ImageUploadInput
+                label="প্রধান ছবি (Primary Image)"
                 value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                className="font-mono"
+                onChange={(url) => setFormData({ ...formData, image: url })}
                 required
               />
 
               {/* Secondary Images Manager */}
-              <div className="space-y-2 pt-2 border-t border-slate-100">
-                <Label className="text-xs font-bold text-slate-700">
-                  অতিরিক্ত ছবিসমূহ (Secondary Gallery)
-                </Label>
-                
-                <div className="flex gap-2 items-center">
-                  <div className="flex-1">
-                    <FloatingInput
-                      label="অতিরিক্ত ছবির URL দিন..."
-                      value={newImageUrl}
-                      onChange={(e) => setNewImageUrl(e.target.value)}
-                      className="font-mono"
-                    />
-                  </div>
-                  <Button
-                    type="button"
-                    onClick={addImageUrl}
-                    variant="outline"
-                    size="sm"
-                    className="h-11 sm:h-12 px-4 rounded-xl border-slate-200 text-xs font-bold text-indigo-600 shrink-0"
-                  >
-                    <Plus className="h-3.5 w-3.5 mr-1" /> যোগ করুন
-                  </Button>
+              <div className="space-y-3 pt-3 border-t border-slate-100">
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs font-bold text-slate-700">
+                    অতিরিক্ত ছবিসমূহ (Secondary Gallery)
+                  </Label>
+                  <span className="text-[11px] text-slate-400">
+                    মোট {formData.secondaryImages.length}টি ছবি
+                  </span>
                 </div>
 
-                <div className="grid grid-cols-4 gap-2 pt-2">
+                <div className="space-y-2">
+                  <input
+                    ref={galleryInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={handleGalleryFiles}
+                  />
+
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={uploadingGallery}
+                      onClick={() => galleryInputRef.current?.click()}
+                      className="h-11 sm:h-12 border-dashed border-2 border-indigo-300 hover:border-indigo-600 hover:bg-indigo-50/50 bg-white text-indigo-700 font-bold text-xs rounded-xl flex items-center justify-center gap-2 shrink-0 shadow-sm"
+                    >
+                      {uploadingGallery ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin text-indigo-600" />
+                          <span>আপলোড হচ্ছে...</span>
+                        </>
+                      ) : (
+                        <>
+                          <UploadCloud className="h-4 w-4 text-indigo-600" />
+                          <span>ডিভাইস থেকে গ্যালারিতে ছবি যোগ করুন</span>
+                        </>
+                      )}
+                    </Button>
+
+                    <div className="flex gap-2 flex-1">
+                      <div className="flex-1">
+                        <FloatingInput
+                          label="অথবা ছবির URL দিন..."
+                          value={newImageUrl}
+                          onChange={(e) => setNewImageUrl(e.target.value)}
+                          className="font-mono"
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        onClick={addImageUrl}
+                        variant="outline"
+                        size="sm"
+                        className="h-11 sm:h-12 px-4 rounded-xl border-slate-200 text-xs font-bold text-indigo-600 shrink-0"
+                      >
+                        <Plus className="h-3.5 w-3.5 mr-1" /> যোগ
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 pt-2">
                   {/* Primary Thumb */}
                   <div className="relative h-20 rounded-xl overflow-hidden border-2 border-indigo-600 bg-slate-100 group">
                     <Image
@@ -608,6 +735,7 @@ function ProductFormContent() {
                       alt="Primary"
                       fill
                       className="object-cover"
+                      unoptimized
                     />
                     <span className="absolute bottom-1 left-1 bg-indigo-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
                       মেইন
@@ -622,11 +750,13 @@ function ProductFormContent() {
                         alt={`Gallery ${idx}`}
                         fill
                         className="object-cover"
+                        unoptimized
                       />
                       <button
                         type="button"
                         onClick={() => removeSecondaryImage(idx)}
-                        className="absolute top-1 right-1 h-5 w-5 bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-1 right-1 h-5 w-5 bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                        title="মুছে ফেলুন"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -728,11 +858,11 @@ function ProductFormContent() {
                       )}
                     </div>
                     <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border ${
-                      formData.inStock 
+                      formData.inStock && Number(formData.stock) > 0
                         ? "text-emerald-600 bg-emerald-50 border-emerald-100" 
                         : "text-red-600 bg-red-50 border-red-100"
                     }`}>
-                      {formData.inStock ? "ইন স্টক" : "স্টক শেষ"}
+                      {formData.inStock && Number(formData.stock) > 0 ? "ইন স্টক" : "স্টক শেষ"}
                     </span>
                   </div>
 

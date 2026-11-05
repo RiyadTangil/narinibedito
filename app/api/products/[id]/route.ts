@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import connectMongoose from "@/lib/mongoose";
 import { Product } from "@/models/product";
 import { ok, notFound, fail } from "@/utils/api-response";
+import { PATCH as updateProduct, DELETE as deleteProduct } from "../route";
 
 export async function GET(
   _req: NextRequest,
@@ -46,4 +47,36 @@ export async function GET(
     console.error("GET /api/products/[id] error:", error);
     return fail(error, 500);
   }
+}
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const body = await req.json();
+  const nextReq = new NextRequest(new URL("/api/products", req.url), {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...body, _id: body._id || body.id || id, id: body.id || body._id || id }),
+  });
+  return updateProduct(nextReq);
+}
+
+export async function PUT(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  return PATCH(req, context);
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const url = new URL("/api/products", req.url);
+  url.searchParams.set("id", id);
+  const nextReq = new NextRequest(url, { method: "DELETE" });
+  return deleteProduct(nextReq);
 }

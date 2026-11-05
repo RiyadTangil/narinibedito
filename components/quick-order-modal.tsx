@@ -15,7 +15,8 @@ import {
   Plus, 
   MessageCircle,
   Package,
-  RotateCcw
+  RotateCcw,
+  AlertCircle
 } from "lucide-react";
 import {
   Dialog,
@@ -38,6 +39,8 @@ export interface QuickOrderProduct {
   size?: string;
   sku?: string;
   category?: string;
+  inStock?: boolean;
+  stock?: number;
 }
 
 interface QuickOrderModalProps {
@@ -73,6 +76,7 @@ export function QuickOrderModal({
 
   if (!product) return null;
 
+  const isInStock = product.inStock !== false && (product.stock === undefined || Number(product.stock) > 0);
   const deliveryFee = deliveryArea === "inside_dhaka" ? 60 : 130;
   const subtotal = product.price * quantity;
   const totalAmount = subtotal + deliveryFee;
@@ -94,6 +98,11 @@ export function QuickOrderModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isInStock) {
+      toast.error("দুঃখিত, এই পণ্যটির স্টক শেষ। অর্ডার গ্রহণ করা সম্ভব নয়।");
+      return;
+    }
 
     if (!customerName.trim()) {
       toast.error("অনুগ্রহ করে আপনার নাম লিখুন");
@@ -221,11 +230,24 @@ export function QuickOrderModal({
                           ৳{product.originalPrice.toLocaleString()}
                         </span>
                       )}
-                      <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                        ইন স্টক
-                      </span>
+                      {isInStock ? (
+                        <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                          ইন স্টক
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
+                          স্টক শেষ
+                        </span>
+                      )}
                     </div>
                   </div>
+
+                  {!isInStock && (
+                    <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2">
+                      <AlertCircle className="h-4 w-4 shrink-0 text-rose-600" />
+                      <span>দুঃখিত, এই পণ্যটির স্টক শেষ। বর্তমানে অর্ডার গ্রহণ করা হচ্ছে না।</span>
+                    </div>
+                  )}
 
                   {/* Quantity Controller */}
                   <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
@@ -371,11 +393,17 @@ export function QuickOrderModal({
                   <div className="pt-2 space-y-2">
                     <Button
                       type="submit"
-                      disabled={submitting}
-                      className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold h-12 rounded-2xl shadow-lg shadow-indigo-950/20 text-sm sm:text-base gap-2 transition-all active:scale-[0.99]"
+                      disabled={submitting || !isInStock}
+                      className={`w-full font-extrabold h-12 rounded-2xl shadow-lg text-sm sm:text-base gap-2 transition-all ${
+                        isInStock
+                          ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-950/20 active:scale-[0.99]"
+                          : "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
+                      }`}
                     >
                       {submitting ? (
                         <span>অর্ডার সম্পন্ন হচ্ছে...</span>
+                      ) : !isInStock ? (
+                        <span>স্টক শেষ (অর্ডার নেওয়া সম্ভব নয়)</span>
                       ) : (
                         <>
                           <ShoppingBag className="h-4 w-4 text-amber-300" />

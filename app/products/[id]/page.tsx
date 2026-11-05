@@ -150,9 +150,15 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
     ? product.highlight.split("•").map((f: string) => f.trim()).filter(Boolean)
     : ["১০০% কোয়ালিটি নিশ্চয়তা", "নিরাপদ প্যাকেজিং", "ক্যাশ অন ডেলিভারি"];
 
-  const whatsappOrderUrl = `https://wa.me/8801614258804?text=${encodeURIComponent(
-    `Hello Nari Nibedito, I want to order ${product.name} (Quantity: ${quantity}, Price: ৳${(product.price * quantity).toLocaleString()}).`
-  )}`;
+  const isInStock = product.inStock !== false && (product.stock === undefined || Number(product.stock) > 0);
+
+  const whatsappOrderUrl = isInStock
+    ? `https://wa.me/8801614258804?text=${encodeURIComponent(
+        `Hello Nari Nibedito, I want to order ${product.name} (Quantity: ${quantity}, Price: ৳${(product.price * quantity).toLocaleString()}).`
+      )}`
+    : `https://wa.me/8801614258804?text=${encodeURIComponent(
+        `Hello Nari Nibedito, when will '${product.name}' be back in stock? Please notify me.`
+      )}`;
 
   const quickOrderProductData: QuickOrderProduct = {
     id: product.id || product._id || productId,
@@ -163,6 +169,8 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
     size: product.size,
     sku: product.sku,
     category: product.category,
+    inStock: isInStock,
+    stock: product.stock,
   };
 
   return (
@@ -198,6 +206,13 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
               <Badge className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-amber-500 text-white font-medium text-xs shadow-md border-0">
                 {product.badge}
               </Badge>
+            )}
+            {!isInStock && (
+              <div className="absolute inset-0 bg-slate-950/45 backdrop-blur-[2px] flex items-center justify-center z-10 pointer-events-none">
+                <span className="bg-rose-600 text-white font-extrabold text-xs sm:text-sm px-4 py-1.5 rounded-full shadow-2xl border border-white/20">
+                  স্টক শেষ (Out of Stock)
+                </span>
+              </div>
             )}
           </div>
 
@@ -297,8 +312,9 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
               <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-white">
                 <button
                   type="button"
+                  disabled={!isInStock}
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="p-3 hover:bg-slate-100 text-slate-600 transition-colors"
+                  className="p-3 hover:bg-slate-100 text-slate-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <Minus className="h-4 w-4" />
                 </button>
@@ -307,29 +323,47 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
                 </span>
                 <button
                   type="button"
+                  disabled={!isInStock}
                   onClick={() => setQuantity(quantity + 1)}
-                  className="p-3 hover:bg-slate-100 text-slate-600 transition-colors"
+                  className="p-3 hover:bg-slate-100 text-slate-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
-              <span className="text-xs text-emerald-600 font-semibold flex items-center gap-1">
-                ✓ ইন স্টক (সারাদেশে ক্যাশ অন ডেলিভারি)
-              </span>
+              {isInStock ? (
+                <span className="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+                  ✓ ইন স্টক (সারাদেশে ক্যাশ অন ডেলিভারি)
+                </span>
+              ) : (
+                <span className="text-xs text-rose-600 font-bold flex items-center gap-1 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-lg">
+                  ✕ স্টক শেষ (বর্তমানে পণ্যটি সহজলভ্য নয়)
+                </span>
+              )}
             </div>
           </div>
 
           {/* Action Buttons: Direct COD Order + WhatsApp + Feedback/Reviews */}
           <div className="space-y-3 pt-2">
             {/* Primary COD Order Button */}
-            <Button
-              size="lg"
-              onClick={() => setIsOrderModalOpen(true)}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold h-13 sm:h-14 rounded-2xl shadow-xl shadow-indigo-950/20 gap-2.5 text-sm sm:text-base active:scale-[0.99] transition-all cursor-pointer"
-            >
-              <ShoppingBag className="h-5 w-5 text-amber-300" />
-              <span>সরাসরি অর্ডার করুন (ক্যাশ অন ডেলিভারি)</span>
-            </Button>
+            {isInStock ? (
+              <Button
+                size="lg"
+                onClick={() => setIsOrderModalOpen(true)}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold h-13 sm:h-14 rounded-2xl shadow-xl shadow-indigo-950/20 gap-2.5 text-sm sm:text-base active:scale-[0.99] transition-all cursor-pointer"
+              >
+                <ShoppingBag className="h-5 w-5 text-amber-300" />
+                <span>সরাসরি অর্ডার করুন (ক্যাশ অন ডেলিভারি)</span>
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                disabled
+                className="w-full bg-slate-200 text-slate-500 font-extrabold h-13 sm:h-14 rounded-2xl gap-2.5 text-sm sm:text-base cursor-not-allowed opacity-90 shadow-none"
+              >
+                <AlertCircle className="h-5 w-5 text-rose-500" />
+                <span>পণ্যটির স্টক শেষ (অর্ডার সম্ভব নয়)</span>
+              </Button>
+            )}
 
             {/* Secondary actions: WhatsApp Order & Inquiry, Reviews, Share */}
             <div className="grid grid-cols-1 sm:flex sm:flex-row gap-2.5">
@@ -341,10 +375,14 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
               >
                 <Button
                   size="lg"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-11 sm:h-12 rounded-xl shadow-md gap-2 text-xs sm:text-sm"
+                  className={`w-full font-bold h-11 sm:h-12 rounded-xl shadow-md gap-2 text-xs sm:text-sm ${
+                    isInStock
+                      ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                      : "bg-emerald-700 hover:bg-emerald-800 text-white"
+                  }`}
                 >
                   <MessageCircle className="h-4 w-4 fill-white" />
-                  <span>হোয়াটসঅ্যাপে অর্ডার / তথ্য</span>
+                  <span>{isInStock ? "হোয়াটসঅ্যাপে অর্ডার / তথ্য" : "স্টক আপডেট জানতে WhatsApp"}</span>
                 </Button>
               </a>
 
@@ -463,11 +501,22 @@ export default function ProductDetailsPage({ params }: ProductDetailsPageProps) 
             </a>
 
             <Button
-              onClick={() => setIsOrderModalOpen(true)}
-              className="h-11 px-5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs gap-1.5 shadow-md tap-scale"
+              disabled={!isInStock}
+              onClick={() => isInStock && setIsOrderModalOpen(true)}
+              className={`h-11 px-5 rounded-xl font-bold text-xs gap-1.5 shadow-md tap-scale ${
+                isInStock
+                  ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                  : "bg-slate-200 text-slate-500 cursor-not-allowed shadow-none"
+              }`}
             >
-              <ShoppingBag className="h-4 w-4 text-amber-300" />
-              <span>অর্ডার করুন</span>
+              {isInStock ? (
+                <>
+                  <ShoppingBag className="h-4 w-4 text-amber-300" />
+                  <span>অর্ডার করুন</span>
+                </>
+              ) : (
+                <span>স্টক শেষ</span>
+              )}
             </Button>
           </div>
         </div>

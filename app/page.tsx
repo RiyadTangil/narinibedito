@@ -517,6 +517,8 @@ export default function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-7">
             {filteredProducts.map((product) => {
               const prodId = product.id || product._id;
+              const isItemInStock = product.inStock !== false && (product.stock === undefined || Number(product.stock) > 0);
+
               const quickOrderData: QuickOrderProduct = {
                 id: prodId,
                 name: product.name,
@@ -526,6 +528,8 @@ export default function HomePage() {
                 size: product.size,
                 sku: product.sku,
                 category: product.category,
+                inStock: isItemInStock,
+                stock: product.stock,
               };
               const whatsappInfoUrl = `https://wa.me/8801614258804?text=${encodeURIComponent(
                 `হ্যালো নারী নিবেদিত, আমি '${product.name}' সম্পর্কে বিস্তারিত তথ্য জানতে চাই।`
@@ -549,6 +553,14 @@ export default function HomePage() {
                     </Link>
                     
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 sm:from-black/65 via-black/10 to-transparent pointer-events-none opacity-80 group-hover:opacity-90 transition-opacity" />
+
+                    {!isItemInStock && (
+                      <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[1px] flex items-center justify-center z-10 pointer-events-none">
+                        <span className="bg-rose-600/95 text-white font-extrabold text-[11px] sm:text-xs px-3.5 py-1 rounded-full shadow-lg border border-white/20 tracking-wide">
+                          স্টক শেষ
+                        </span>
+                      </div>
+                    )}
 
                     {/* Top Left: Luxury Boutique Badge */}
                     {product.badge && (
@@ -650,22 +662,41 @@ export default function HomePage() {
                             </span>
                           )}
                         </div>
-                        <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 shrink-0">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                          ইন স্টক
+                        <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold shrink-0">
+                          {isItemInStock ? (
+                            <div className="flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-2 sm:px-2.5 py-0.5 rounded-full border border-emerald-200">
+                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                              ইন স্টক
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1 text-rose-700 bg-rose-50 px-2 sm:px-2.5 py-0.5 rounded-full border border-rose-200">
+                              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                              স্টক শেষ
+                            </div>
+                          )}
                         </div>
                       </div>
 
                       {/* Mobile Actions: Primary Order + Compact WhatsApp Icon */}
                       <div className="flex sm:hidden items-center gap-1.5">
-                        <Button 
-                          size="sm" 
-                          onClick={() => setOrderModalProduct(quickOrderData)}
-                          className="flex-1 min-w-0 h-9 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs gap-1 rounded-xl shadow-xs active:scale-95 border-0 px-2"
-                        >
-                          <ShoppingBag className="h-3.5 w-3.5 text-amber-300 shrink-0" />
-                          <span className="truncate">অর্ডার</span>
-                        </Button>
+                        {isItemInStock ? (
+                          <Button 
+                            size="sm" 
+                            onClick={() => setOrderModalProduct(quickOrderData)}
+                            className="flex-1 min-w-0 h-9 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs gap-1 rounded-xl shadow-xs active:scale-95 border-0 px-2"
+                          >
+                            <ShoppingBag className="h-3.5 w-3.5 text-amber-300 shrink-0" />
+                            <span className="truncate">অর্ডার</span>
+                          </Button>
+                        ) : (
+                          <Button 
+                            size="sm" 
+                            disabled
+                            className="flex-1 min-w-0 h-9 bg-slate-100 text-slate-400 font-bold text-xs gap-1 rounded-xl border border-slate-200 px-2 cursor-not-allowed shadow-none"
+                          >
+                            <span className="truncate">স্টক শেষ</span>
+                          </Button>
+                        )}
                         <a
                           href={whatsappInfoUrl}
                           target="_blank"
@@ -695,14 +726,24 @@ export default function HomePage() {
                           </Button>
                         </a>
 
-                        <Button 
-                          size="sm" 
-                          onClick={() => setOrderModalProduct(quickOrderData)}
-                          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs gap-1.5 rounded-xl h-10 shadow-xs hover:shadow-md transition-all active:scale-95 border-0"
-                        >
-                          <ShoppingBag className="h-3.5 w-3.5 text-amber-300" />
-                          <span>অর্ডার করুন</span>
-                        </Button>
+                        {isItemInStock ? (
+                          <Button 
+                            size="sm" 
+                            onClick={() => setOrderModalProduct(quickOrderData)}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs gap-1.5 rounded-xl h-10 shadow-xs hover:shadow-md transition-all active:scale-95 border-0"
+                          >
+                            <ShoppingBag className="h-3.5 w-3.5 text-amber-300" />
+                            <span>অর্ডার করুন</span>
+                          </Button>
+                        ) : (
+                          <Button 
+                            size="sm" 
+                            disabled
+                            className="w-full bg-slate-100 text-slate-400 font-bold text-xs gap-1.5 rounded-xl h-10 border border-slate-200 cursor-not-allowed shadow-none"
+                          >
+                            <span>স্টক শেষ</span>
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>

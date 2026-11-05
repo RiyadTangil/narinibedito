@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
+import mongoose from "mongoose";
 import connectMongoose from "@/lib/mongoose";
 import { Order } from "@/models/order";
+import { Product } from "@/models/product";
 import { ORDER_STATUS, PAYMENT_METHOD } from "@/lib/constants/order-constants";
 import { ok, fail, badRequest, notFound } from "@/utils/api-response";
 
@@ -104,6 +106,18 @@ export async function POST(req: NextRequest) {
       return badRequest("অর্ডারে কোনো পণ্য পাওয়া যায়নি");
     }
 
+    // Validate that items are in stock
+    for (const it of items) {
+      const pId = it.productId || it.id;
+      if (pId) {
+        const filter = mongoose.isValidObjectId(pId) ? { _id: pId } : { id: pId };
+        const prod = await Product.findOne(filter);
+        if (prod && (prod.inStock === false || Number(prod.stock) <= 0)) {
+          return badRequest(`দুঃখিত, '${prod.name}' পণ্যটির স্টক শেষ হয়ে গেছে।`);
+        }
+      }
+    }
+
     // Calculate subtotal
     const calculatedSubtotal = items.reduce(
       (sum: number, item: any) => sum + Number(item.price) * Number(item.quantity || 1),
@@ -143,6 +157,22 @@ export async function POST(req: NextRequest) {
       paymentStatus: 1, // Unpaid (Cash On Delivery)
       note: (note || "").trim(),
     });
+
+    // Automatically update product stock in database
+    for (const it of items) {
+      const pId = it.productId || it.id;
+      if (pId) {
+        const filter = mongoose.isValidObjectId(pId) ? { _id: pId } : { id: pId };
+        const prod = await Product.findOne(filter);
+        if (prod && typeof prod.stock === "number") {
+          const qty = Math.max(1, Number(it.quantity || 1));
+          const remainingStock = Math.max(0, prod.stock - qty);
+          prod.stock = remainingStock;
+          prod.inStock = remainingStock > 0;
+          await prod.save();
+        }
+      }
+    }
 
     return ok(newOrder, 201, "আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে!");
   } catch (error: any) {

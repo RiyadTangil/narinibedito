@@ -10,5 +10,6 @@ import "@/models/category"
 import "@/models/product"
 import "@/models/order"
 import "@/models/review"
+import "@/models/upload"
 
 
